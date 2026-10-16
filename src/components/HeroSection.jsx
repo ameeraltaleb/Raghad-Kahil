@@ -36,38 +36,36 @@ export default function HeroSection({ lang }) {
             idx === currentImgIndex ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <img src={img} alt={`Raghad Kahil Banner ${idx}`} className="w-full h-full object-cover object-center" />
+          <img 
+            src={img} 
+            alt={`Raghad Kahil Banner ${idx}`} 
+            className="w-full h-full object-cover object-center brightness-105 contrast-[1.02]" 
+          />
         </div>
       ))}
 
-      {/* Dark Gradient Overlay for Text Clarity */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] z-10"></div>
-
-      {/* Feminine Ambient Blobs */}
-      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none opacity-40">
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-brand-rose/40 rounded-full blur-[100px] animate-blob"></div>
-        <div className="absolute top-1/3 -right-20 w-[30rem] h-[30rem] bg-brand-pink/30 rounded-full blur-[120px] animate-blob" style={{ animationDelay: '2s' }}></div>
-      </div>
+      {/* Ultra-Light Gentle Overlay for Maximum Brightness & Vivid Clarity */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/30 z-10 pointer-events-none"></div>
 
       {/* Centered Content */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center items-center py-10 sm:py-16 w-full text-center">
         
         <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
-          <div className="inline-flex items-center bg-white/10 backdrop-blur-md border border-white/20 text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase shadow-sm">
+          <div className="inline-flex items-center bg-black/30 backdrop-blur-md border border-white/30 text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
             {t.hero.badge}
           </div>
           {t.hero.pamperBadge && (
-            <div className="inline-flex items-center bg-brand-rose/20 backdrop-blur-md border border-brand-pink/30 text-brand-peach px-4 py-2 rounded-full text-xs font-bold shadow-sm animate-float">
+            <div className="inline-flex items-center bg-brand-rose/60 backdrop-blur-md border border-brand-pink/50 text-white px-4 py-2 rounded-full text-xs font-bold shadow-md animate-float">
               {t.hero.pamperBadge}
             </div>
           )}
         </div>
         
-        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-tight mb-6 sm:mb-8 drop-shadow-2xl">
+        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-tight mb-6 sm:mb-8 [text-shadow:_0_3px_16px_rgba(0,0,0,0.85)]">
           {t.hero.headline}
         </h1>
         
-        <p className="text-lg sm:text-xl lg:text-2xl text-white/90 leading-relaxed mb-10 sm:mb-12 max-w-3xl drop-shadow-md font-medium">
+        <p className="text-lg sm:text-xl lg:text-2xl text-white leading-relaxed mb-10 sm:mb-12 max-w-3xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)] font-medium">
           {t.hero.subtitle}
         </p>
         
