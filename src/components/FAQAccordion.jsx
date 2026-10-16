@@ -1,0 +1,52 @@
+import React, { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { translations } from '../translations';
+
+export default function FAQAccordion({ lang }) {
+  const t = translations[lang].faq;
+  
+  const [openIndex, setOpenIndex] = useState(0);
+
+  return (
+    <section id="faq" className="py-12 sm:py-16 lg:py-20 bg-white relative">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="font-serif text-3xl md:text-5xl text-brand-dark leading-tight">
+            {t.title}
+          </h2>
+        </div>
+
+        <div className="space-y-4">
+          {t.items.map((item, index) => (
+            <div 
+              key={index}
+              className={`border rounded-2xl overflow-hidden transition-all duration-300 ${openIndex === index ? 'border-brand-rose bg-brand-peach/20 shadow-sm' : 'border-gray-100 bg-white hover:border-brand-pink/50'}`}
+            >
+              <button
+                onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
+              >
+                <span className="font-medium text-lg text-brand-dark pr-2">{item.q}</span>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 ${openIndex === index ? 'bg-brand-rose' : 'bg-brand-peach/50'}`}>
+                  <ChevronDown 
+                    className={`w-5 h-5 transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-white' : 'text-brand-rose'}`} 
+                  />
+                </div>
+              </button>
+              
+              <div 
+                className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-96 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                <p className="text-brand-muted leading-relaxed text-base pt-2">
+                  {item.a}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+      </div>
+    </section>
+  );
+}
