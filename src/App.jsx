@@ -80,11 +80,11 @@ function App() {
   const t = translations[lang];
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-dark font-sans selection:bg-brand-pink/30 relative overflow-x-hidden w-full">
+    <div className="min-h-screen bg-brand-bg text-brand-dark font-sans selection:bg-brand-pink/30 relative overflow-x-hidden w-full max-w-full">
       {/* Smoothly dissolves into crystal-clear focus as preloader fades */}
       <div 
-        className={`w-full transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isSiteRevealed ? 'opacity-100 scale-100 blur-0' : 'opacity-90 scale-[0.985] blur-[2px]'
+        className={`w-full max-w-full transition-opacity duration-1000 ease-out ${
+          isSiteRevealed ? 'opacity-100' : 'opacity-85'
         }`}
       >
         <Navbar lang={lang} setLang={setLang} />

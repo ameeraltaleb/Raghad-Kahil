@@ -14,7 +14,7 @@ export default function ComparisonTable({ lang }) {
   const lastIdx = t.rows.length - 1;
 
   return (
-    <section className="w-full max-w-6xl mx-auto py-14 sm:py-20 px-4 sm:px-6 relative isolate">
+    <section className="w-full max-w-6xl mx-auto py-14 sm:py-20 px-4 sm:px-6 relative isolate overflow-hidden">
       {/* Soft decorative background */}
       <div className="absolute inset-0 bg-gradient-to-b from-brand-peach/30 via-brand-bg/40 to-transparent rounded-[3rem] pointer-events-none -z-10"></div>
       <div className="absolute -top-10 start-1/2 w-72 h-72 bg-brand-pink/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
