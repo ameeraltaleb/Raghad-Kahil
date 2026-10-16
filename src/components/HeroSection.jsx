@@ -17,7 +17,7 @@ export default function HeroSection({ lang }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImgIndex((prev) => (prev + 1) % images.length);
-    }, 4000); // Crossfade every 4 seconds
+    }, 5500); // 5.5s per slide for smooth slow zoom-out
     return () => clearInterval(interval);
   }, [images.length]);
 
@@ -28,24 +28,26 @@ export default function HeroSection({ lang }) {
   return (
     <section className="relative min-h-[95vh] flex flex-col justify-between overflow-hidden pt-16 sm:pt-20">
       
-      {/* Background Image Carousel */}
+      {/* Background Image Carousel with Slow Zoom-Out */}
       {images.map((img, idx) => (
         <div 
           key={idx}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out overflow-hidden ${
             idx === currentImgIndex ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <img 
             src={img} 
             alt={`Raghad Kahil Banner ${idx}`} 
-            className="w-full h-full object-cover object-center brightness-105 contrast-[1.02]" 
+            className={`w-full h-full object-cover object-center ${
+              idx === currentImgIndex ? 'hero-slow-zoom-out' : 'scale-115'
+            }`} 
           />
         </div>
       ))}
 
-      {/* Ultra-Light Gentle Overlay for Maximum Brightness & Vivid Clarity */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/30 z-10 pointer-events-none"></div>
+      {/* Elegant Balanced Dark Overlay for Crystal-Clear Text & Deep Colors */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/55 z-10 pointer-events-none"></div>
 
       {/* Centered Content */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center items-center py-10 sm:py-16 w-full text-center">
@@ -119,6 +121,22 @@ export default function HeroSection({ lang }) {
         </div>
       </div>
 
+      {/* Scoped CSS for Slow Cinematic Zoom-Out */}
+      <style>{`
+        @keyframes heroSlowZoomOut {
+          0% {
+            transform: scale(1.15);
+          }
+          100% {
+            transform: scale(1.0);
+          }
+        }
+
+        .hero-slow-zoom-out {
+          animation: heroSlowZoomOut 5.5s cubic-bezier(0.25, 1, 0.45, 1) forwards;
+          will-change: transform;
+        }
+      `}</style>
     </section>
   );
 }
