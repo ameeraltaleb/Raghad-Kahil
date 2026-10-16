@@ -49,6 +49,7 @@ const DEFAULT_CURRENCY = { ar: 'SAR', tr: 'TRY', en: 'USD' };
 function App() {
   const [lang, setLang] = useState(getBrowserLanguage());
   const [currency, setCurrency] = useState(() => DEFAULT_CURRENCY[getBrowserLanguage()] || 'SAR');
+  const [isSiteRevealed, setIsSiteRevealed] = useState(false);
 
   // Switch to natural currency and persist language choice
   useEffect(() => {
@@ -80,25 +81,33 @@ function App() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-dark font-sans selection:bg-brand-pink/30 relative overflow-x-hidden w-full">
-      <Navbar lang={lang} setLang={setLang} />
-      <main>
-        <HeroSection lang={lang} />
-        <MarqueeRibbon lang={lang} />
-        <ProblemSolution lang={lang} />
-        <ComparisonTable lang={lang} />
-        <KeyIngredients lang={lang} />
-        <ClinicalResults lang={lang} />
-        <HowToUse lang={lang} />
-        <ProductDetails lang={lang} />
-        <CheckoutSection lang={lang} currency={currency} setCurrency={setCurrency} />
-        <CustomerReviews lang={lang} />
-        <FAQAccordion lang={lang} />
-      </main>
-      <Footer lang={lang} />
-      <FloatingWhatsApp lang={lang} />
-      <StickyAddToCart lang={lang} currency={currency} />
-      <SocialProofToast lang={lang} />
-      <ElegantPreloader lang={lang} />
+      {/* Smoothly dissolves into crystal-clear focus as preloader fades */}
+      <div 
+        className={`w-full transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isSiteRevealed ? 'opacity-100 scale-100 blur-0' : 'opacity-90 scale-[0.985] blur-[2px]'
+        }`}
+      >
+        <Navbar lang={lang} setLang={setLang} />
+        <main>
+          <HeroSection lang={lang} />
+          <MarqueeRibbon lang={lang} />
+          <ProblemSolution lang={lang} />
+          <ComparisonTable lang={lang} />
+          <KeyIngredients lang={lang} />
+          <ClinicalResults lang={lang} />
+          <HowToUse lang={lang} />
+          <ProductDetails lang={lang} />
+          <CheckoutSection lang={lang} currency={currency} setCurrency={setCurrency} />
+          <CustomerReviews lang={lang} />
+          <FAQAccordion lang={lang} />
+        </main>
+        <Footer lang={lang} />
+        <FloatingWhatsApp lang={lang} />
+        <StickyAddToCart lang={lang} currency={currency} />
+        <SocialProofToast lang={lang} />
+      </div>
+
+      <ElegantPreloader lang={lang} onStartReveal={() => setIsSiteRevealed(true)} />
     </div>
   );
 }

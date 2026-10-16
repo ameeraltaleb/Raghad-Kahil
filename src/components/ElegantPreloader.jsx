@@ -2,20 +2,26 @@ import React, { useState, useEffect } from 'react';
 import logoImg from '../assets/logo.png';
 import { Sparkles } from 'lucide-react';
 
-export default function ElegantPreloader({ lang }) {
+export default function ElegantPreloader({ lang, onStartReveal }) {
   const [isVisible, setIsVisible] = useState(true);
   const [isFading, setIsFading] = useState(false);
 
+  const triggerReveal = () => {
+    if (isFading) return;
+    setIsFading(true);
+    if (onStartReveal) onStartReveal();
+  };
+
   useEffect(() => {
-    // Exactly 2 seconds of thrilling intro animation, then start smooth luxury fade
+    // 2 seconds of signature intro animation, then start gentle luxury dissolve
     const fadeTimer = setTimeout(() => {
-      setIsFading(true);
+      triggerReveal();
     }, 2000);
 
-    // Completely remove from DOM after smooth 450ms fade
+    // Completely remove from DOM after gentle 1000ms dissolve
     const removeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 2450);
+    }, 3000);
 
     return () => {
       clearTimeout(fadeTimer);
@@ -27,27 +33,40 @@ export default function ElegantPreloader({ lang }) {
 
   return (
     <div 
-      className={`fixed inset-0 z-[9999] bg-[#FAF3F5] flex flex-col items-center justify-center transition-all duration-500 ease-out select-none cursor-pointer overflow-hidden ${
-        isFading ? 'opacity-0 scale-104 pointer-events-none' : 'opacity-100 scale-100'
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center select-none cursor-pointer overflow-hidden ${
+        isFading 
+          ? 'opacity-0 pointer-events-none' 
+          : 'opacity-100'
       }`}
-      onClick={() => setIsFading(true)}
+      style={{
+        backgroundColor: isFading ? 'rgba(250, 243, 245, 0)' : '#FAF3F5',
+        transition: 'background-color 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 950ms cubic-bezier(0.16, 1, 0.3, 1)'
+      }}
+      onClick={triggerReveal}
     >
       {/* Ambient Silk Luxury Glow in the background */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+      <div className={`absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
         <div className="w-[500px] h-[500px] bg-gradient-to-tr from-rose-200/40 via-amber-100/30 to-pink-100/40 rounded-full blur-3xl animate-pulse-slow"></div>
         <div className="absolute w-[300px] h-[300px] bg-white/70 rounded-full blur-2xl"></div>
       </div>
 
       {/* Floating Micro Stardust Particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <div className={`absolute inset-0 pointer-events-none overflow-hidden transition-opacity duration-500 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
         <div className="absolute top-[25%] left-[20%] w-1.5 h-1.5 bg-amber-400/70 rounded-full blur-[0.5px] animate-float-particle-1"></div>
         <div className="absolute top-[35%] right-[22%] w-2 h-2 bg-rose-400/60 rounded-full blur-[0.5px] animate-float-particle-2"></div>
         <div className="absolute bottom-[30%] left-[28%] w-1 h-1 bg-amber-500/80 rounded-full animate-float-particle-3"></div>
         <div className="absolute bottom-[35%] right-[30%] w-1.5 h-1.5 bg-pink-400/70 rounded-full animate-float-particle-1"></div>
       </div>
 
-      {/* Center Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-4 w-full max-w-sm sm:max-w-md">
+      {/* Center Content with gentle upward float and dissolve */}
+      <div 
+        className="relative z-10 flex flex-col items-center justify-center px-4 w-full max-w-sm sm:max-w-md"
+        style={{
+          transform: isFading ? 'translateY(-14px) scale(0.96)' : 'translateY(0) scale(1)',
+          opacity: isFading ? 0 : 1,
+          transition: 'transform 750ms cubic-bezier(0.16, 1, 0.3, 1), opacity 650ms ease-out'
+        }}
+      >
         
         {/* Animated Drawing Canvas */}
         <div className="relative w-full aspect-[672/362] max-w-[340px] sm:max-w-[420px] flex items-center justify-center drop-shadow-sm">
