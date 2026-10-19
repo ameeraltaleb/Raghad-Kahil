@@ -82,11 +82,17 @@ export default function HeroSection({ lang, onWatchVideo }) {
           
           <button 
             type="button"
-            onClick={onWatchVideo}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 text-white px-4 py-3 sm:px-10 sm:py-5 rounded-full font-bold text-sm sm:text-xl hover:bg-white/10 transition-all border-2 border-white/50 backdrop-blur-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 shadow-lg"
+            id="btn-watch-video"
+            aria-label={t.cta.watchVideo}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (onWatchVideo) onWatchVideo();
+            }}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 text-white px-4 py-3 sm:px-10 sm:py-5 rounded-full font-bold text-sm sm:text-xl hover:bg-white/15 transition-all border-2 border-white/50 backdrop-blur-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 shadow-lg relative z-30"
           >
-            <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-            {t.cta.watchVideo}
+            <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current pointer-events-none" />
+            <span className="pointer-events-none">{t.cta.watchVideo}</span>
           </button>
         </div>
 

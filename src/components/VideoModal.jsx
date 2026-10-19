@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Play, Sparkles } from 'lucide-react';
 import hero2Img from '../assets/hero2.png';
 
@@ -12,27 +13,36 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
     en: { title: 'Exclusive Product Video', brand: 'Raghad Kahil', close: 'Close' }
   }[lang] || { title: 'Exclusive Product Video', brand: 'Raghad Kahil', close: 'Close' };
 
-  // Play video on open, pause on close & reset
+  // Play video on open, pause on close & reset safely
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0;
-        const playPromise = videoRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Autoplay with sound might be blocked by browser; mute and retry if needed
-            if (videoRef.current) {
-              videoRef.current.muted = true;
-              videoRef.current.play();
+      const timer = setTimeout(() => {
+        if (videoRef.current) {
+          try {
+            if (videoRef.current.readyState > 0) {
+              videoRef.current.currentTime = 0;
             }
-          });
+          } catch (e) {}
+          const playPromise = videoRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              // Browser may restrict unmuted autoplay, mute and retry
+              if (videoRef.current) {
+                videoRef.current.muted = true;
+                videoRef.current.play().catch(() => {});
+              }
+            });
+          }
         }
-      }
+      }, 100);
+      return () => clearTimeout(timer);
     } else {
       document.body.style.overflow = '';
       if (videoRef.current) {
-        videoRef.current.pause();
+        try {
+          videoRef.current.pause();
+        } catch (e) {}
       }
     }
 
@@ -54,9 +64,10 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <div 
-      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl animate-fade-in transition-all select-none"
+      id="raghad-video-modal-backdrop"
+      className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl animate-fade-in transition-all select-none"
       onClick={onClose}
     >
       {/* Modal Dialog Card */}
@@ -86,16 +97,16 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
         <div className="relative w-full bg-black flex items-center justify-center aspect-[9/16] sm:aspect-video max-h-[75vh] overflow-hidden">
           <video
             ref={videoRef}
+            src={videoSrc}
             controls
+            autoPlay
             playsInline
-            preload="metadata"
+            preload="auto"
             poster={hero2Img}
             className="w-full h-full object-contain bg-black"
           >
-            {/* Primary video source */}
+            {/* Fallback secondary source */}
             <source src={videoSrc} type="video/mp4" />
-            {/* Fallback demo video for testing if user hasn't copied promo.mp4 yet */}
-            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4" />
             Your browser does not support HTML5 video.
           </video>
         </div>
@@ -111,4 +122,6 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null;
 }
