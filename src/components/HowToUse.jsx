@@ -15,36 +15,36 @@ export default function HowToUse({ lang }) {
   ];
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
+    <section className="py-8 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-brand-peach/30 to-transparent pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 lg:gap-16 items-center">
           
           <div>
-            <div className={`mb-6 sm:mb-12 ${isRtl ? 'text-right' : 'text-left'}`}>
-              <h2 className="font-serif text-3xl md:text-5xl text-brand-dark mb-4 leading-tight">
+            <div className={`mb-5 sm:mb-12 ${isRtl ? 'text-right' : 'text-left'}`}>
+              <h2 className="font-serif text-2xl sm:text-5xl text-brand-dark mb-2 sm:mb-4 leading-tight">
                 {t.title}
               </h2>
-              <p className="text-lg text-brand-muted">
+              <p className="text-sm sm:text-lg text-brand-muted">
                 {t.subtitle}
               </p>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-4 sm:space-y-8">
               {t.steps.map((step, index) => (
-                <div key={index} className="flex gap-6 items-start group">
+                <div key={index} className="flex gap-4 sm:gap-6 items-start group">
                   <div className="shrink-0 flex flex-col items-center">
-                    <div className="w-14 h-14 rounded-full bg-brand-peach flex items-center justify-center border-4 border-white shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-brand-peach flex items-center justify-center border-3 sm:border-4 border-white shadow-md group-hover:scale-110 transition-transform duration-300">
                       {icons[index]}
                     </div>
-                    {index !== 2 && <div className="w-0.5 h-12 bg-brand-pink/30 mt-2"></div>}
+                    {index !== 2 && <div className="w-0.5 h-8 sm:h-12 bg-brand-pink/30 mt-2"></div>}
                   </div>
-                  <div className="pt-2">
-                    <h3 className="text-xl font-serif font-medium text-brand-dark mb-2">
+                  <div className="pt-1 sm:pt-2">
+                    <h3 className="text-lg sm:text-xl font-serif font-medium text-brand-dark mb-1 sm:mb-2">
                       {step.title}
                     </h3>
-                    <p className="text-brand-muted leading-relaxed">
+                    <p className="text-brand-muted leading-relaxed text-xs sm:text-base">
                       {step.desc}
                     </p>
                   </div>

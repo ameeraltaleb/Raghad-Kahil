@@ -37,30 +37,30 @@ export default function ClinicalResults({ lang }) {
   const handleMouseUp = () => setIsDragging(false);
 
   return (
-    <section id="results" className="py-12 sm:py-16 lg:py-20 bg-brand-peach/50 relative overflow-hidden">
+    <section id="results" className="py-8 sm:py-16 lg:py-20 bg-brand-peach/50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-          <div className="inline-flex items-center bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-6 shadow-xs">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
+          <div className="inline-flex items-center bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-3 sm:mb-6 shadow-xs">
             {t.badge}
           </div>
-          <h2 className="font-serif text-3xl md:text-5xl text-brand-dark leading-tight">
+          <h2 className="font-serif text-2xl sm:text-5xl text-brand-dark leading-tight">
             {t.title}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-12 items-center">
           
           {/* Stats Column */}
-          <div className={`space-y-3 sm:space-y-8 ${isRtl ? 'lg:pl-8' : 'lg:pr-8'}`}>
+          <div className={`space-y-2.5 sm:space-y-8 ${isRtl ? 'lg:pl-8' : 'lg:pr-8'}`}>
             {t.stats.map((stat, index) => (
-              <div key={index} className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-brand-pink/20 flex flex-row items-center gap-4 sm:gap-6 hover:shadow-md transition-shadow text-start">
-                <div className="flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-brand-bg flex items-center justify-center border-4 border-brand-pink/30 shadow-inner">
-                  <span className="text-lg sm:text-3xl font-bold text-brand-rose">{stat.percentage}</span>
+              <div key={index} className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm border border-brand-pink/20 flex flex-row items-center gap-3.5 sm:gap-6 hover:shadow-md transition-shadow text-start">
+                <div className="flex-shrink-0 w-13 h-13 sm:w-24 sm:h-24 rounded-full bg-brand-bg flex items-center justify-center border-3 sm:border-4 border-brand-pink/30 shadow-inner">
+                  <span className="text-base sm:text-3xl font-bold text-brand-rose">{stat.percentage}</span>
                 </div>
-                <div className="flex flex-col justify-center flex-1 py-1">
-                  <p className="text-brand-dark font-medium leading-relaxed text-sm sm:text-lg">
+                <div className="flex flex-col justify-center flex-1 py-0.5">
+                  <p className="text-brand-dark font-medium leading-relaxed text-xs sm:text-lg">
                     {stat.desc}
                   </p>
                 </div>

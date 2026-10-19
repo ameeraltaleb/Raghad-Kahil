@@ -26,7 +26,7 @@ export default function HeroSection({ lang }) {
   };
 
   return (
-    <section className="relative min-h-[95vh] flex flex-col justify-between overflow-hidden pt-16 sm:pt-20">
+    <section className="relative min-h-[88vh] sm:min-h-[95vh] flex flex-col justify-between overflow-hidden pt-14 sm:pt-20">
       
       {/* Background Image Carousel with Slow Zoom-Out */}
       {images.map((img, idx) => (
@@ -50,28 +50,28 @@ export default function HeroSection({ lang }) {
       <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/55 z-10 pointer-events-none"></div>
 
       {/* Centered Content */}
-      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center items-center py-10 sm:py-16 w-full text-center">
+      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center items-center py-6 sm:py-16 w-full text-center">
         
-        <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
-          <div className="inline-flex items-center bg-black/30 backdrop-blur-md border border-white/30 text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 mb-4 sm:mb-8">
+          <div className="inline-flex items-center bg-black/30 backdrop-blur-md border border-white/30 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
             {t.hero.badge}
           </div>
           {t.hero.pamperBadge && (
-            <div className="inline-flex items-center bg-[#F7D6DE]/30 backdrop-blur-md border border-[#F7D6DE]/80 text-white px-4 py-2 rounded-full text-xs font-bold shadow-md animate-float">
+            <div className="inline-flex items-center bg-[#F7D6DE]/30 backdrop-blur-md border border-[#F7D6DE]/80 text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold shadow-md animate-float">
               {t.hero.pamperBadge}
             </div>
           )}
         </div>
         
-        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-tight mb-6 sm:mb-8 [text-shadow:_0_3px_16px_rgba(0,0,0,0.85)]">
+        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-tight mb-3 sm:mb-8 [text-shadow:_0_3px_16px_rgba(0,0,0,0.85)]">
           {t.hero.headline}
         </h1>
         
-        <p className="text-lg sm:text-xl lg:text-2xl text-white leading-relaxed mb-10 sm:mb-12 max-w-3xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)] font-medium">
+        <p className="text-base sm:text-xl lg:text-2xl text-white leading-relaxed mb-6 sm:mb-12 max-w-3xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)] font-medium">
           {t.hero.subtitle}
         </p>
         
-        <div className="flex flex-row items-center justify-center gap-3 sm:gap-5 mb-12 sm:mb-16 w-full sm:w-auto">
+        <div className="flex flex-row items-center justify-center gap-3 sm:gap-5 mb-6 sm:mb-16 w-full sm:w-auto">
           <button 
             onClick={scrollToCheckout}
             className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 bg-brand-rose text-white px-4 py-3 sm:px-10 sm:py-5 rounded-full font-bold text-sm sm:text-xl hover:bg-[#a64e58] transition-all hover:scale-105 shadow-xl shadow-brand-rose/40 animate-pulse-glow whitespace-nowrap"
@@ -87,13 +87,13 @@ export default function HeroSection({ lang }) {
         </div>
 
         {/* Read More Link */}
-        <div className="pt-6 sm:pt-8 border-t border-white/20 w-full max-w-2xl mx-auto flex justify-center">
+        <div className="pt-4 sm:pt-8 border-t border-white/20 w-full max-w-2xl mx-auto flex justify-center">
           <button 
             onClick={() => document.getElementById('details')?.scrollIntoView({ behavior: 'smooth' })}
-            className="flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium tracking-widest uppercase transition-colors group"
+            className="flex items-center gap-2 text-white/80 hover:text-white text-xs sm:text-sm font-medium tracking-widest uppercase transition-colors group"
           >
             <span>{t.cta.readMore}</span>
-            <div className="w-6 h-6 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
               <ArrowDown className="w-3 h-3 transform group-hover:translate-y-0.5 transition-transform" />
             </div>
           </button>
@@ -101,7 +101,7 @@ export default function HeroSection({ lang }) {
       </div>
       
       {/* Bottom Stats Ribbon */}
-      <div className="relative z-20 w-full bg-brand-dark/70 backdrop-blur-xl border-t border-white/10 py-3 sm:py-4 mt-8 sm:mt-0">
+      <div className="relative z-20 w-full bg-brand-dark/70 backdrop-blur-xl border-t border-white/10 py-2.5 sm:py-4 mt-4 sm:mt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-row flex-wrap justify-center items-center gap-x-6 gap-y-2 sm:gap-12">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex text-amber-400">

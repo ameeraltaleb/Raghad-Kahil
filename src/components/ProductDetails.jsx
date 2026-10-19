@@ -9,23 +9,23 @@ export default function ProductDetails({ lang }) {
   const isRtl = lang === 'ar';
 
   return (
-    <section id="details" className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden border-y border-brand-pink/20">
+    <section id="details" className="py-8 sm:py-16 lg:py-20 bg-white relative overflow-hidden border-y border-brand-pink/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
-          <div className="inline-flex items-center bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 shadow-xs">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-16">
+          <div className="inline-flex items-center bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-3 sm:mb-4 shadow-xs">
             {t.badge}
           </div>
-          <h2 className="font-serif text-3xl md:text-5xl text-brand-dark mb-6 leading-tight">
+          <h2 className="font-serif text-2xl sm:text-5xl text-brand-dark mb-3 sm:mb-6 leading-tight">
             {t.title}
           </h2>
-          <p className="text-lg text-brand-muted">
+          <p className="text-sm sm:text-lg text-brand-muted">
             {t.subtitle}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center mb-12 sm:mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 lg:gap-16 items-center mb-6 sm:mb-20">
           
           {/* Column 1: Visual Presentation */}
           <div className="relative pt-8 lg:pt-0">
@@ -62,13 +62,13 @@ export default function ProductDetails({ lang }) {
 
           {/* Column 2: Specs Table */}
           <div className="flex flex-col">
-            <h3 className="text-2xl font-serif text-brand-dark mb-8 border-b border-brand-pink/30 pb-4">
+            <h3 className="text-xl sm:text-2xl font-serif text-brand-dark mb-4 sm:mb-8 border-b border-brand-pink/30 pb-3 sm:pb-4">
               {t.specs.title}
             </h3>
             
-            <div className="space-y-4">
+            <div className="space-y-2 sm:space-y-4">
               {t.specs.items.map((item, idx) => (
-                <div key={idx} className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-6 p-4 rounded-xl hover:bg-brand-peach/30 transition-colors">
+                <div key={idx} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 p-2.5 sm:p-4 rounded-xl hover:bg-brand-peach/30 transition-colors">
                   <div className="sm:w-1/3 font-semibold text-brand-dark shrink-0">
                     {item.label}
                   </div>
@@ -118,7 +118,7 @@ export default function ProductDetails({ lang }) {
         </div>
 
         {/* Assurances Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 border-t border-brand-pink/20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-6 sm:pt-12 border-t border-brand-pink/20">
           <div className="flex flex-col items-center text-center gap-3">
             <Ban className="w-8 h-8 text-brand-rose" />
             <span className="font-medium text-sm text-brand-dark">{t.assurances[0]}</span>

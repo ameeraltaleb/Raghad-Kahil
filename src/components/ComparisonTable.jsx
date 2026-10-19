@@ -14,19 +14,19 @@ export default function ComparisonTable({ lang }) {
   const lastIdx = t.rows.length - 1;
 
   return (
-    <section className="w-full max-w-6xl mx-auto py-14 sm:py-20 px-4 sm:px-6 relative isolate overflow-hidden">
+    <section className="w-full max-w-6xl mx-auto py-8 sm:py-20 px-4 sm:px-6 relative isolate overflow-hidden">
       {/* Soft decorative background */}
       <div className="absolute inset-0 bg-gradient-to-b from-brand-peach/30 via-brand-bg/40 to-transparent rounded-[3rem] pointer-events-none -z-10"></div>
       <div className="absolute -top-10 start-1/2 w-72 h-72 bg-brand-pink/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
 
       {/* Heading */}
-      <div className="text-center mb-10 sm:mb-14">
-        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark text-xs font-bold mb-4 shadow-xs ${isRtl ? '' : 'uppercase tracking-widest'}`}>
+      <div className="text-center mb-6 sm:mb-14">
+        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark text-xs font-bold mb-3 sm:mb-4 shadow-xs ${isRtl ? '' : 'uppercase tracking-widest'}`}>
           <Sparkles className="w-3.5 h-3.5 text-brand-rose" />
           {shop.differenceBadge}
         </div>
-        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-brand-dark leading-tight">{t.title}</h2>
-        <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-brand-pink to-brand-rose"></div>
+        <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl text-brand-dark leading-tight">{t.title}</h2>
+        <div className="mx-auto mt-3 sm:mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-brand-pink to-brand-rose"></div>
       </div>
 
       {/* ================= Desktop / Tablet ================= */}
@@ -82,7 +82,7 @@ export default function ComparisonTable({ lang }) {
       {/* ================= Mobile ================= */}
       <div className="md:hidden">
         {/* Legend */}
-        <div className="flex items-center justify-center gap-3 mb-6 text-xs font-bold">
+        <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6 text-xs font-bold">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-rose text-white shadow-md">
             <Check className="w-3.5 h-3.5" strokeWidth={3} /> {gloworaLabel}
           </span>
@@ -92,17 +92,17 @@ export default function ComparisonTable({ lang }) {
           </span>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {t.rows.map((row, idx) => {
             const Icon = ROW_ICONS[idx] || Sparkles;
             return (
-              <div key={idx} className="bg-white rounded-3xl p-4 shadow-[0_10px_30px_-12px_rgba(61,27,34,0.15)] border border-brand-peach">
+              <div key={idx} className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-[0_10px_30px_-12px_rgba(61,27,34,0.15)] border border-brand-peach">
                 {/* Feature title */}
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="shrink-0 w-10 h-10 rounded-2xl bg-brand-peach text-brand-rose flex items-center justify-center">
-                    <Icon className="w-5 h-5" />
+                <div className="flex items-center gap-2.5 sm:gap-3 mb-2.5 sm:mb-3">
+                  <span className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-brand-peach text-brand-rose flex items-center justify-center">
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </span>
-                  <h3 className="font-bold text-brand-dark text-base">{row.f}</h3>
+                  <h3 className="font-bold text-brand-dark text-sm sm:text-base">{row.f}</h3>
                 </div>
 
                 {/* Glowora */}

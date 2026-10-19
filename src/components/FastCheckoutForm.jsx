@@ -96,7 +96,7 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
   };
 
   return (
-    <section className="pb-20 sm:pb-32 pt-8 sm:pt-12 relative">
+    <section className="pb-12 sm:pb-32 pt-4 sm:pt-12 relative">
       {/* Decorative background blur */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-brand-peach/30 pointer-events-none"></div>
       
@@ -105,13 +105,13 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
         <div className="bg-white/80 backdrop-blur-2xl rounded-3xl sm:rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(184,92,102,0.1)] border border-white/60 overflow-hidden flex flex-col md:flex-row">
           
           {/* Order Summary sidebar */}
-          <div className="w-full md:w-5/12 bg-gradient-to-br from-brand-peach/40 to-transparent p-6 sm:p-8 lg:p-12 border-b md:border-b-0 md:border-r border-brand-pink/20 flex flex-col">
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-dark mb-6 sm:mb-8 flex items-center gap-3">
+          <div className="w-full md:w-5/12 bg-gradient-to-br from-brand-peach/40 to-transparent p-4 sm:p-8 lg:p-12 border-b md:border-b-0 md:border-r border-brand-pink/20 flex flex-col">
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-dark mb-4 sm:mb-8 flex items-center gap-3">
               <span className="w-8 h-8 rounded-full bg-[#F7D6DE] flex items-center justify-center text-brand-dark font-bold text-sm border border-[#edd0d7]">1</span>
               {t.summaryTitle}
             </h3>
             
-            <div className="bg-white/60 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/50 space-y-5 mb-8 flex-grow">
+            <div className="bg-white/60 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-white/50 space-y-3.5 sm:space-y-5 mb-4 sm:mb-8 flex-grow">
               <div className="flex justify-between items-center pb-5 border-b border-brand-pink/20">
                 <div>
                   <p className="text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1">{tPricingInfo.quantity}</p>
@@ -152,13 +152,13 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
           </div>
 
           {/* Checkout Form */}
-          <div className="w-full md:w-7/12 p-6 sm:p-8 lg:p-12 bg-white/40">
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-dark mb-6 sm:mb-8 flex items-center gap-3">
+          <div className="w-full md:w-7/12 p-4 sm:p-8 lg:p-12 bg-white/40">
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-dark mb-4 sm:mb-8 flex items-center gap-3">
               <span className="w-8 h-8 rounded-full bg-[#F7D6DE] flex items-center justify-center text-brand-dark font-bold text-sm border border-[#edd0d7]">2</span>
               Delivery Details
             </h3>
 
-            <form className="space-y-7" onSubmit={handleSubmit}>
+            <form className="space-y-4 sm:space-y-7" onSubmit={handleSubmit}>
               
               {errorMsg && (
                 <div className="p-4 rounded-2xl bg-red-50/80 backdrop-blur-md border border-red-100 text-red-600 text-sm font-medium flex items-center gap-2">
@@ -200,40 +200,40 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
               </div>
 
               {/* Payment Methods (Redesigned as sleek luxury pills) */}
-              <div className="pt-6">
-                <h3 className="text-2xl font-serif font-bold text-brand-dark mb-6 flex items-center gap-3">
+              <div className="pt-4 sm:pt-6">
+                <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-dark mb-4 sm:mb-6 flex items-center gap-3">
                   <span className="w-8 h-8 rounded-full bg-[#F7D6DE] flex items-center justify-center text-brand-dark font-bold text-sm border border-[#edd0d7]">3</span>
                   {t.payment.title}
                 </h3>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2.5 sm:gap-3">
                   
                   {/* COD */}
-                  <label className={`cursor-pointer group flex items-center p-5 rounded-2xl border transition-all duration-300 ${
+                  <label className={`cursor-pointer group flex items-center p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all duration-300 ${
                       paymentMethod === 'cod' ? 'border-brand-rose bg-brand-rose/5 shadow-md shadow-brand-rose/10' : 'border-white bg-white hover:border-brand-pink/50 hover:shadow-sm'
                     }`}>
                     <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="sr-only" />
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${paymentMethod === 'cod' ? 'border-brand-rose' : 'border-gray-300 group-hover:border-brand-pink'}`}>
                       {paymentMethod === 'cod' && <div className="w-2.5 h-2.5 rounded-full bg-brand-rose"></div>}
                     </div>
-                    <div className="ml-4 mr-4 flex items-center justify-between w-full">
+                    <div className="ml-3 mr-3 sm:ml-4 sm:mr-4 flex items-center justify-between w-full">
                       <div>
-                        <div className={`font-semibold ${paymentMethod === 'cod' ? 'text-brand-rose' : 'text-brand-dark'}`}>{t.payment.cod}</div>
-                        <div className="text-xs text-brand-muted mt-0.5">{t.payment.codNote}</div>
+                        <div className={`font-semibold text-sm sm:text-base ${paymentMethod === 'cod' ? 'text-brand-rose' : 'text-brand-dark'}`}>{t.payment.cod}</div>
+                        <div className="text-[11px] sm:text-xs text-brand-muted mt-0.5">{t.payment.codNote}</div>
                       </div>
-                      <Truck className={`w-6 h-6 shrink-0 ${paymentMethod === 'cod' ? 'text-brand-rose' : 'text-gray-400'}`} />
+                      <Truck className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${paymentMethod === 'cod' ? 'text-brand-rose' : 'text-gray-400'}`} />
                     </div>
                   </label>
                   
                   {/* Card */}
-                  <label className={`cursor-pointer group flex items-center p-5 rounded-2xl border transition-all duration-300 ${
+                  <label className={`cursor-pointer group flex items-center p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all duration-300 ${
                       paymentMethod === 'card' ? 'border-brand-rose bg-brand-rose/5 shadow-md shadow-brand-rose/10' : 'border-white bg-white hover:border-brand-pink/50 hover:shadow-sm'
                     }`}>
                     <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} className="sr-only" />
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${paymentMethod === 'card' ? 'border-brand-rose' : 'border-gray-300 group-hover:border-brand-pink'}`}>
                       {paymentMethod === 'card' && <div className="w-2.5 h-2.5 rounded-full bg-brand-rose"></div>}
                     </div>
-                    <div className="ml-4 mr-4 flex items-center justify-between w-full">
-                      <div className={`font-semibold ${paymentMethod === 'card' ? 'text-brand-rose' : 'text-brand-dark'}`}>
+                    <div className="ml-3 mr-3 sm:ml-4 sm:mr-4 flex items-center justify-between w-full">
+                      <div className={`font-semibold text-sm sm:text-base ${paymentMethod === 'card' ? 'text-brand-rose' : 'text-brand-dark'}`}>
                         {t.payment.card}
                       </div>
                       <CreditCard className={`w-6 h-6 shrink-0 ${paymentMethod === 'card' ? 'text-brand-rose' : 'text-gray-400'}`} />

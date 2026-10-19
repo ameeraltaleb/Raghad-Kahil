@@ -27,10 +27,10 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
   const handleDecrement = () => setQuantity(q => Math.max(1, q - 1));
 
   return (
-    <section id="bundles" className="py-12 sm:py-16 lg:py-20 bg-brand-bg relative">
+    <section id="bundles" className="py-8 sm:py-16 lg:py-20 bg-brand-bg relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 lg:gap-16 items-start">
 
           {/* Image Gallery */}
           <div className="flex flex-col gap-3 sm:gap-4 md:sticky md:top-24">
