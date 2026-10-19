@@ -57,7 +57,7 @@ export default function HeroSection({ lang, onWatchVideo }) {
             {t.hero.badge}
           </div>
           {t.hero.pamperBadge && (
-            <div className="inline-flex items-center bg-[#F7D6DE]/30 backdrop-blur-md border border-[#F7D6DE]/80 text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold shadow-md animate-float">
+            <div className="inline-flex items-center bg-[#FBC6E2]/35 backdrop-blur-md border border-[#FBC6E2]/90 text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold shadow-md animate-float">
               {t.hero.pamperBadge}
             </div>
           )}

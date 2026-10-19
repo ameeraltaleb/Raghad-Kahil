@@ -132,7 +132,7 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
     >
       {/* Feminine Glowing Outline Container */}
       <div 
-        className="relative w-full max-w-[430px] sm:w-[390px] h-[88vh] sm:h-[82vh] max-h-[820px] p-[2.5px] rounded-t-[2.5rem] sm:rounded-[2.8rem] bg-gradient-to-b from-[#F7D6DE] via-[#F8DCE2]/80 to-[#B85C66]/60 shadow-[0_20px_80px_rgba(247,214,222,0.45),0_15px_45px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden transform transition-all duration-300 animate-fade-in-up"
+        className="relative w-full max-w-[430px] sm:w-[390px] h-[88vh] sm:h-[82vh] max-h-[820px] p-[2.5px] rounded-t-[2.5rem] sm:rounded-[2.8rem] bg-gradient-to-b from-[#FBC6E2] via-[#FCE3F0] to-[#B85C66]/60 shadow-[0_20px_80px_rgba(251,198,226,0.5),0_15px_45px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden transform transition-all duration-300 animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
         onContextMenu={(e) => e.preventDefault()}
       >
@@ -143,7 +143,7 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
           <div className="absolute top-2.5 inset-x-3.5 z-40 flex items-center gap-1 pointer-events-none">
             <div className="flex-1 h-1 bg-white/25 rounded-full overflow-hidden backdrop-blur-sm">
               <div 
-                className="h-full bg-gradient-to-r from-[#F7D6DE] to-white rounded-full transition-all duration-100 ease-linear shadow-[0_0_8px_#F7D6DE]"
+                className="h-full bg-gradient-to-r from-[#FBC6E2] to-white rounded-full transition-all duration-100 ease-linear shadow-[0_0_8px_#FBC6E2]"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
@@ -156,12 +156,12 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
               type="button"
               onClick={toggleMute}
               aria-label={isMuted ? 'Unmute' : 'Mute'}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-md text-white border border-[#F7D6DE]/40 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-md text-white border border-[#FBC6E2]/40 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md"
             >
               {isMuted ? (
                 <VolumeX className="w-4 h-4 text-red-300" />
               ) : (
-                <Volume2 className="w-4 h-4 text-[#F7D6DE]" />
+                <Volume2 className="w-4 h-4 text-[#FBC6E2]" />
               )}
             </button>
 
@@ -173,7 +173,7 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-md text-white border border-[#F7D6DE]/40 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-md text-white border border-[#FBC6E2]/40 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md"
             >
               <X className="w-4 h-4 text-white" />
             </button>
@@ -209,11 +209,11 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
             {/* Play / Pause Animated Indicator Icon on Tap */}
             {(showPlayPulse || !isPlaying) && (
               <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-black/55 backdrop-blur-md border border-[#F7D6DE]/60 text-white flex items-center justify-center shadow-[0_0_30px_rgba(247,214,222,0.4)] animate-scale">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-black/55 backdrop-blur-md border border-[#FBC6E2]/60 text-white flex items-center justify-center shadow-[0_0_30px_rgba(251,198,226,0.4)] animate-scale">
                   {!isPlaying ? (
-                    <Play className="w-8 h-8 sm:w-10 sm:h-10 text-[#F7D6DE] fill-current translate-x-0.5" />
+                    <Play className="w-8 h-8 sm:w-10 sm:h-10 text-[#FBC6E2] fill-current translate-x-0.5" />
                   ) : (
-                    <Pause className="w-8 h-8 sm:w-10 sm:h-10 text-[#F7D6DE] fill-current" />
+                    <Pause className="w-8 h-8 sm:w-10 sm:h-10 text-[#FBC6E2] fill-current" />
                   )}
                 </div>
               </div>
@@ -225,9 +225,9 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
             <button
               type="button"
               onClick={handleOrderClick}
-              className="w-full py-3 sm:py-3.5 px-5 rounded-full bg-gradient-to-r from-brand-rose via-[#c9636e] to-[#a64e58] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl shadow-brand-rose/50 hover:scale-102 active:scale-98 transition-all border border-[#F7D6DE]/50 animate-pulse-glow"
+              className="w-full py-3 sm:py-3.5 px-5 rounded-full bg-gradient-to-r from-brand-rose via-[#c9636e] to-[#a64e58] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl shadow-brand-rose/50 hover:scale-102 active:scale-98 transition-all border border-[#FBC6E2]/50 animate-pulse-glow"
             >
-              <Sparkles className="w-4 h-4 text-[#F7D6DE] animate-sparkle" />
+              <Sparkles className="w-4 h-4 text-[#FBC6E2] animate-sparkle" />
               <span>{ctaLabels.order}</span>
               <ArrowIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>

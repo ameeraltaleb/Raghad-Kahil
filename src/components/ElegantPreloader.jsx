@@ -39,7 +39,7 @@ export default function ElegantPreloader({ lang, onStartReveal }) {
           : 'opacity-100'
       }`}
       style={{
-        backgroundColor: isFading ? 'rgba(250, 243, 245, 0)' : '#FAF3F5',
+        backgroundColor: isFading ? 'rgba(252, 246, 249, 0)' : '#FCF6F9',
         transition: 'background-color 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 950ms cubic-bezier(0.16, 1, 0.3, 1)'
       }}
       onClick={triggerReveal}

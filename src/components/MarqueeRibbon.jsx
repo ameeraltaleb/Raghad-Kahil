@@ -16,7 +16,7 @@ export default function MarqueeRibbon({ lang }) {
   const items = [...textItems, ...textItems, ...textItems, ...textItems];
 
   return (
-    <div dir="ltr" className="w-full bg-[#F7D6DE] text-brand-dark py-3.5 overflow-hidden relative border-y border-[#edd0d7] flex items-center shadow-xs z-20">
+    <div dir="ltr" className="w-full bg-[#FBC6E2] text-brand-dark py-3.5 overflow-hidden relative border-y border-[#F3B2D4] flex items-center shadow-xs z-20">
       <div className={`flex whitespace-nowrap ${isRtl ? 'animate-marquee-rtl' : 'animate-marquee'} w-max`}>
         {items.map((item, idx) => (
           <div key={idx} className={`flex items-center mx-6 gap-6 font-bold text-sm tracking-wide ${isRtl ? '' : 'tracking-widest uppercase'}`}>

@@ -42,7 +42,7 @@ export default function ClinicalResults({ lang }) {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
-          <div className="inline-flex items-center bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-3 sm:mb-6 shadow-xs">
+          <div className="inline-flex items-center bg-[#FBC6E2] border border-[#F3B2D4] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-3 sm:mb-6 shadow-xs">
             {t.badge}
           </div>
           <h2 className="font-serif text-2xl sm:text-5xl text-brand-dark leading-tight">
