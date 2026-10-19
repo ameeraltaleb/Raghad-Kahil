@@ -57,7 +57,7 @@ export default function HeroSection({ lang }) {
             {t.hero.badge}
           </div>
           {t.hero.pamperBadge && (
-            <div className="inline-flex items-center bg-brand-rose/60 backdrop-blur-md border border-brand-pink/50 text-white px-4 py-2 rounded-full text-xs font-bold shadow-md animate-float">
+            <div className="inline-flex items-center bg-[#F7D6DE]/30 backdrop-blur-md border border-[#F7D6DE]/80 text-white px-4 py-2 rounded-full text-xs font-bold shadow-md animate-float">
               {t.hero.pamperBadge}
             </div>
           )}

@@ -15,14 +15,14 @@ export default function KeyIngredients({ lang }) {
   const backgrounds = [
     'bg-[#FFF5F2] border-[#FDEEEB]', // Soft peach tint
     'bg-[#FFF9F0] border-[#FFF0D4]', // Soft warm tint
-    'bg-[#FDF7F6] border-[#FCE8EB]', // Soft blush rose tint (matches brand-peach)
+    'bg-[#FEF6F8] border-[#F7D6DE]', // Soft Baby Pink tint
     'bg-[#FAF8F8] border-[#F3EBEB]'  // Soft neutral warm tint
   ];
 
   const iconBackgrounds = [
     'bg-orange-100/50',
     'bg-amber-100/50',
-    'bg-brand-pink/30',
+    'bg-[#F7D6DE]/60',
     'bg-stone-200/50'
   ];
 

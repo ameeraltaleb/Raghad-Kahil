@@ -21,8 +21,8 @@ export default function ComparisonTable({ lang }) {
 
       {/* Heading */}
       <div className="text-center mb-10 sm:mb-14">
-        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-brand-rose/20 text-brand-rose text-xs font-bold mb-4 shadow-sm ${isRtl ? '' : 'uppercase tracking-widest'}`}>
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark text-xs font-bold mb-4 shadow-xs ${isRtl ? '' : 'uppercase tracking-widest'}`}>
+          <Sparkles className="w-3.5 h-3.5 text-brand-rose" />
           {shop.differenceBadge}
         </div>
         <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-brand-dark leading-tight">{t.title}</h2>

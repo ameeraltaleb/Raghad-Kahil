@@ -14,7 +14,7 @@ export default function ProductDetails({ lang }) {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
-          <div className="inline-flex items-center bg-brand-pink/20 text-brand-rose px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider mb-4">
+          <div className="inline-flex items-center bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 shadow-xs">
             {t.badge}
           </div>
           <h2 className="font-serif text-3xl md:text-5xl text-brand-dark mb-6 leading-tight">

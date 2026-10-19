@@ -12,7 +12,7 @@ export default function CustomerReviews({ lang }) {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-          <div className="inline-flex items-center bg-white border border-brand-pink/40 text-brand-rose px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider mb-6 shadow-sm">
+          <div className="inline-flex items-center bg-[#F7D6DE] border border-[#edd0d7] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-6 shadow-xs">
             {t.badge}
           </div>
           <h2 className="font-serif text-3xl md:text-5xl text-brand-dark mb-6 leading-tight">

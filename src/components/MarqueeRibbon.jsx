@@ -16,12 +16,12 @@ export default function MarqueeRibbon({ lang }) {
   const items = [...textItems, ...textItems, ...textItems, ...textItems];
 
   return (
-    <div dir="ltr" className="w-full bg-brand-rose text-brand-peach py-3 overflow-hidden relative border-y border-brand-pink/30 flex items-center shadow-inner z-20">
+    <div dir="ltr" className="w-full bg-[#F7D6DE] text-brand-dark py-3.5 overflow-hidden relative border-y border-[#edd0d7] flex items-center shadow-xs z-20">
       <div className={`flex whitespace-nowrap ${isRtl ? 'animate-marquee-rtl' : 'animate-marquee'} w-max`}>
         {items.map((item, idx) => (
-          <div key={idx} className={`flex items-center mx-6 gap-6 font-bold text-sm ${isRtl ? '' : 'tracking-widest uppercase'}`}>
+          <div key={idx} className={`flex items-center mx-6 gap-6 font-bold text-sm tracking-wide ${isRtl ? '' : 'tracking-widest uppercase'}`}>
             <span dir={isRtl ? 'rtl' : 'ltr'}>{item}</span>
-            {idx % 2 === 0 ? <Sparkles className="w-4 h-4 text-brand-peach/80" /> : <Heart className="w-4 h-4 text-brand-peach/80 fill-current" />}
+            {idx % 2 === 0 ? <Sparkles className="w-4 h-4 text-brand-rose" /> : <Heart className="w-4 h-4 text-brand-rose fill-current" />}
           </div>
         ))}
       </div>

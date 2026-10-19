@@ -2,10 +2,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* Soft Blush & Rose Gold Theme */
-  --color-brand-bg: #FFF5F7;
-  --color-brand-peach: #FCE8EB;
-  --color-brand-pink: #E0B0B0;
+  /* Soft Blush & Pastel Baby Pink Luxury Theme */
+  --color-brand-bg: #FAF5F6;
+  --color-brand-peach: #FCEDF0;
+  --color-brand-pink: #F7D6DE;
+  --color-brand-babypink: #F7D6DE;
   --color-brand-rose: #B85C66;
   --color-brand-dark: #3D1B22;
   --color-brand-muted: #856065;

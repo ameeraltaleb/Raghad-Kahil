@@ -136,8 +136,8 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
                         )}
                       </span>
                       {p.freeGifts.length > 0 ? (
-                        <span className="flex items-center gap-1 text-xs text-brand-rose font-semibold mt-0.5">
-                          <Gift className="w-3.5 h-3.5" /> {shop.bundles.freeGift}
+                        <span className="inline-flex items-center gap-1 text-xs text-brand-dark font-semibold mt-1 px-2 py-0.5 rounded-full bg-[#F7D6DE] border border-[#edd0d7] w-fit">
+                          <Gift className="w-3.5 h-3.5 text-brand-rose" /> {shop.bundles.freeGift}
                         </span>
                       ) : q > 1 ? (
                         <span className="block text-xs text-brand-muted mt-0.5" dir="ltr" style={{ textAlign: isRtl ? 'right' : 'left' }}>

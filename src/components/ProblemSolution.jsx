@@ -13,7 +13,7 @@ export default function ProblemSolution({ lang }) {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-          <div className="inline-flex items-center bg-brand-pink/20 text-brand-rose px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider mb-4">
+          <div className="inline-flex items-center bg-[#F7D6DE] text-brand-dark px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 border border-[#edd0d7] shadow-xs">
             {t.badge}
           </div>
           <h2 className="font-serif text-3xl md:text-4xl text-brand-dark leading-tight">

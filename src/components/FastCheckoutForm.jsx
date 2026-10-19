@@ -107,7 +107,7 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
           {/* Order Summary sidebar */}
           <div className="w-full md:w-5/12 bg-gradient-to-br from-brand-peach/40 to-transparent p-6 sm:p-8 lg:p-12 border-b md:border-b-0 md:border-r border-brand-pink/20 flex flex-col">
             <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-dark mb-6 sm:mb-8 flex items-center gap-3">
-              <span className="w-8 h-8 rounded-full bg-brand-rose/10 flex items-center justify-center text-brand-rose">1</span>
+              <span className="w-8 h-8 rounded-full bg-[#F7D6DE] flex items-center justify-center text-brand-dark font-bold text-sm border border-[#edd0d7]">1</span>
               {t.summaryTitle}
             </h3>
             
@@ -154,7 +154,7 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
           {/* Checkout Form */}
           <div className="w-full md:w-7/12 p-6 sm:p-8 lg:p-12 bg-white/40">
             <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-dark mb-6 sm:mb-8 flex items-center gap-3">
-              <span className="w-8 h-8 rounded-full bg-brand-rose/10 flex items-center justify-center text-brand-rose">2</span>
+              <span className="w-8 h-8 rounded-full bg-[#F7D6DE] flex items-center justify-center text-brand-dark font-bold text-sm border border-[#edd0d7]">2</span>
               Delivery Details
             </h3>
 
@@ -202,7 +202,7 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
               {/* Payment Methods (Redesigned as sleek luxury pills) */}
               <div className="pt-6">
                 <h3 className="text-2xl font-serif font-bold text-brand-dark mb-6 flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-full bg-brand-rose/10 flex items-center justify-center text-brand-rose">3</span>
+                  <span className="w-8 h-8 rounded-full bg-[#F7D6DE] flex items-center justify-center text-brand-dark font-bold text-sm border border-[#edd0d7]">3</span>
                   {t.payment.title}
                 </h3>
                 <div className="flex flex-col gap-3">
