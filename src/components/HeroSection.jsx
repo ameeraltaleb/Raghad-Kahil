@@ -5,7 +5,7 @@ import hero1Img from '../assets/hero1.png';
 import hero2Img from '../assets/hero2.png';
 import hero3Img from '../assets/hero3.jpg';
 
-export default function HeroSection({ lang }) {
+export default function HeroSection({ lang, onWatchVideo }) {
   const t = translations[lang];
   const isRtl = lang === 'ar';
   
@@ -80,7 +80,11 @@ export default function HeroSection({ lang }) {
             <ArrowIcon className="w-4 h-4 sm:w-6 sm:h-6" />
           </button>
           
-          <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 text-white px-4 py-3 sm:px-10 sm:py-5 rounded-full font-bold text-sm sm:text-xl hover:bg-white/10 transition-all border-2 border-white/50 backdrop-blur-sm whitespace-nowrap">
+          <button 
+            type="button"
+            onClick={onWatchVideo}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 text-white px-4 py-3 sm:px-10 sm:py-5 rounded-full font-bold text-sm sm:text-xl hover:bg-white/10 transition-all border-2 border-white/50 backdrop-blur-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 shadow-lg"
+          >
             <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
             {t.cta.watchVideo}
           </button>

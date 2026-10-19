@@ -16,6 +16,7 @@ import ComparisonTable from './components/ComparisonTable';
 import ElegantPreloader from './components/ElegantPreloader';
 import StickyAddToCart from './components/StickyAddToCart';
 import SocialProofToast from './components/SocialProofToast';
+import VideoModal from './components/VideoModal';
 import { translations } from './translations';
 
 import { detectUserLocale } from './utils/geoDetection';
@@ -26,6 +27,7 @@ function App() {
   const [currency, setCurrency] = useState(locale.currency);
   const [countryCode] = useState(locale.countryCode);
   const [isSiteRevealed, setIsSiteRevealed] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   // Persist language and sync currency smartly when user toggles
   const handleLangChange = (newLang) => {
@@ -77,7 +79,7 @@ function App() {
       >
         <Navbar lang={lang} setLang={handleLangChange} />
         <main>
-          <HeroSection lang={lang} />
+          <HeroSection lang={lang} onWatchVideo={() => setIsVideoModalOpen(true)} />
           <MarqueeRibbon lang={lang} />
           <ProblemSolution lang={lang} />
           <ComparisonTable lang={lang} />
@@ -96,6 +98,14 @@ function App() {
       </div>
 
       <ElegantPreloader lang={lang} onStartReveal={() => setIsSiteRevealed(true)} />
+
+      {/* Luxury Lightbox Video Player */}
+      <VideoModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        lang={lang} 
+        videoSrc="/promo.mp4" 
+      />
     </div>
   );
 }
