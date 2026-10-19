@@ -3,7 +3,7 @@ import BundlePricing from './BundlePricing';
 import FastCheckoutForm from './FastCheckoutForm';
 import OrderSuccessModal from './OrderSuccessModal';
 
-export default function CheckoutSection({ lang, currency, setCurrency }) {
+export default function CheckoutSection({ lang, currency, setCurrency, countryCode }) {
   const [quantity, setQuantity] = useState(1);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
@@ -49,6 +49,7 @@ export default function CheckoutSection({ lang, currency, setCurrency }) {
             lang={lang} 
             quantity={quantity}
             currency={currency}
+            countryCode={countryCode}
             onOrderSuccess={handleOrderSuccess}
           />
         </div>

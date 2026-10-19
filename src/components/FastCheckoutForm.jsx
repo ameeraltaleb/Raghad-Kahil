@@ -5,7 +5,7 @@ import GuaranteeBadge from './GuaranteeBadge';
 import { submitOrder } from '../services/orderService';
 import { countries, currencies, calculatePricing } from '../data/checkoutData';
 
-export default function FastCheckoutForm({ lang, quantity, currency, onOrderSuccess }) {
+export default function FastCheckoutForm({ lang, quantity, currency, countryCode = 'TR', onOrderSuccess }) {
   const t = translations[lang].checkout;
   const tPricingInfo = translations[lang].pricing;
   const isRtl = lang === 'ar';
@@ -18,10 +18,12 @@ export default function FastCheckoutForm({ lang, quantity, currency, onOrderSucc
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  const initialCountry = countries.find(c => c.code === countryCode) || countries[0];
+
   const [formData, setFormData] = useState({
     fullName: '',
-    phone: '',
-    countryCode: 'TR',
+    phone: initialCountry ? initialCountry.dialCode + ' ' : '',
+    countryCode: initialCountry ? initialCountry.code : 'TR',
     city: '',
     address: ''
   });

@@ -18,46 +18,34 @@ import StickyAddToCart from './components/StickyAddToCart';
 import SocialProofToast from './components/SocialProofToast';
 import { translations } from './translations';
 
-const getBrowserLanguage = () => {
-  if (typeof window !== 'undefined') {
-    // 1. Check if the user previously selected a language
-    const saved = localStorage.getItem('raghad_lang');
-    if (saved && ['ar', 'tr', 'en'].includes(saved)) return saved;
-
-    // 2. Check full user preferred languages list
-    if (navigator.languages && navigator.languages.length) {
-      for (const l of navigator.languages) {
-        const lower = l.toLowerCase();
-        if (lower.startsWith('ar')) return 'ar';
-        if (lower.startsWith('tr')) return 'tr';
-      }
-    }
-
-    // 3. Check primary navigator language
-    if (navigator.language) {
-      const browserLang = navigator.language.toLowerCase();
-      if (browserLang.startsWith('ar')) return 'ar';
-      if (browserLang.startsWith('tr')) return 'tr';
-    }
-  }
-  // Default to Arabic for Middle Eastern / Gulf beauty brand
-  return 'ar';
-};
-
-const DEFAULT_CURRENCY = { ar: 'SAR', tr: 'TRY', en: 'USD' };
+import { detectUserLocale } from './utils/geoDetection';
 
 function App() {
-  const [lang, setLang] = useState(getBrowserLanguage());
-  const [currency, setCurrency] = useState(() => DEFAULT_CURRENCY[getBrowserLanguage()] || 'SAR');
+  const [locale] = useState(() => detectUserLocale());
+  const [lang, setLang] = useState(locale.lang);
+  const [currency, setCurrency] = useState(locale.currency);
+  const [countryCode] = useState(locale.countryCode);
   const [isSiteRevealed, setIsSiteRevealed] = useState(false);
 
-  // Switch to natural currency and persist language choice
-  useEffect(() => {
-    setCurrency(DEFAULT_CURRENCY[lang] || 'USD');
+  // Persist language and sync currency smartly when user toggles
+  const handleLangChange = (newLang) => {
+    setLang(newLang);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('raghad_lang', lang);
+      localStorage.setItem('raghad_lang', newLang);
+      if (newLang === 'tr' && !localStorage.getItem('raghad_currency')) {
+        setCurrency('TRY');
+      } else if (newLang === 'ar' && !localStorage.getItem('raghad_currency')) {
+        setCurrency('SAR');
+      }
     }
-  }, [lang]);
+  };
+
+  const handleCurrencyChange = (newCurrency) => {
+    setCurrency(newCurrency);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('raghad_currency', newCurrency);
+    }
+  };
   
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -87,7 +75,7 @@ function App() {
           isSiteRevealed ? 'opacity-100' : 'opacity-85'
         }`}
       >
-        <Navbar lang={lang} setLang={setLang} />
+        <Navbar lang={lang} setLang={handleLangChange} />
         <main>
           <HeroSection lang={lang} />
           <MarqueeRibbon lang={lang} />
@@ -97,7 +85,7 @@ function App() {
           <ClinicalResults lang={lang} />
           <HowToUse lang={lang} />
           <ProductDetails lang={lang} />
-          <CheckoutSection lang={lang} currency={currency} setCurrency={setCurrency} />
+          <CheckoutSection lang={lang} currency={currency} setCurrency={handleCurrencyChange} countryCode={countryCode} />
           <CustomerReviews lang={lang} />
           <FAQAccordion lang={lang} />
         </main>
