@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Star, CheckCircle2, Quote, PenSquare, X, ThumbsUp, Sparkles, Heart } from 'lucide-react';
+import { 
+  Star, CheckCircle2, Quote, PenSquare, X, ThumbsUp, Sparkles, Heart, 
+  MessageCircle, Lock, ShieldCheck, Plus, Trash2, Check, Clock, Eye 
+} from 'lucide-react';
 import { translations } from '../translations';
+import { WHATSAPP_PHONE, WHATSAPP_DISPLAY } from '../utils/whatsapp';
 
-const STORAGE_KEY = 'raghad_customer_reviews';
+const PENDING_STORAGE_KEY = 'raghad_pending_reviews';
+const APPROVED_STORAGE_KEY = 'raghad_approved_reviews';
+const ADMIN_PIN = '7700';
 
 export default function CustomerReviews({ lang }) {
   const t = translations[lang]?.reviews || translations.ar.reviews;
@@ -10,7 +16,7 @@ export default function CustomerReviews({ lang }) {
 
   // Modal & form states
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userReviews, setUserReviews] = useState([]);
+  const [submittedReviewData, setSubmittedReviewData] = useState(null);
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [name, setName] = useState('');
@@ -18,29 +24,85 @@ export default function CustomerReviews({ lang }) {
   const [reviewText, setReviewText] = useState('');
   const [recommend, setRecommend] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successNotice, setSuccessNotice] = useState(false);
+  const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
 
-  // Load user reviews from localStorage
+  // Admin Moderation Modal States
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [adminPinInput, setAdminPinInput] = useState('');
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [adminPinError, setAdminPinError] = useState(false);
+  const [adminTab, setAdminTab] = useState('pending'); // 'pending', 'add', 'approved'
+
+  // Admin Quick Add Form State
+  const [adminNewName, setAdminNewName] = useState('');
+  const [adminNewLocation, setAdminNewLocation] = useState('');
+  const [adminNewRating, setAdminNewRating] = useState(5);
+  const [adminNewText, setAdminNewText] = useState('');
+  const [adminNewRecommend, setAdminNewRecommend] = useState(true);
+
+  // Persistent lists
+  const [pendingReviews, setPendingReviews] = useState([]);
+  const [approvedReviews, setApprovedReviews] = useState([]);
+
+  // Load reviews from localStorage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setUserReviews(JSON.parse(stored));
-      }
+      const storedPending = localStorage.getItem(PENDING_STORAGE_KEY);
+      if (storedPending) setPendingReviews(JSON.parse(storedPending));
+
+      const storedApproved = localStorage.getItem(APPROVED_STORAGE_KEY);
+      if (storedApproved) setApprovedReviews(JSON.parse(storedApproved));
     } catch (e) {
-      console.error('Failed to load reviews:', e);
+      console.error('Failed to load reviews storage:', e);
     }
   }, []);
 
-  // Handle new review submission
-  const handleSubmit = (e) => {
+  // Save approved reviews to localStorage
+  const saveApprovedReviews = (newList) => {
+    setApprovedReviews(newList);
+    try {
+      localStorage.setItem(APPROVED_STORAGE_KEY, JSON.stringify(newList));
+    } catch (e) {
+      console.error('Failed to save approved reviews:', e);
+    }
+  };
+
+  // Save pending reviews to localStorage
+  const savePendingReviews = (newList) => {
+    setPendingReviews(newList);
+    try {
+      localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(newList));
+    } catch (e) {
+      console.error('Failed to save pending reviews:', e);
+    }
+  };
+
+  // Build WhatsApp review notification link
+  const buildWhatsAppReviewUrl = (reviewItem) => {
+    const starEmojis = '⭐'.repeat(reviewItem.rating || 5);
+    let msg = `مرحباً رغد كحيل 🌸✨\n`;
+    msg += `أود إرسال تقييمي وتجربتي لجل وشمع الحواجب للمراجعة والنشر:\n`;
+    msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
+    msg += `⭐ التقييم: ${reviewItem.rating} / 5 نجوم ${starEmojis}\n`;
+    msg += `👤 الاسم: ${reviewItem.name}\n`;
+    msg += `📍 المدينة / الدولة: ${reviewItem.location}\n`;
+    msg += `👍 هل توصي به: ${reviewItem.recommended ? 'نعم، أوصي به بشدة' : 'تجربة عادية'}\n`;
+    msg += `💬 نص التقييم والتجربة:\n"${reviewItem.text}"\n`;
+    msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
+    msg += `يرجى مراجعة التقييم واعتماده على الموقع، شكراً لكم 💕`;
+
+    return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`;
+  };
+
+  // Handle customer submit
+  const handleCustomerSubmit = (e) => {
     e.preventDefault();
     if (!name.trim() || !reviewText.trim()) return;
 
     setIsSubmitting(true);
 
     const nowText = lang === 'ar' ? 'الآن' : lang === 'tr' ? 'Az önce' : 'Just now';
-    const newReview = {
+    const newPendingItem = {
       id: Date.now(),
       name: name.trim(),
       location: city.trim() || (lang === 'ar' ? 'الرياض' : lang === 'tr' ? 'İstanbul' : 'Verified Buyer'),
@@ -48,38 +110,82 @@ export default function CustomerReviews({ lang }) {
       time: nowText,
       text: reviewText.trim(),
       recommended: recommend,
-      isUserSubmitted: true
+      status: 'pending',
+      date: new Date().toLocaleDateString(lang === 'ar' ? 'ar-SA' : 'en-US')
     };
 
     setTimeout(() => {
-      const updated = [newReview, ...userReviews];
-      setUserReviews(updated);
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      } catch (err) {
-        console.error('Failed to save review:', err);
-      }
+      const updatedPending = [newPendingItem, ...pendingReviews];
+      savePendingReviews(updatedPending);
 
+      setSubmittedReviewData(newPendingItem);
       setIsSubmitting(false);
-      setSuccessNotice(true);
+      setIsSubmittedSuccess(true);
 
-      // Reset form
+      // Reset form fields
       setName('');
       setCity('');
       setReviewText('');
       setRating(5);
       setRecommend(true);
-
-      // Close modal after 1.5 seconds
-      setTimeout(() => {
-        setSuccessNotice(false);
-        setIsModalOpen(false);
-      }, 1600);
-    }, 400);
+    }, 350);
   };
 
-  // Combine user-submitted reviews with predefined reviews
-  const allReviews = [...userReviews, ...(t.items || [])];
+  // Admin PIN verification
+  const handleAdminLogin = (e) => {
+    e.preventDefault();
+    if (adminPinInput.trim() === ADMIN_PIN) {
+      setIsAdminAuthenticated(true);
+      setAdminPinError(false);
+      setAdminPinInput('');
+    } else {
+      setAdminPinError(true);
+    }
+  };
+
+  // Admin Approve Action
+  const handleApprovePending = (item) => {
+    const approvedItem = { ...item, status: 'approved', time: lang === 'ar' ? 'حديثاً' : 'Recently' };
+    saveApprovedReviews([approvedItem, ...approvedReviews]);
+    savePendingReviews(pendingReviews.filter(p => p.id !== item.id));
+  };
+
+  // Admin Delete Pending Action
+  const handleDeletePending = (id) => {
+    savePendingReviews(pendingReviews.filter(p => p.id !== id));
+  };
+
+  // Admin Delete Approved Action
+  const handleDeleteApproved = (id) => {
+    saveApprovedReviews(approvedReviews.filter(p => p.id !== id));
+  };
+
+  // Admin Quick Add Submit
+  const handleAdminAddSubmit = (e) => {
+    e.preventDefault();
+    if (!adminNewName.trim() || !adminNewText.trim()) return;
+
+    const newItem = {
+      id: Date.now(),
+      name: adminNewName.trim(),
+      location: adminNewLocation.trim() || (lang === 'ar' ? 'عميلة موثقة' : 'Verified Buyer'),
+      rating: adminNewRating,
+      time: lang === 'ar' ? 'حديثاً' : 'Recently',
+      text: adminNewText.trim(),
+      recommended: adminNewRecommend,
+      status: 'approved'
+    };
+
+    saveApprovedReviews([newItem, ...approvedReviews]);
+    setAdminNewName('');
+    setAdminNewLocation('');
+    setAdminNewText('');
+    setAdminNewRating(5);
+    setAdminTab('approved');
+  };
+
+  // Combine approved user reviews with default authentic reviews
+  const allDisplayReviews = [...approvedReviews, ...(t.items || [])];
 
   const ratingPhrases = {
     ar: ['', 'مقبول', 'جيد', 'جيد جداً', 'رائع جداً ✨', 'ممتاز وأنصح به بشدة! 💖'],
@@ -109,7 +215,7 @@ export default function CustomerReviews({ lang }) {
         </div>
 
         {/* Rating Summary & Write Review Bar */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#F3B2D4]/60 shadow-sm mb-8 sm:mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#F3B2D4]/60 shadow-xs mb-8 sm:mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-start">
             <div className="flex items-center gap-3">
               <span className="font-serif text-4xl sm:text-5xl font-black text-brand-dark">4.9</span>
@@ -120,7 +226,7 @@ export default function CustomerReviews({ lang }) {
                   ))}
                 </div>
                 <div className="text-xs text-brand-muted mt-1 font-medium">
-                  {lang === 'ar' ? 'أكثر من 10,000 تقييم مؤكد' : lang === 'tr' ? '10.000+ Doğrulanmış Yorum' : '10,000+ Verified Reviews'}
+                  {lang === 'ar' ? 'أكثر من 10,000 تقييم موثق' : lang === 'tr' ? '10.000+ Doğrulanmış Yorum' : '10,000+ Verified Reviews'}
                 </div>
               </div>
             </div>
@@ -135,8 +241,12 @@ export default function CustomerReviews({ lang }) {
 
           {/* Action button to open write-review modal */}
           <button
-            onClick={() => setIsModalOpen(true)}
-            className="w-full md:w-auto inline-flex items-center justify-center gap-2.5 bg-[#FBC6E2] hover:bg-[#f8b4d8] text-brand-dark font-bold px-6 py-3.5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-[#F3B2D4] cursor-pointer group"
+            onClick={() => {
+              setIsSubmittedSuccess(false);
+              setSubmittedReviewData(null);
+              setIsModalOpen(true);
+            }}
+            className="w-full md:w-auto inline-flex items-center justify-center gap-2.5 bg-[#FBC6E2] hover:bg-[#f8b4d8] text-brand-dark font-bold px-6 py-3.5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 border border-[#F3B2D4] cursor-pointer group"
           >
             <PenSquare className="w-4 h-4 text-brand-dark group-hover:rotate-6 transition-transform" />
             <span>{t.writeBtn || (lang === 'ar' ? 'اكتبي تقييمكِ الآن' : 'Write a Review')}</span>
@@ -145,14 +255,14 @@ export default function CustomerReviews({ lang }) {
 
         {/* Reviews Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {allReviews.map((review, index) => {
-            const isUserReview = Boolean(review.isUserSubmitted);
+          {allDisplayReviews.map((review, index) => {
+            const isCustomApproved = Boolean(review.id);
 
             return (
               <div
                 key={review.id || index}
-                className={`bg-white rounded-3xl p-5 sm:p-7 shadow-xs border transition-all duration-300 flex flex-col h-full relative group hover:shadow-md ${
-                  isUserReview ? 'border-[#FBC6E2] ring-2 ring-[#FBC6E2]/40 bg-linear-to-b from-white to-[#FBC6E2]/10' : 'border-[#F3B2D4]/50'
+                className={`bg-white rounded-3xl p-5 sm:p-7 shadow-2xs border transition-all duration-300 flex flex-col h-full relative group hover:shadow-md ${
+                  isCustomApproved ? 'border-[#FBC6E2] bg-gradient-to-b from-white to-[#FBC6E2]/10' : 'border-[#F3B2D4]/50'
                 }`}
               >
                 {/* Decorative quote icon */}
@@ -166,16 +276,9 @@ export default function CustomerReviews({ lang }) {
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {isUserReview && (
-                      <span className="text-[10px] font-bold bg-[#FBC6E2] text-brand-dark px-2 py-0.5 rounded-full border border-[#F3B2D4]">
-                        {lang === 'ar' ? 'تقييمكِ' : lang === 'tr' ? 'Yorumunuz' : 'Your Review'}
-                      </span>
-                    )}
-                    <span className="text-xs text-brand-muted font-medium">
-                      {review.time}
-                    </span>
-                  </div>
+                  <span className="text-xs text-brand-muted font-medium">
+                    {review.time}
+                  </span>
                 </div>
 
                 {/* Recommendation pill if applicable */}
@@ -212,9 +315,26 @@ export default function CustomerReviews({ lang }) {
             );
           })}
         </div>
+
+        {/* Discreet Owner Moderation Link */}
+        <div className="mt-12 text-center">
+          <button
+            onClick={() => setIsAdminOpen(true)}
+            className="inline-flex items-center gap-1.5 text-xs text-brand-muted hover:text-brand-dark transition-colors px-3 py-1.5 rounded-full hover:bg-white/60 border border-transparent hover:border-[#F3B2D4] cursor-pointer"
+          >
+            <Lock className="w-3 h-3 text-brand-rose" />
+            <span>{lang === 'ar' ? 'إدارة واعتماد التقييمات (خاص بالإدارة)' : 'Review Moderation Portal'}</span>
+            {pendingReviews.length > 0 && (
+              <span className="bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
+                {pendingReviews.length}
+              </span>
+            )}
+          </button>
+        </div>
+
       </div>
 
-      {/* Interactive Write a Review Modal */}
+      {/* CUSTOMER MODAL: Write a Review */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
           <div
@@ -230,128 +350,450 @@ export default function CustomerReviews({ lang }) {
               <X className="w-5 h-5" />
             </button>
 
-            {/* Modal Header */}
-            <div className="text-center mb-6">
-              <div className="w-12 h-12 bg-[#FBC6E2] rounded-full flex items-center justify-center mx-auto mb-3 border border-[#F3B2D4]">
-                <Heart className="w-6 h-6 text-brand-dark fill-current" />
-              </div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-dark mb-1.5">
-                {t.modalTitle || (lang === 'ar' ? 'شاركينا رأيكِ وتجربتكِ' : 'Share Your Experience')}
-              </h3>
-              <p className="text-xs sm:text-sm text-brand-muted max-w-sm mx-auto">
-                {t.modalSubtitle || (lang === 'ar' ? 'رأيكِ الصادق يلهم آلاف السيدات لاكتشاف حواجب مثالية ✨' : 'Your feedback helps other customers')}
-              </p>
-            </div>
+            {/* If Submitted: Show Confirmation & WhatsApp Option */}
+            {isSubmittedSuccess && submittedReviewData ? (
+              <div className="text-center py-4 space-y-4">
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-600">
+                  <CheckCircle2 className="w-10 h-10" />
+                </div>
+                
+                <h3 className="font-serif text-2xl font-bold text-brand-dark">
+                  {lang === 'ar' ? 'شكراً لكِ من القلب! 💖' : 'Thank You! 💖'}
+                </h3>
+                
+                <p className="text-sm text-brand-muted max-w-sm mx-auto leading-relaxed">
+                  {lang === 'ar'
+                    ? 'تم استلام تقييمكِ بنجاح! سيتم اعتماده ونشره ليظهر لجميع الزوار بعد المراجعة السريعة.'
+                    : 'Your review has been submitted for quick approval. Thank you for sharing!'}
+                </p>
 
-            {/* Success message banner */}
-            {successNotice ? (
-              <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-6 text-center animate-in zoom-in-95 duration-200 my-4">
-                <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                <h4 className="font-bold text-base mb-1">
-                  {t.successMsg || (lang === 'ar' ? 'شكراً لكِ! تم نشر تقييمكِ بنجاح ✨' : 'Review published successfully!')}
-                </h4>
+                {/* Direct WhatsApp Share Action */}
+                <div className="bg-[#FFF5F9] p-4 rounded-2xl border border-[#F3B2D4]/60 text-start space-y-2 mt-4">
+                  <div className="text-xs font-bold text-brand-dark flex items-center gap-1.5">
+                    <MessageCircle className="w-4 h-4 text-emerald-600" />
+                    <span>{lang === 'ar' ? 'هل تودين إرسال تقييمكِ مباشرة للواتساب؟' : 'Send directly to WhatsApp?'}</span>
+                  </div>
+                  <p className="text-[11px] text-brand-muted">
+                    {lang === 'ar'
+                      ? 'يمكنكِ إرسال تقييمكِ بضغطة زر لمحادثة رغد كحيل الرسمية للموافقة عليه فوراً.'
+                      : 'Send your review directly to the official Raghad Kahil WhatsApp line for instant verification.'}
+                  </p>
+                  <a
+                    href={buildWhatsAppReviewUrl(submittedReviewData)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-colors cursor-pointer"
+                  >
+                    <MessageCircle className="w-4 h-4 fill-current" />
+                    <span>{lang === 'ar' ? 'إرسال التقييم عبر واتساب الآن 💬' : 'Send to WhatsApp Now 💬'}</span>
+                  </a>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="w-full py-3 rounded-xl border border-gray-200 text-brand-dark font-bold text-xs hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  {lang === 'ar' ? 'إغلاق والعودة للموقع' : 'Close'}
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                
-                {/* Star Rating Picker */}
-                <div className="bg-[#FFF5F9] p-4 rounded-2xl border border-[#F3B2D4]/60 text-center">
-                  <label className="block text-xs font-bold text-brand-dark mb-2">
-                    {t.ratingLabel || (lang === 'ar' ? 'تقييمكِ العام' : 'Your Rating')}
-                  </label>
-                  <div className="flex items-center justify-center gap-2 mb-1.5">
-                    {[1, 2, 3, 4, 5].map((starValue) => {
-                      const isFilled = (hoverRating || rating) >= starValue;
-                      return (
-                        <button
-                          key={starValue}
-                          type="button"
-                          onMouseEnter={() => setHoverRating(starValue)}
-                          onMouseLeave={() => setHoverRating(0)}
-                          onClick={() => setRating(starValue)}
-                          className="p-1 cursor-pointer transition-transform hover:scale-125 focus:outline-none"
-                        >
-                          <Star
-                            className={`w-7 h-7 sm:w-8 sm:h-8 transition-colors ${
-                              isFilled ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                            }`}
-                          />
-                        </button>
-                      );
-                    })}
+              /* Writing Form */
+              <div>
+                <div className="text-center mb-6">
+                  <div className="w-12 h-12 bg-[#FBC6E2] rounded-full flex items-center justify-center mx-auto mb-3 border border-[#F3B2D4]">
+                    <Heart className="w-6 h-6 text-brand-dark fill-current" />
                   </div>
-                  <span className="text-xs font-semibold text-brand-dark">
-                    {(ratingPhrases[lang] || ratingPhrases.ar)[hoverRating || rating]}
-                  </span>
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-dark mb-1.5">
+                    {t.modalTitle || (lang === 'ar' ? 'شاركينا رأيكِ وتجربتكِ' : 'Share Your Experience')}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-brand-muted max-w-sm mx-auto">
+                    {t.modalSubtitle || (lang === 'ar' ? 'رأيكِ الصادق يلهم آلاف السيدات لاكتشاف حواجب مثالية ✨' : 'Your feedback helps other customers')}
+                  </p>
                 </div>
 
-                {/* Name field */}
-                <div>
-                  <label className="block text-xs font-bold text-brand-dark mb-1">
-                    {t.nameLabel || (lang === 'ar' ? 'اسمكِ الكريم' : 'Your Name')} *
+                <form onSubmit={handleCustomerSubmit} className="space-y-4">
+                  {/* Star Rating Picker */}
+                  <div className="bg-[#FFF5F9] p-4 rounded-2xl border border-[#F3B2D4]/60 text-center">
+                    <label className="block text-xs font-bold text-brand-dark mb-2">
+                      {t.ratingLabel || (lang === 'ar' ? 'تقييمكِ العام' : 'Your Rating')}
+                    </label>
+                    <div className="flex items-center justify-center gap-2 mb-1.5">
+                      {[1, 2, 3, 4, 5].map((starValue) => {
+                        const isFilled = (hoverRating || rating) >= starValue;
+                        return (
+                          <button
+                            key={starValue}
+                            type="button"
+                            onMouseEnter={() => setHoverRating(starValue)}
+                            onMouseLeave={() => setHoverRating(0)}
+                            onClick={() => setRating(starValue)}
+                            className="p-1 cursor-pointer transition-transform hover:scale-125 focus:outline-none"
+                          >
+                            <Star
+                              className={`w-7 h-7 sm:w-8 sm:h-8 transition-colors ${
+                                isFilled ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                              }`}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <span className="text-xs font-semibold text-brand-dark">
+                      {(ratingPhrases[lang] || ratingPhrases.ar)[hoverRating || rating]}
+                    </span>
+                  </div>
+
+                  {/* Name field */}
+                  <div>
+                    <label className="block text-xs font-bold text-brand-dark mb-1">
+                      {t.nameLabel || (lang === 'ar' ? 'اسمكِ الكريم' : 'Your Name')} *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder={t.namePlaceholder || (lang === 'ar' ? 'مثال: نورة العتيبي' : 'e.g. Sarah M.')}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-sm transition-all bg-white"
+                    />
+                  </div>
+
+                  {/* City field */}
+                  <div>
+                    <label className="block text-xs font-bold text-brand-dark mb-1">
+                      {t.cityLabel || (lang === 'ar' ? 'المدينة والدولة' : 'City & Country')}
+                    </label>
+                    <input
+                      type="text"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder={t.cityPlaceholder || (lang === 'ar' ? 'مثال: الرياض، السعودية' : 'e.g. Riyadh, Saudi Arabia')}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-sm transition-all bg-white"
+                    />
+                  </div>
+
+                  {/* Review textarea */}
+                  <div>
+                    <label className="block text-xs font-bold text-brand-dark mb-1">
+                      {t.reviewLabel || (lang === 'ar' ? 'رأيكِ وتجربتكِ' : 'Your Review')} *
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      placeholder={t.reviewPlaceholder || (lang === 'ar' ? 'كيف كانت تجربتكِ مع جل الحواجب؟ (قوة الثبات، المظهر الطبيعي، انعدام القشور البيضاء...)' : 'How was your experience?')}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-sm transition-all resize-none bg-white"
+                    />
+                  </div>
+
+                  {/* Recommend Checkbox */}
+                  <label className="flex items-center gap-3 cursor-pointer py-1">
+                    <input
+                      type="checkbox"
+                      checked={recommend}
+                      onChange={(e) => setRecommend(e.target.checked)}
+                      className="w-4 h-4 rounded border-gray-300 text-[#FBC6E2] focus:ring-[#FBC6E2] accent-[#3D1B22]"
+                    />
+                    <span className="text-xs text-brand-dark font-medium">
+                      {t.recommendCheckbox || (lang === 'ar' ? 'نعم، أوصي بهذا المنتج لصديقاتي' : 'Yes, I recommend this product')}
+                    </span>
                   </label>
+
+                  {/* Submit button */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#FBC6E2] hover:bg-[#f8b4d8] text-brand-dark font-bold py-3.5 px-6 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 border border-[#F3B2D4] cursor-pointer text-sm flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>{isSubmitting ? (lang === 'ar' ? 'جارٍ الإرسال...' : 'Submitting...') : (lang === 'ar' ? 'إرسال التقييم للمراجعة والنشر ✨' : 'Submit for Review')}</span>
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ADMIN MODERATION MODAL */}
+      {isAdminOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div
+            className="bg-white rounded-3xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl border border-[#F3B2D4] relative max-h-[92vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsAdminOpen(false)}
+              className="absolute top-5 right-5 p-2 rounded-full text-brand-muted hover:text-brand-dark hover:bg-gray-100 transition-colors cursor-pointer"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* PIN Verification View */}
+            {!isAdminAuthenticated ? (
+              <div className="text-center py-6 max-w-sm mx-auto space-y-4">
+                <div className="w-14 h-14 rounded-full bg-[#FBC6E2] border border-[#F3B2D4] flex items-center justify-center mx-auto text-brand-dark">
+                  <Lock className="w-7 h-7" />
+                </div>
+                <h3 className="font-serif text-xl font-bold text-brand-dark">
+                  {lang === 'ar' ? 'بوابة إدارة التقييمات' : 'Review Moderation Login'}
+                </h3>
+                <p className="text-xs text-brand-muted">
+                  {lang === 'ar'
+                    ? 'أدخل الرمز السري للإدارة لمراجعة والموافقة على التقييمات (الرمز الافتراضي: 7700)'
+                    : 'Enter admin PIN to approve and manage reviews (Default: 7700)'}
+                </p>
+
+                <form onSubmit={handleAdminLogin} className="space-y-3 pt-2">
                   <input
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder={t.namePlaceholder || (lang === 'ar' ? 'مثال: نورة العتيبي' : 'e.g. Sarah M.')}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-sm transition-all bg-white"
+                    type="password"
+                    maxLength={6}
+                    value={adminPinInput}
+                    onChange={(e) => setAdminPinInput(e.target.value)}
+                    placeholder="PIN: 7700"
+                    className="w-full text-center tracking-widest text-lg font-bold py-3 rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2] outline-none"
+                    autoFocus
                   />
+                  {adminPinError && (
+                    <div className="text-xs text-red-500 font-bold">
+                      {lang === 'ar' ? 'الرمز السري غير صحيح، يرجى المحاولة ثانية.' : 'Incorrect PIN, try again.'}
+                    </div>
+                  )}
+                  <button
+                    type="submit"
+                    className="w-full py-3 bg-[#FBC6E2] hover:bg-[#f8b4d8] text-brand-dark font-bold text-sm rounded-xl border border-[#F3B2D4] cursor-pointer shadow-xs"
+                  >
+                    {lang === 'ar' ? 'دخول لوحة الإدارة' : 'Unlock Dashboard'}
+                  </button>
+                </form>
+              </div>
+            ) : (
+              /* Authenticated Admin Dashboard */
+              <div className="space-y-6">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-4 flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-6 h-6 text-emerald-600" />
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-brand-dark">
+                      {lang === 'ar' ? 'لوحة إدارة واعتماد التقييمات' : 'Reviews Moderation Center'}
+                    </h3>
+                  </div>
+
+                  {/* Tabs */}
+                  <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl text-xs font-bold">
+                    <button
+                      onClick={() => setAdminTab('pending')}
+                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        adminTab === 'pending' ? 'bg-white text-brand-dark shadow-xs' : 'text-brand-muted hover:text-brand-dark'
+                      }`}
+                    >
+                      {lang === 'ar' ? 'بانتظار الموافقة' : 'Pending'} ({pendingReviews.length})
+                    </button>
+                    <button
+                      onClick={() => setAdminTab('add')}
+                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        adminTab === 'add' ? 'bg-white text-brand-dark shadow-xs' : 'text-brand-muted hover:text-brand-dark'
+                      }`}
+                    >
+                      {lang === 'ar' ? 'إضافة تقييم' : 'Add New'}
+                    </button>
+                    <button
+                      onClick={() => setAdminTab('approved')}
+                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        adminTab === 'approved' ? 'bg-white text-brand-dark shadow-xs' : 'text-brand-muted hover:text-brand-dark'
+                      }`}
+                    >
+                      {lang === 'ar' ? 'المنشورة' : 'Published'} ({approvedReviews.length})
+                    </button>
+                  </div>
                 </div>
 
-                {/* City field */}
-                <div>
-                  <label className="block text-xs font-bold text-brand-dark mb-1">
-                    {t.cityLabel || (lang === 'ar' ? 'المدينة والدولة' : 'City & Country')}
-                  </label>
-                  <input
-                    type="text"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder={t.cityPlaceholder || (lang === 'ar' ? 'مثال: الرياض، السعودية' : 'e.g. Riyadh, Saudi Arabia')}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-sm transition-all bg-white"
-                  />
-                </div>
+                {/* TAB 1: PENDING REVIEWS */}
+                {adminTab === 'pending' && (
+                  <div className="space-y-3">
+                    {pendingReviews.length === 0 ? (
+                      <div className="text-center py-12 text-brand-muted">
+                        <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2 opacity-60" />
+                        <p className="font-bold text-sm text-brand-dark">
+                          {lang === 'ar' ? 'لا توجد تقييمات معلقة حالياً' : 'No pending reviews'}
+                        </p>
+                        <p className="text-xs mt-1">
+                          {lang === 'ar'
+                            ? 'جميع التقييمات الواردة تم البت فيها بنجاح.'
+                            : 'All incoming reviews have been moderated.'}
+                        </p>
+                      </div>
+                    ) : (
+                      pendingReviews.map((item) => (
+                        <div
+                          key={item.id}
+                          className="bg-[#FFF5F9] p-4 rounded-2xl border border-[#F3B2D4]/60 space-y-2 text-start"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-brand-dark text-sm">{item.name}</span>
+                              <span className="text-xs text-brand-muted">({item.location})</span>
+                            </div>
+                            <div className="flex text-yellow-400">
+                              {[...Array(item.rating || 5)].map((_, i) => (
+                                <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                              ))}
+                            </div>
+                          </div>
 
-                {/* Review textarea */}
-                <div>
-                  <label className="block text-xs font-bold text-brand-dark mb-1">
-                    {t.reviewLabel || (lang === 'ar' ? 'رأيكِ وتجربتكِ' : 'Your Review')} *
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    placeholder={t.reviewPlaceholder || (lang === 'ar' ? 'كيف كانت تجربتكِ مع جل الحواجب؟ (قوة الثبات، المظهر الطبيعي، انعدام القشور البيضاء...)' : 'How was your experience?')}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-sm transition-all resize-none bg-white"
-                  />
-                </div>
+                          <p className="text-xs sm:text-sm text-brand-dark italic bg-white p-3 rounded-xl border border-gray-100">
+                            "{item.text}"
+                          </p>
 
-                {/* Recommend Checkbox */}
-                <label className="flex items-center gap-3 cursor-pointer py-1">
-                  <input
-                    type="checkbox"
-                    checked={recommend}
-                    onChange={(e) => setRecommend(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-[#FBC6E2] focus:ring-[#FBC6E2] accent-[#3D1B22]"
-                  />
-                  <span className="text-xs text-brand-dark font-medium">
-                    {t.recommendCheckbox || (lang === 'ar' ? 'نعم، أوصي بهذا المنتج لصديقاتي' : 'Yes, I recommend this product')}
-                  </span>
-                </label>
+                          <div className="flex items-center justify-between pt-2">
+                            <span className="text-[11px] text-brand-muted flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              <span>{item.date || item.time}</span>
+                            </span>
 
-                {/* Submit button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#FBC6E2] hover:bg-[#f8b4d8] text-brand-dark font-bold py-3.5 px-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-[#F3B2D4] cursor-pointer text-sm flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>{isSubmitting ? (t.submitting || 'جارٍ النشر...') : (t.submitBtn || 'نشر التقييم')}</span>
-                </button>
-              </form>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleDeletePending(item.id)}
+                                className="px-3 py-1.5 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50 border border-red-200 transition-colors flex items-center gap-1 cursor-pointer"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                <span>{lang === 'ar' ? 'رفض' : 'Reject'}</span>
+                              </button>
+                              <button
+                                onClick={() => handleApprovePending(item)}
+                                className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                                <span>{lang === 'ar' ? 'موافقة ونشر للجميع ✅' : 'Approve & Publish'}</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+
+                {/* TAB 2: QUICK ADD REVIEW */}
+                {adminTab === 'add' && (
+                  <form onSubmit={handleAdminAddSubmit} className="space-y-3.5 text-start">
+                    <p className="text-xs text-brand-muted">
+                      {lang === 'ar'
+                        ? 'يمكنكِ نسخ أي تقييم وصلكِ على واتساب أو إنستغرام وإضافته هنا فوراً ليظهر مباشرة على الموقع لجميع الزوار.'
+                        : 'Easily paste and publish any customer review received via WhatsApp or social media.'}
+                    </p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-brand-dark mb-1">
+                          {lang === 'ar' ? 'اسم الزبونة' : 'Name'} *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={adminNewName}
+                          onChange={(e) => setAdminNewName(e.target.value)}
+                          placeholder="مثال: منيرة الشمري"
+                          className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#FBC6E2] outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-brand-dark mb-1">
+                          {lang === 'ar' ? 'المدينة / الدولة' : 'Location'}
+                        </label>
+                        <input
+                          type="text"
+                          value={adminNewLocation}
+                          onChange={(e) => setAdminNewLocation(e.target.value)}
+                          placeholder="مثال: الرياض"
+                          className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#FBC6E2] outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-brand-dark mb-1">
+                        {lang === 'ar' ? 'عدد النجوم' : 'Rating'}
+                      </label>
+                      <select
+                        value={adminNewRating}
+                        onChange={(e) => setAdminNewRating(Number(e.target.value))}
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none"
+                      >
+                        <option value={5}>⭐⭐⭐⭐⭐ (5 نجوم - ممتاز)</option>
+                        <option value={4}>⭐⭐⭐⭐ (4 نجوم - رائع)</option>
+                        <option value={3}>⭐⭐⭐ (3 نجوم - جيد)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-brand-dark mb-1">
+                        {lang === 'ar' ? 'نص التقييم والتجربة' : 'Review Text'} *
+                      </label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={adminNewText}
+                        onChange={(e) => setAdminNewText(e.target.value)}
+                        placeholder="اكتبي أو الصقي نص الرسالة الواردة..."
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#FBC6E2] outline-none resize-none"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-3 bg-[#FBC6E2] hover:bg-[#f8b4d8] text-brand-dark font-bold text-xs rounded-xl border border-[#F3B2D4] cursor-pointer flex items-center justify-center gap-2 shadow-xs"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>{lang === 'ar' ? 'نشر التقييم مباشرة على الموقع 🚀' : 'Publish Directly'}</span>
+                    </button>
+                  </form>
+                )}
+
+                {/* TAB 3: APPROVED REVIEWS */}
+                {adminTab === 'approved' && (
+                  <div className="space-y-3">
+                    {approvedReviews.length === 0 ? (
+                      <div className="text-center py-8 text-brand-muted text-xs">
+                        {lang === 'ar'
+                          ? 'لا توجد تقييمات مضافة يدوياً حتى الآن (التقييمات الأساسية للموقع معروضة تلقائياً).'
+                          : 'No custom approved reviews added yet.'}
+                      </div>
+                    ) : (
+                      approvedReviews.map((item) => (
+                        <div
+                          key={item.id}
+                          className="bg-white p-3.5 rounded-xl border border-gray-200 flex items-center justify-between gap-3 text-start"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-xs text-brand-dark">{item.name}</span>
+                              <span className="text-[11px] text-brand-muted">({item.location})</span>
+                              <div className="flex text-yellow-400">
+                                {[...Array(item.rating || 5)].map((_, i) => (
+                                  <Star key={i} className="w-3 h-3 fill-current" />
+                                ))}
+                              </div>
+                            </div>
+                            <p className="text-xs text-brand-dark truncate mt-1">"{item.text}"</p>
+                          </div>
+
+                          <button
+                            onClick={() => handleDeleteApproved(item.id)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                            title={lang === 'ar' ? 'حذف من الموقع' : 'Delete'}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
