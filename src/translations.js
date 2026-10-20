@@ -186,8 +186,8 @@ export const translations = {
       rights: '© 2026 Raghad Kahil. All rights reserved.'
     },
     whatsapp: {
-      tooltip: 'Chat with beauty advisor',
-      message: 'Hello Raghad Kahil! I would like to order the Eyebrow Wax & Styling Gel.'
+      tooltip: 'Chat with Beauty Advisor & Order on WhatsApp 💬',
+      message: 'Hello Raghad Kahil 🌸✨ I would like to inquire and place an order for the Eyebrow Wax & Styling Gel.'
     },
     successModal: {
       title: 'Order Confirmed!',
@@ -444,8 +444,8 @@ export const translations = {
       rights: '© 2026 Raghad Kahil. Tüm hakları saklıdır.'
     },
     whatsapp: {
-      tooltip: 'Canlı Destek',
-      message: 'Merhaba Raghad Kahil! Kaş Jeli & Wax hakkında bilgi ve sipariş vermek istiyorum.'
+      tooltip: 'WhatsApp ile Hızlı Sipariş & Bilgi 💬',
+      message: 'Merhaba Raghad Kahil 🌸✨ Kaş Jeli & Wax hakkında bilgi ve sipariş vermek istiyorum.'
     },
     successModal: {
       title: 'Sipariş Onaylandı!',
@@ -712,8 +712,8 @@ export const translations = {
       rights: '© 2026 Raghad Kahil. جميع الحقوق محفوظة.'
     },
     whatsapp: {
-      tooltip: 'تواصل مع خبيرة التجميل',
-      message: 'مرحباً Raghad Kahil! أود الاستفسار وطلب جل وواكس الحواجب.'
+      tooltip: 'تحدثي مع خبيرة رغد كحيل للطلب والاستفسار 💬',
+      message: 'مرحباً رغد كحيل 🌸✨ أود الاستفسار وطلب جل وشمع الحواجب الفاخر.'
     },
     successModal: {
       title: 'تم تأكيد الطلب بنجاح!',

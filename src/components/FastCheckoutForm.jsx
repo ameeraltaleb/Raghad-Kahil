@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { translations } from '../translations';
-import { CreditCard, Truck, ShieldCheck, Loader2, Building, Gift, CheckCircle2 } from 'lucide-react';
+import { CreditCard, Truck, ShieldCheck, Loader2, Building, Gift, CheckCircle2, MessageCircle } from 'lucide-react';
 import GuaranteeBadge from './GuaranteeBadge';
 import { submitOrder } from '../services/orderService';
 import { countries, currencies, calculatePricing } from '../data/checkoutData';
+import { openWhatsAppOrder } from '../utils/whatsapp';
 
 export default function FastCheckoutForm({ lang, quantity, currency, countryCode = 'TR', onOrderSuccess }) {
   const t = translations[lang].checkout;
@@ -80,6 +81,20 @@ export default function FastCheckoutForm({ lang, quantity, currency, countryCode
       timestamp: new Date().toISOString(),
       language: lang
     };
+
+    // Automatically launch WhatsApp with structured order details
+    openWhatsAppOrder({
+      lang,
+      quantity,
+      bundleTitle: `${quantity}x ${tPricingInfo.units}`,
+      price: displayFinalPrice,
+      customerName: formData.fullName,
+      phone: formData.phone,
+      city: formData.city,
+      address: formData.address,
+      hasFreeGift: pricing.freeGifts && pricing.freeGifts.length > 0,
+      paymentMethod
+    });
 
     const response = await submitOrder(orderData);
     setIsSubmitting(false);
@@ -250,17 +265,19 @@ export default function FastCheckoutForm({ lang, quantity, currency, countryCode
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full py-4 sm:py-5 text-base sm:text-lg font-black rounded-xl sm:rounded-2xl bg-[#FBC6E2] text-brand-dark hover:bg-[#f8b0d8] border-2 border-[#F3B2D4] hover:shadow-2xl hover:shadow-[#FBC6E2]/60 transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0 disabled:cursor-not-allowed flex items-center justify-center gap-2 animate-pulse-glow"
+                  className="w-full py-4 sm:py-5 text-base sm:text-lg font-black rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 text-white hover:from-emerald-600 hover:to-emerald-700 border-2 border-emerald-400/50 shadow-xl shadow-emerald-500/25 transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-6 h-6 animate-spin" />
-                      Processing...
+                      <span>Processing...</span>
                     </>
                   ) : (
                     <>
-                      {t.submit}
-                      <CheckCircle2 className="w-5 h-5 opacity-80" />
+                      <MessageCircle className="w-5 h-5 fill-current" />
+                      <span>
+                        {lang === 'ar' ? 'تأكيد وإرسال الطلب عبر واتساب 💬' : lang === 'tr' ? 'Siparişi WhatsApp ile Onayla 💬' : 'Confirm & Send Order via WhatsApp 💬'}
+                      </span>
                     </>
                   )}
                 </button>
