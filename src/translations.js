@@ -141,11 +141,30 @@ export const translations = {
     reviews: {
       badge: 'REAL EXPERIENCES',
       title: 'Loved by Over 10,000+ Women',
+      subtitle: '99% of customers recommend Raghad Kahil Eyebrow Wax',
       verified: 'Verified Buyer',
+      writeBtn: 'Write a Review',
+      modalTitle: 'Share Your Experience',
+      modalSubtitle: 'Your honest feedback helps thousands of women discover their perfect brows ✨',
+      ratingLabel: 'Your Rating',
+      nameLabel: 'Your Name',
+      namePlaceholder: 'e.g. Sarah M.',
+      cityLabel: 'City & Country',
+      cityPlaceholder: 'e.g. Riyadh, Saudi Arabia',
+      reviewLabel: 'Your Review',
+      reviewPlaceholder: 'How did Raghad Kahil Eyebrow Wax work for you? (Hold, ease of application, zero white flakes...)',
+      recommendCheckbox: 'Yes, I recommend this product to friends',
+      submitBtn: 'Submit Review',
+      submitting: 'Publishing...',
+      successMsg: 'Thank you! Your review has been published successfully ✨',
+      recommendedBadge: 'Recommends this product',
       items: [
-        { name: 'Sarah M.', location: 'Riyadh', text: 'It perfectly mimics a professional brow lamination without the salon cost. My brows look so thick and feathered naturally with zero white residue!' },
-        { name: 'Elif Y.', location: 'İstanbul', text: 'I am amazed! My stubborn brows stay lifted all day even through my intense workouts. Absolutely zero flakes.' },
-        { name: 'Leyla K.', location: 'Dubai', text: 'The crystal texture is super lightweight and non-sticky. It nourishes my brows and keeps them looking healthy and full all day.' }
+        { name: 'Sarah M.', location: 'Riyadh', rating: 5, time: '2 days ago', text: 'It perfectly mimics a professional brow lamination without the salon cost. My brows look so thick and feathered naturally with zero white residue!' },
+        { name: 'Elif Y.', location: 'İstanbul', rating: 5, time: '3 days ago', text: 'I am amazed! My stubborn brows stay lifted all day even through my intense workouts. Absolutely zero flakes.' },
+        { name: 'Noura A.', location: 'Jeddah', rating: 5, time: '4 days ago', text: 'Hands down the best eyebrow styling wax on the market. The included dual-ended brush makes shaping so effortless.' },
+        { name: 'Leyla K.', location: 'Dubai', rating: 5, time: '5 days ago', text: 'The crystal texture is super lightweight and non-sticky. It nourishes my brows and keeps them looking healthy and full all day.' },
+        { name: 'Maryam Al-K.', location: 'Kuwait City', rating: 5, time: '1 week ago', text: 'Stands up to heat and humidity like a dream! My brows stay in place from morning until evening without budging.' },
+        { name: 'Reem M.', location: 'Abu Dhabi', rating: 5, time: '1 week ago', text: 'I ordered the 3-jar bundle for myself and my sisters. We are all completely obsessed with how full and laminated our brows look!' }
       ]
     },
     faq: {
@@ -380,11 +399,30 @@ export const translations = {
     reviews: {
       badge: 'GERÇEK DENEYİMLER',
       title: '10.000\'den Fazla Kadının Tercihi',
+      subtitle: 'Kullanıcıların %99\'u Raghad Kahil Kaş Jeli\'ni tavsiye ediyor',
       verified: 'Doğrulanmış Alıcı',
+      writeBtn: 'Değerlendirme Yaz',
+      modalTitle: 'Deneyiminizi Paylaşın',
+      modalSubtitle: 'Görüşleriniz binlerce kadına ilham veriyor ✨',
+      ratingLabel: 'Genel Puanınız',
+      nameLabel: 'Adınız Soyadınız',
+      namePlaceholder: 'Örn: Elif Y.',
+      cityLabel: 'Şehir & Ülke',
+      cityPlaceholder: 'Örn: İstanbul, Türkiye',
+      reviewLabel: 'Yorumunuz',
+      reviewPlaceholder: 'Raghad Kahil kaş jeli ile deneyiminiz nasıldı? (Kalıcılık, beyaz kalıntı bırakmama, pratiklik...)',
+      recommendCheckbox: 'Evet, bu ürünü arkadaşlarıma tavsiye ediyorum',
+      submitBtn: 'Değerlendirmeyi Yayınla',
+      submitting: 'Gönderiliyor...',
+      successMsg: 'Teşekkürler! Değerlendirmeniz başarıyla yayınlandı ✨',
+      recommendedBadge: 'Bu ürünü tavsiye ediyor',
       items: [
-        { name: 'Sarah M.', location: 'Riyadh', text: 'Pahalı kuaför işlemlerine gerek bırakmıyor! Kaşlarım doğal, dolgun ve sıfır beyaz kalıntıyla tüm gün kalkık kalıyor.' },
-        { name: 'Elif Y.', location: 'İstanbul', text: 'İnanılmaz bir ürün! İnatçı kaşlarım spor salonundaki yoğun antrenmanlarımda bile tüm gün havada kalıyor. Asla beyaz pullanma yapmıyor!' },
-        { name: 'Leyla K.', location: 'Dubai', text: 'Kristal yapısı çok hafif ve asla yapışkan değil. Kaş köklerini besliyor ve gün boyu sağlıklı, gür görünmesini sağlıyor.' }
+        { name: 'Sarah M.', location: 'Riyadh', rating: 5, time: '2 gün önce', text: 'Pahalı kuaför işlemlerine gerek bırakmıyor! Kaşlarım doğal, dolgun ve sıfır beyaz kalıntıyla tüm gün kalkık kalıyor.' },
+        { name: 'Elif Y.', location: 'İstanbul', rating: 5, time: '3 gün önce', text: 'İnanılmaz bir ürün! İnatçı kaşlarım spor salonundaki yoğun antrenmanlarımda bile tüm gün havada kalıyor. Asla beyaz pullanma yapmıyor!' },
+        { name: 'Noura A.', location: 'Jeddah', rating: 5, time: '4 gün önce', text: 'Piyasadaki en iyi kaş sabitleyici wax! Çift taraflı fırçasıyla uygulaması son derece kolay ve pratik.' },
+        { name: 'Leyla K.', location: 'Dubai', rating: 5, time: '5 gün önce', text: 'Kristal yapısı çok hafif ve asla yapışkan değil. Kaş köklerini besliyor ve gün boyu sağlıklı, gür görünmesini sağlıyor.' },
+        { name: 'Maryam Al-K.', location: 'Kuwait City', rating: 5, time: '1 hafta önce', text: 'Sıcak ve neme karşı inanılmaz dayanıklı! Sabahtan akşama kadar kaşlarım tek bir tel bile oynamadan sabit kalıyor.' },
+        { name: 'Reem M.', location: 'Abu Dhabi', rating: 5, time: '1 hafta önce', text: 'Kardeşlerim ve kendim için 3\'lü avantaj paketini aldık. Kaşlarımızın laminasyonlu ve dolgun görünümüne bayıldık!' }
       ]
     },
     faq: {
@@ -629,11 +667,30 @@ export const translations = {
     reviews: {
       badge: 'تجارب حقيقية',
       title: 'أحبته أكثر من 10,000 عميلة',
+      subtitle: '99% من العميلات يوصين بجل حواجب رغد كحيل',
       verified: 'مشترية موثقة',
+      writeBtn: 'اكتبي تقييمكِ الآن',
+      modalTitle: 'شاركينا رأيكِ وتجربتكِ',
+      modalSubtitle: 'رأيكِ الصادق يلهم آلاف السيدات لاكتشاف حواجب مثالية ✨',
+      ratingLabel: 'تقييمكِ العام',
+      nameLabel: 'اسمكِ الكامل',
+      namePlaceholder: 'مثال: نورة العتيبي',
+      cityLabel: 'المدينة والدولة',
+      cityPlaceholder: 'مثال: الرياض، السعودية',
+      reviewLabel: 'رأيكِ وتجربتكِ',
+      reviewPlaceholder: 'كيف كانت تجربتكِ مع جل الحواجب؟ (قوة الثبات، ملمس الشعيرات، انعدام القشور البيضاء...)',
+      recommendCheckbox: 'نعم، أوصي بهذا المنتج لصديقاتي',
+      submitBtn: 'نشر التقييم',
+      submitting: 'جارٍ النشر...',
+      successMsg: 'شكراً لكِ من القلب! تم تسجيل ونشر تقييمكِ بنجاح ✨',
+      recommendedBadge: 'توصي بهذا المنتج',
       items: [
-        { name: 'إيليف ي.', location: 'إسطنبول', text: 'أنا مندهشة! حواجبي العنيدة تبقى مرفوعة طوال اليوم حتى خلال التمارين والعمل الشاق. وبدون أي أثر طباشيري أو قشور بيضاء إطلاقاً!' },
-        { name: 'سارة م.', location: 'الرياض', text: 'يحاكي تماماً تأثير صالون رفع الحواجب (Brow Lamination) بدون أي تكلفة إضافية. حواجبي تبدو كثيفة ومرفوعة ومرتبة كالمحترفين.' },
-        { name: 'ليلى ك.', location: 'دبي', text: 'ملمسه خفيف جداً ولا يسبب أي لزوجة أو تصلب قاسي، بالإضافة إلى أنه يحافظ على الشعيرات رطبة ويمنع تساقطها. منتج لا أستغني عنه يومياً!' }
+        { name: 'سارة م.', location: 'الرياض', rating: 5, time: 'قبل يومين', text: 'يحاكي تماماً تأثير صالون رفع وتصفيح الحواجب (Brow Lamination) بدون أي تكلفة صالون! حواجبي صارت كثيفة ومرفوعة ومرتبة كالمحترفين وبدون أي قشور بيضاء إطلاقاً.' },
+        { name: 'نورة العتيبي', location: 'جدة', rating: 5, time: 'قبل 3 أيام', text: 'أفضل جل حواجب جربته بحياتي بدون مبالغة! يثبت أصعب الشعيرات من أول لمسة والفرشاة المزدوجة المرفقة خرافية وسهلة جداً بالرسم.' },
+        { name: 'إيليف ي.', location: 'إسطنبول', rating: 5, time: 'قبل 4 أيام', text: 'أنا مندهشة! حواجبي العنيدة تبقى مرفوعة طوال اليوم حتى خلال التمارين والعمل الشاق. وبدون أي أثر طباشيري أو قشور بيضاء إطلاقاً!' },
+        { name: 'ليلى ك.', location: 'دبي', rating: 5, time: 'قبل 5 أيام', text: 'ملمسه كريستالي خفيف جداً ولا يسبب أي لزوجة أو تصلب قاسي، بالإضافة إلى أنه يحافظ على الشعيرات رطبة ويمنع تساقطها. منتج لا أستغني عنه يومياً!' },
+        { name: 'مريم الكندري', location: 'الكويت', rating: 5, time: 'قبل أسبوع', text: 'ثبات جبار في حر ورطوبة الخليج! حواجبي تضل ثابتة من الصباح للمساء بدون ما يتغير مظهرها أو تبهت، ويزول بسهولة بالماء الدافئ.' },
+        { name: 'ريم المنصوري', location: 'أبوظبي', rating: 5, time: 'قبل أسبوع', text: 'طلبت باقة الـ 3 علب لي ولأخواتي، كلنا مغرمات بالنتيجة! يمنح مظهر حواجب ممتلئة ومرتبة بمظهر ناعم جداً وطبيعي.' }
       ]
     },
     faq: {
