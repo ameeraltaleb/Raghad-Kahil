@@ -102,7 +102,7 @@ export default function Navbar({ lang, setLang }) {
                         setLang(l.code);
                         setIsLangDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-brand-peach transition-colors ${lang === l.code ? 'font-bold text-brand-rose bg-brand-peach/50' : 'text-brand-dark'}`}
+                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-brand-peach transition-colors ${lang === l.code ? 'font-bold text-brand-dark bg-[#FBC6E2]/40' : 'text-brand-dark'}`}
                     >
                       {l.label}
                     </button>
@@ -138,7 +138,7 @@ export default function Navbar({ lang, setLang }) {
                         setLang(l.code);
                         setIsLangDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-brand-peach transition-colors ${lang === l.code ? 'font-bold text-brand-rose bg-brand-peach/50' : 'text-brand-dark'}`}
+                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-brand-peach transition-colors ${lang === l.code ? 'font-bold text-brand-dark bg-[#FBC6E2]/40' : 'text-brand-dark'}`}
                     >
                       {l.label}
                     </button>

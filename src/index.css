@@ -7,7 +7,8 @@
   --color-brand-peach: #FDF0F6;
   --color-brand-pink: #FBC6E2;
   --color-brand-babypink: #FBC6E2;
-  --color-brand-rose: #B85C66;
+  --color-brand-primary: #FBC6E2;
+  --color-brand-rose: #D94B7E;
   --color-brand-dark: #3D1B22;
   --color-brand-muted: #856065;
 
@@ -54,8 +55,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 15px 0px rgba(184, 92, 102, 0.2); }
-  50% { box-shadow: 0 0 30px 10px rgba(184, 92, 102, 0.4); }
+  0%, 100% { box-shadow: 0 0 15px 0px rgba(251, 198, 226, 0.4); }
+  50% { box-shadow: 0 0 30px 10px rgba(251, 198, 226, 0.75); }
 }
 
 @keyframes sparkle {

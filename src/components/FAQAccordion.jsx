@@ -21,16 +21,16 @@ export default function FAQAccordion({ lang }) {
           {t.items.map((item, index) => (
             <div 
               key={index}
-              className={`border rounded-2xl overflow-hidden transition-all duration-300 ${openIndex === index ? 'border-brand-rose bg-brand-peach/20 shadow-sm' : 'border-gray-100 bg-white hover:border-brand-pink/50'}`}
+              className={`border-2 rounded-2xl overflow-hidden transition-all duration-300 ${openIndex === index ? 'border-[#FBC6E2] bg-[#FBC6E2]/15 shadow-sm' : 'border-gray-100 bg-white hover:border-[#FBC6E2]/50'}`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
                 className="w-full text-left px-4 py-3.5 sm:px-6 sm:py-5 flex items-center justify-between gap-4 focus:outline-none"
               >
-                <span className="font-medium text-base sm:text-lg text-brand-dark pr-2">{item.q}</span>
-                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 ${openIndex === index ? 'bg-brand-rose' : 'bg-brand-peach/50'}`}>
+                <span className="font-bold text-base sm:text-lg text-brand-dark pr-2">{item.q}</span>
+                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 ${openIndex === index ? 'bg-[#FBC6E2] border border-[#F3B2D4]' : 'bg-[#FBC6E2]/40'}`}>
                   <ChevronDown 
-                    className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-white' : 'text-brand-rose'}`} 
+                    className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-brand-dark' : 'text-brand-dark'}`} 
                   />
                 </div>
               </button>

@@ -74,7 +74,7 @@ export default function HeroSection({ lang, onWatchVideo }) {
         <div className="flex flex-row items-center justify-center gap-3 sm:gap-5 mb-6 sm:mb-16 w-full sm:w-auto">
           <button 
             onClick={scrollToCheckout}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 bg-brand-rose text-white px-4 py-3 sm:px-10 sm:py-5 rounded-full font-bold text-sm sm:text-xl hover:bg-[#a64e58] transition-all hover:scale-105 shadow-xl shadow-brand-rose/40 animate-pulse-glow whitespace-nowrap"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 bg-[#FBC6E2] text-brand-dark px-4 py-3 sm:px-10 sm:py-5 rounded-full font-black text-sm sm:text-xl hover:bg-[#f8b0d8] transition-all hover:scale-105 shadow-xl shadow-[#FBC6E2]/50 border-2 border-[#F3B2D4] animate-pulse-glow whitespace-nowrap"
           >
             {t.cta.orderNow}
             <ArrowIcon className="w-4 h-4 sm:w-6 sm:h-6" />

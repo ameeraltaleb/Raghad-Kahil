@@ -37,14 +37,14 @@ export default function StickyAddToCart({ lang, currency = 'USD' }) {
             <span className="font-bold text-sm text-brand-dark truncate">{shop.productName}</span>
             <div className="flex items-center gap-1">
               <span className="text-[10px] text-brand-muted">{shop.priceLabel}:</span>
-              <span className="font-bold text-xs text-brand-rose" dir="ltr">{cur.format(unitPrice)}</span>
+              <span className="font-bold text-xs text-brand-dark" dir="ltr">{cur.format(unitPrice)}</span>
             </div>
           </div>
         </div>
 
         <button 
           onClick={scrollToCheckout}
-          className="flex items-center justify-center gap-2 bg-brand-rose text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-md animate-pulse-glow flex-shrink-0"
+          className="flex items-center justify-center gap-2 bg-[#FBC6E2] text-brand-dark px-5 py-2.5 rounded-full font-black text-sm shadow-lg shadow-[#FBC6E2]/50 border border-[#F3B2D4] animate-pulse-glow flex-shrink-0"
         >
           <ShoppingBag className="w-4 h-4" />
           {t.buyNow}

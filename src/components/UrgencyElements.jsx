@@ -30,17 +30,17 @@ export function UrgencyBar({ lang }) {
   }, []);
 
   return (
-    <div className="bg-brand-rose text-white text-xs sm:text-sm font-medium py-2 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 z-50 relative shadow-md">
+    <div className="bg-[#FBC6E2] text-brand-dark text-xs sm:text-sm font-bold py-2.5 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 z-50 relative border-b border-[#F3B2D4] shadow-xs">
       <span className="flex items-center gap-2">
-        <Clock className="w-4 h-4 animate-pulse" />
+        <Clock className="w-4 h-4 text-brand-dark animate-pulse" />
         {t.banner}
       </span>
-      <div className="flex items-center gap-1 font-bold">
-        <span className="bg-white/20 px-2 py-0.5 rounded">{String(timeLeft.h).padStart(2, '0')}{t.hours}</span>
+      <div className="flex items-center gap-1 font-black">
+        <span className="bg-white/90 border border-[#F3B2D4] text-brand-dark px-2 py-0.5 rounded shadow-2xs">{String(timeLeft.h).padStart(2, '0')}{t.hours}</span>
         <span>:</span>
-        <span className="bg-white/20 px-2 py-0.5 rounded">{String(timeLeft.m).padStart(2, '0')}{t.mins}</span>
+        <span className="bg-white/90 border border-[#F3B2D4] text-brand-dark px-2 py-0.5 rounded shadow-2xs">{String(timeLeft.m).padStart(2, '0')}{t.mins}</span>
         <span>:</span>
-        <span className="bg-white/20 px-2 py-0.5 rounded text-brand-peach">{String(timeLeft.s).padStart(2, '0')}{t.secs}</span>
+        <span className="bg-white/90 border border-[#F3B2D4] text-brand-dark px-2 py-0.5 rounded shadow-2xs">{String(timeLeft.s).padStart(2, '0')}{t.secs}</span>
       </div>
     </div>
   );

@@ -225,9 +225,9 @@ export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.m
             <button
               type="button"
               onClick={handleOrderClick}
-              className="w-full py-3 sm:py-3.5 px-5 rounded-full bg-gradient-to-r from-brand-rose via-[#c9636e] to-[#a64e58] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl shadow-brand-rose/50 hover:scale-102 active:scale-98 transition-all border border-[#FBC6E2]/50 animate-pulse-glow"
+              className="w-full py-3.5 sm:py-4 px-5 rounded-full bg-[#FBC6E2] text-brand-dark font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-2xl shadow-[#FBC6E2]/60 hover:bg-[#f8b0d8] hover:scale-102 active:scale-98 transition-all border-2 border-[#F3B2D4] animate-pulse-glow"
             >
-              <Sparkles className="w-4 h-4 text-[#FBC6E2] animate-sparkle" />
+              <Sparkles className="w-4 h-4 text-brand-dark animate-sparkle" />
               <span>{ctaLabels.order}</span>
               <ArrowIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>

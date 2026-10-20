@@ -210,35 +210,35 @@ export default function FastCheckoutForm({ lang, quantity, currency, countryCode
                 <div className="flex flex-col gap-2.5 sm:gap-3">
                   
                   {/* COD */}
-                  <label className={`cursor-pointer group flex items-center p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all duration-300 ${
-                      paymentMethod === 'cod' ? 'border-brand-rose bg-brand-rose/5 shadow-md shadow-brand-rose/10' : 'border-white bg-white hover:border-brand-pink/50 hover:shadow-sm'
+                  <label className={`cursor-pointer group flex items-center p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 ${
+                      paymentMethod === 'cod' ? 'border-[#FBC6E2] bg-[#FBC6E2]/20 shadow-md shadow-[#FBC6E2]/20 ring-1 ring-[#FBC6E2]' : 'border-white bg-white hover:border-[#FBC6E2]/50 hover:shadow-sm'
                     }`}>
                     <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="sr-only" />
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${paymentMethod === 'cod' ? 'border-brand-rose' : 'border-gray-300 group-hover:border-brand-pink'}`}>
-                      {paymentMethod === 'cod' && <div className="w-2.5 h-2.5 rounded-full bg-brand-rose"></div>}
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${paymentMethod === 'cod' ? 'border-[#F3B2D4] bg-[#FBC6E2]' : 'border-gray-300 group-hover:border-[#FBC6E2]'}`}>
+                      {paymentMethod === 'cod' && <div className="w-2.5 h-2.5 rounded-full bg-brand-dark"></div>}
                     </div>
                     <div className="ml-3 mr-3 sm:ml-4 sm:mr-4 flex items-center justify-between w-full">
                       <div>
-                        <div className={`font-semibold text-sm sm:text-base ${paymentMethod === 'cod' ? 'text-brand-rose' : 'text-brand-dark'}`}>{t.payment.cod}</div>
+                        <div className={`font-bold text-sm sm:text-base ${paymentMethod === 'cod' ? 'text-brand-dark' : 'text-brand-dark'}`}>{t.payment.cod}</div>
                         <div className="text-[11px] sm:text-xs text-brand-muted mt-0.5">{t.payment.codNote}</div>
                       </div>
-                      <Truck className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${paymentMethod === 'cod' ? 'text-brand-rose' : 'text-gray-400'}`} />
+                      <Truck className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${paymentMethod === 'cod' ? 'text-brand-dark' : 'text-gray-400'}`} />
                     </div>
                   </label>
                   
                   {/* Card */}
-                  <label className={`cursor-pointer group flex items-center p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all duration-300 ${
-                      paymentMethod === 'card' ? 'border-brand-rose bg-brand-rose/5 shadow-md shadow-brand-rose/10' : 'border-white bg-white hover:border-brand-pink/50 hover:shadow-sm'
+                  <label className={`cursor-pointer group flex items-center p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 ${
+                      paymentMethod === 'card' ? 'border-[#FBC6E2] bg-[#FBC6E2]/20 shadow-md shadow-[#FBC6E2]/20 ring-1 ring-[#FBC6E2]' : 'border-white bg-white hover:border-[#FBC6E2]/50 hover:shadow-sm'
                     }`}>
                     <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} className="sr-only" />
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${paymentMethod === 'card' ? 'border-brand-rose' : 'border-gray-300 group-hover:border-brand-pink'}`}>
-                      {paymentMethod === 'card' && <div className="w-2.5 h-2.5 rounded-full bg-brand-rose"></div>}
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${paymentMethod === 'card' ? 'border-[#F3B2D4] bg-[#FBC6E2]' : 'border-gray-300 group-hover:border-[#FBC6E2]'}`}>
+                      {paymentMethod === 'card' && <div className="w-2.5 h-2.5 rounded-full bg-brand-dark"></div>}
                     </div>
                     <div className="ml-3 mr-3 sm:ml-4 sm:mr-4 flex items-center justify-between w-full">
-                      <div className={`font-semibold text-sm sm:text-base ${paymentMethod === 'card' ? 'text-brand-rose' : 'text-brand-dark'}`}>
+                      <div className={`font-bold text-sm sm:text-base ${paymentMethod === 'card' ? 'text-brand-dark' : 'text-brand-dark'}`}>
                         {t.payment.card}
                       </div>
-                      <CreditCard className={`w-6 h-6 shrink-0 ${paymentMethod === 'card' ? 'text-brand-rose' : 'text-gray-400'}`} />
+                      <CreditCard className={`w-6 h-6 shrink-0 ${paymentMethod === 'card' ? 'text-brand-dark' : 'text-gray-400'}`} />
                     </div>
                   </label>
 
@@ -250,7 +250,7 @@ export default function FastCheckoutForm({ lang, quantity, currency, countryCode
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full py-4 sm:py-5 text-base sm:text-lg font-bold rounded-xl sm:rounded-2xl bg-gradient-to-r from-brand-rose to-[#d47683] text-white hover:shadow-xl hover:shadow-brand-rose/30 transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-4 sm:py-5 text-base sm:text-lg font-black rounded-xl sm:rounded-2xl bg-[#FBC6E2] text-brand-dark hover:bg-[#f8b0d8] border-2 border-[#F3B2D4] hover:shadow-2xl hover:shadow-[#FBC6E2]/60 transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0 disabled:cursor-not-allowed flex items-center justify-center gap-2 animate-pulse-glow"
                 >
                   {isSubmitting ? (
                     <>

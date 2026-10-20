@@ -85,8 +85,8 @@ export default function ProductDetails({ lang }) {
         <div className="mb-12 sm:mb-16">
           <h3 className="text-2xl font-serif text-brand-dark text-center mb-6 sm:mb-10">{t.boxContents.title}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            <div className="bg-brand-bg rounded-2xl p-6 border border-brand-pink/20 flex items-center gap-4 hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-brand-rose">
+            <div className="bg-brand-bg rounded-2xl p-6 border border-[#F3B2D4]/50 flex items-center gap-4 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 rounded-full bg-[#FBC6E2] flex items-center justify-center shrink-0 shadow-sm text-brand-dark border border-[#F3B2D4]">
                 <Package className="w-6 h-6" />
               </div>
               <div>
@@ -95,8 +95,8 @@ export default function ProductDetails({ lang }) {
               </div>
             </div>
             
-            <div className="bg-brand-bg rounded-2xl p-6 border border-brand-pink/20 flex items-center gap-4 hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-brand-rose">
+            <div className="bg-brand-bg rounded-2xl p-6 border border-[#F3B2D4]/50 flex items-center gap-4 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 rounded-full bg-[#FBC6E2] flex items-center justify-center shrink-0 shadow-sm text-brand-dark border border-[#F3B2D4]">
                 <PenTool className="w-6 h-6" />
               </div>
               <div>
@@ -105,8 +105,8 @@ export default function ProductDetails({ lang }) {
               </div>
             </div>
 
-            <div className="bg-brand-bg rounded-2xl p-6 border border-brand-pink/20 flex items-center gap-4 hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-brand-rose">
+            <div className="bg-brand-bg rounded-2xl p-6 border border-[#F3B2D4]/50 flex items-center gap-4 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 rounded-full bg-[#FBC6E2] flex items-center justify-center shrink-0 shadow-sm text-brand-dark border border-[#F3B2D4]">
                 <BookOpen className="w-6 h-6" />
               </div>
               <div>
@@ -120,20 +120,28 @@ export default function ProductDetails({ lang }) {
         {/* Assurances Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-6 sm:pt-12 border-t border-brand-pink/20">
           <div className="flex flex-col items-center text-center gap-3">
-            <Ban className="w-8 h-8 text-brand-rose" />
-            <span className="font-medium text-sm text-brand-dark">{t.assurances[0]}</span>
+            <div className="w-12 h-12 rounded-full bg-[#FBC6E2]/40 border border-[#F3B2D4] flex items-center justify-center">
+              <Ban className="w-6 h-6 text-brand-dark" />
+            </div>
+            <span className="font-bold text-sm text-brand-dark">{t.assurances[0]}</span>
           </div>
           <div className="flex flex-col items-center text-center gap-3">
-            <Ban className="w-8 h-8 text-brand-rose opacity-60" />
-            <span className="font-medium text-sm text-brand-dark">{t.assurances[1]}</span>
+            <div className="w-12 h-12 rounded-full bg-[#FBC6E2]/40 border border-[#F3B2D4] flex items-center justify-center">
+              <Ban className="w-6 h-6 text-brand-dark opacity-75" />
+            </div>
+            <span className="font-bold text-sm text-brand-dark">{t.assurances[1]}</span>
           </div>
           <div className="flex flex-col items-center text-center gap-3">
-            <Eye className="w-8 h-8 text-brand-rose" />
-            <span className="font-medium text-sm text-brand-dark">{t.assurances[2]}</span>
+            <div className="w-12 h-12 rounded-full bg-[#FBC6E2]/40 border border-[#F3B2D4] flex items-center justify-center">
+              <Eye className="w-6 h-6 text-brand-dark" />
+            </div>
+            <span className="font-bold text-sm text-brand-dark">{t.assurances[2]}</span>
           </div>
           <div className="flex flex-col items-center text-center gap-3">
-            <CloudRain className="w-8 h-8 text-brand-rose" />
-            <span className="font-medium text-sm text-brand-dark">{t.assurances[3]}</span>
+            <div className="w-12 h-12 rounded-full bg-[#FBC6E2]/40 border border-[#F3B2D4] flex items-center justify-center">
+              <CloudRain className="w-6 h-6 text-brand-dark" />
+            </div>
+            <span className="font-bold text-sm text-brand-dark">{t.assurances[3]}</span>
           </div>
         </div>
 

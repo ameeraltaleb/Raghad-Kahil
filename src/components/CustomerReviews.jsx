@@ -41,7 +41,7 @@ export default function CustomerReviews({ lang }) {
               </p>
               
               <div className="flex items-center gap-4 mt-auto">
-                <div className="w-12 h-12 bg-brand-peach rounded-full flex items-center justify-center font-serif text-brand-rose font-bold text-xl">
+                <div className="w-12 h-12 bg-[#FBC6E2] border border-[#F3B2D4] rounded-full flex items-center justify-center font-serif text-brand-dark font-black text-xl shadow-xs">
                   {review.name.charAt(0)}
                 </div>
                 <div>

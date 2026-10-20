@@ -9,9 +9,9 @@ export default function HowToUse({ lang }) {
   const isRtl = lang === 'ar';
   
   const icons = [
-    <Sparkles className="w-5 h-5 text-brand-rose" />,
-    <Pipette className="w-5 h-5 text-brand-rose" />,
-    <Smile className="w-5 h-5 text-brand-rose" />
+    <Sparkles className="w-5 h-5 text-brand-dark" />,
+    <Pipette className="w-5 h-5 text-brand-dark" />,
+    <Smile className="w-5 h-5 text-brand-dark" />
   ];
 
   return (
@@ -35,10 +35,10 @@ export default function HowToUse({ lang }) {
               {t.steps.map((step, index) => (
                 <div key={index} className="flex gap-4 sm:gap-6 items-start group">
                   <div className="shrink-0 flex flex-col items-center">
-                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-brand-peach flex items-center justify-center border-3 sm:border-4 border-white shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-[#FBC6E2] text-brand-dark flex items-center justify-center border-3 sm:border-4 border-white shadow-md group-hover:scale-110 transition-transform duration-300">
                       {icons[index]}
                     </div>
-                    {index !== 2 && <div className="w-0.5 h-8 sm:h-12 bg-brand-pink/30 mt-2"></div>}
+                    {index !== 2 && <div className="w-0.5 h-8 sm:h-12 bg-[#FBC6E2] mt-2"></div>}
                   </div>
                   <div className="pt-1 sm:pt-2">
                     <h3 className="text-lg sm:text-xl font-serif font-medium text-brand-dark mb-1 sm:mb-2">

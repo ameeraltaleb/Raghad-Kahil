@@ -36,11 +36,11 @@ export default function ComparisonTable({ lang }) {
           <div className={`flex items-end px-5 pb-6 pt-10 text-sm font-bold text-brand-muted ${isRtl ? '' : 'uppercase tracking-widest'}`}>
             {t.features}
           </div>
-          <div className="relative -mt-6 rounded-t-[1.75rem] bg-gradient-to-b from-brand-rose to-[#c96d78] text-white flex flex-col items-center justify-end px-5 pb-6 pt-10 shadow-[0_-10px_30px_-10px_rgba(184,92,102,0.5)]">
+          <div className="relative -mt-6 rounded-t-[1.75rem] bg-gradient-to-b from-[#FBC6E2] via-[#f7b3d9] to-[#FBC6E2] text-brand-dark flex flex-col items-center justify-end px-5 pb-6 pt-10 shadow-[0_-10px_30px_-10px_rgba(251,198,226,0.5)] border-t-2 border-x-2 border-[#F3B2D4]">
             <span className="absolute -top-3 inset-x-0 mx-auto w-max px-3 py-1 rounded-full bg-brand-dark text-white text-[11px] font-bold tracking-wide shadow-md">
               ★ {shop.bestChoice}
             </span>
-            <span className="font-serif text-2xl lg:text-3xl font-bold text-center">{gloworaLabel}</span>
+            <span className="font-serif text-2xl lg:text-3xl font-black text-center">{gloworaLabel}</span>
           </div>
           <div className="flex items-end justify-center px-5 pb-6 pt-10 text-lg font-bold text-gray-400 text-center">
             {traditionalLabel}
@@ -54,17 +54,17 @@ export default function ComparisonTable({ lang }) {
             return (
               <React.Fragment key={idx}>
                 <div className={`group flex items-center gap-4 px-5 py-6 ${divider}`}>
-                  <span className="shrink-0 w-11 h-11 rounded-2xl bg-brand-peach text-brand-rose flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <span className="shrink-0 w-11 h-11 rounded-2xl bg-[#FBC6E2]/40 text-brand-dark flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 border border-[#F3B2D4]/50">
                     <Icon className="w-5 h-5" />
                   </span>
                   <span className="font-bold text-brand-dark text-base lg:text-lg">{row.f}</span>
                 </div>
 
-                <div className={`flex items-center gap-3 px-6 py-6 bg-gradient-to-b from-[#c96d78] to-brand-rose text-white ${!isLast ? 'border-b border-white/15' : 'rounded-b-[1.75rem] -mb-8 pb-10 shadow-[0_20px_40px_-15px_rgba(184,92,102,0.6)]'}`}>
-                  <span className="shrink-0 w-8 h-8 rounded-full bg-white text-brand-rose flex items-center justify-center shadow-md">
+                <div className={`flex items-center gap-3 px-6 py-6 bg-gradient-to-b from-[#fce2ef] to-[#FBC6E2]/50 text-brand-dark border-x-2 border-[#F3B2D4] ${!isLast ? 'border-b border-[#F3B2D4]/40' : 'rounded-b-[1.75rem] -mb-8 pb-10 border-b-2 shadow-[0_20px_40px_-15px_rgba(251,198,226,0.6)]'}`}>
+                  <span className="shrink-0 w-8 h-8 rounded-full bg-brand-dark text-[#FBC6E2] flex items-center justify-center shadow-md">
                     <Check className="w-4 h-4" strokeWidth={3} />
                   </span>
-                  <span className="font-semibold leading-snug text-[15px] lg:text-base">{row.g}</span>
+                  <span className="font-bold leading-snug text-[15px] lg:text-base">{row.g}</span>
                 </div>
 
                 <div className={`flex items-center gap-3 px-6 py-6 ${divider}`}>
@@ -83,7 +83,7 @@ export default function ComparisonTable({ lang }) {
       <div className="md:hidden">
         {/* Legend */}
         <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6 text-xs font-bold">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-rose text-white shadow-md">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FBC6E2] text-brand-dark border border-[#F3B2D4] shadow-md font-bold">
             <Check className="w-3.5 h-3.5" strokeWidth={3} /> {gloworaLabel}
           </span>
           <span className="text-gray-300">VS</span>
@@ -99,18 +99,18 @@ export default function ComparisonTable({ lang }) {
               <div key={idx} className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-[0_10px_30px_-12px_rgba(61,27,34,0.15)] border border-brand-peach">
                 {/* Feature title */}
                 <div className="flex items-center gap-2.5 sm:gap-3 mb-2.5 sm:mb-3">
-                  <span className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-brand-peach text-brand-rose flex items-center justify-center">
+                  <span className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#FBC6E2]/40 text-brand-dark border border-[#F3B2D4]/50 flex items-center justify-center">
                     <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </span>
                   <h3 className="font-bold text-brand-dark text-sm sm:text-base">{row.f}</h3>
                 </div>
 
                 {/* Glowora */}
-                <div className="flex items-start gap-3 rounded-2xl bg-gradient-to-br from-brand-rose to-[#c96d78] text-white p-3.5 shadow-[0_8px_20px_-8px_rgba(184,92,102,0.6)]">
-                  <span className="shrink-0 mt-0.5 w-6 h-6 rounded-full bg-white text-brand-rose flex items-center justify-center">
+                <div className="flex items-start gap-3 rounded-2xl bg-gradient-to-br from-[#FBC6E2] via-[#f7b3d9] to-[#FBC6E2] text-brand-dark p-3.5 border border-[#F3B2D4] shadow-[0_8px_20px_-8px_rgba(251,198,226,0.6)]">
+                  <span className="shrink-0 mt-0.5 w-6 h-6 rounded-full bg-brand-dark text-[#FBC6E2] flex items-center justify-center shadow-xs">
                     <Check className="w-3.5 h-3.5" strokeWidth={3} />
                   </span>
-                  <span className="text-sm font-semibold leading-relaxed">{row.g}</span>
+                  <span className="text-sm font-bold leading-relaxed">{row.g}</span>
                 </div>
 
                 {/* Traditional */}

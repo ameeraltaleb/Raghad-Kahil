@@ -43,7 +43,7 @@ export default function ProblemSolution({ lang }) {
 
           {/* Glowora Solution Card */}
           <TiltCard className="h-full">
-            <div className="bg-brand-bg rounded-2xl sm:rounded-3xl ring-2 ring-brand-rose/30 shadow-2xl shadow-brand-pink/10 flex flex-col relative overflow-hidden h-full group">
+            <div className="bg-brand-bg rounded-2xl sm:rounded-3xl ring-2 ring-[#FBC6E2] shadow-2xl shadow-[#FBC6E2]/25 flex flex-col relative overflow-hidden h-full group">
               
               {/* Texture Image Header */}
               <div className="h-32 sm:h-40 w-full relative overflow-hidden">
@@ -52,11 +52,11 @@ export default function ProblemSolution({ lang }) {
               </div>
               
               <div className="relative z-10 flex flex-col flex-1 p-4 sm:p-8 lg:p-10 pt-2">
-                <div className="flex items-center justify-between mb-4 sm:mb-8 pb-3 sm:pb-4 border-b border-brand-pink/30">
+                <div className="flex items-center justify-between mb-4 sm:mb-8 pb-3 sm:pb-4 border-b border-[#FBC6E2]/40">
                   <h3 className="text-xl sm:text-2xl font-serif text-brand-dark">
                     {t.glowora.title}
                   </h3>
-                  <span className="bg-brand-dark text-white text-[11px] sm:text-xs px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full font-medium shadow-md">
+                  <span className="bg-[#FBC6E2] text-brand-dark text-[11px] sm:text-xs px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full font-bold shadow-md border border-[#F3B2D4]">
                     {t.glowora.badge}
                   </span>
                 </div>
@@ -64,8 +64,8 @@ export default function ProblemSolution({ lang }) {
                 <ul className="space-y-3.5 sm:space-y-6 flex-1">
                   {t.glowora.points.map((point, index) => (
                     <li key={index} className="flex items-start gap-3 sm:gap-4">
-                      <div className="mt-0.5 shrink-0">
-                        <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-brand-rose" />
+                      <div className="mt-0.5 shrink-0 w-6 h-6 rounded-full bg-[#FBC6E2] flex items-center justify-center border border-[#F3B2D4]">
+                        <CheckCircle className="w-4 h-4 text-brand-dark" />
                       </div>
                       <span className="text-brand-dark font-medium leading-relaxed text-sm sm:text-base">{point}</span>
                     </li>

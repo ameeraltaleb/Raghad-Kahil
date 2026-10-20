@@ -111,19 +111,19 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
                     onClick={() => setQuantity(q)}
                     className={`relative w-full flex items-center gap-3 sm:gap-4 rounded-2xl border-2 px-4 py-3.5 text-start transition-all duration-200 ${
                       selected
-                        ? 'border-brand-rose bg-white shadow-[0_8px_24px_-10px_rgba(184,92,102,0.45)]'
+                        ? 'border-2 border-[#FBC6E2] bg-[#FBC6E2]/15 shadow-[0_10px_30px_-10px_rgba(251,198,226,0.6)] ring-2 ring-[#FBC6E2]'
                         : 'border-brand-pink/30 bg-white/60 hover:border-brand-pink hover:bg-white'
                     }`}
                   >
                     {bundleTag[q] && (
-                      <span className="absolute -top-2.5 end-4 px-2.5 py-0.5 rounded-full bg-brand-rose text-white text-[10px] sm:text-[11px] font-bold shadow-sm">
+                      <span className="absolute -top-2.5 end-4 px-2.5 py-0.5 rounded-full bg-[#FBC6E2] text-brand-dark border border-[#F3B2D4] text-[10px] sm:text-[11px] font-black shadow-sm">
                         {bundleTag[q]}
                       </span>
                     )}
 
                     {/* Radio dot */}
-                    <span className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${selected ? 'border-brand-rose bg-brand-rose' : 'border-brand-pink'}`}>
-                      {selected && <Check className="w-3 h-3 text-white" strokeWidth={3.5} />}
+                    <span className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${selected ? 'border-[#F3B2D4] bg-[#FBC6E2]' : 'border-brand-pink'}`}>
+                      {selected && <Check className="w-3 h-3 text-brand-dark" strokeWidth={3.5} />}
                     </span>
 
                     <span className="flex-1 min-w-0">
@@ -137,7 +137,7 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
                       </span>
                       {p.freeGifts.length > 0 ? (
                         <span className="inline-flex items-center gap-1 text-xs text-brand-dark font-semibold mt-1 px-2 py-0.5 rounded-full bg-[#FBC6E2] border border-[#F3B2D4] w-fit">
-                          <Gift className="w-3.5 h-3.5 text-brand-rose" /> {shop.bundles.freeGift}
+                          <Gift className="w-3.5 h-3.5 text-brand-dark" /> {shop.bundles.freeGift}
                         </span>
                       ) : q > 1 ? (
                         <span className="block text-xs text-brand-muted mt-0.5" dir="ltr" style={{ textAlign: isRtl ? 'right' : 'left' }}>
@@ -161,7 +161,7 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
             <div className="flex items-center justify-between gap-3 mb-6 text-sm">
               <span className="text-brand-muted">{shop.bundles.more}</span>
               <div className="flex items-center bg-white border border-brand-pink/30 rounded-full p-0.5 shadow-sm">
-                <button type="button" onClick={handleDecrement} aria-label="-" className="w-8 h-8 flex items-center justify-center rounded-full text-brand-muted hover:text-brand-rose hover:bg-brand-peach/50 transition-colors">
+                <button type="button" onClick={handleDecrement} aria-label="-" className="w-8 h-8 flex items-center justify-center rounded-full text-brand-muted hover:text-brand-dark hover:bg-[#FBC6E2]/40 transition-colors">
                   <Minus className="w-3.5 h-3.5" />
                 </button>
                 <input
@@ -172,7 +172,7 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
                   min="1"
                   aria-label={t.quantity}
                 />
-                <button type="button" onClick={handleIncrement} aria-label="+" className="w-8 h-8 flex items-center justify-center rounded-full text-brand-muted hover:text-brand-rose hover:bg-brand-peach/50 transition-colors">
+                <button type="button" onClick={handleIncrement} aria-label="+" className="w-8 h-8 flex items-center justify-center rounded-full text-brand-muted hover:text-brand-dark hover:bg-[#FBC6E2]/40 transition-colors">
                   <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -183,7 +183,7 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
               type="button"
               id="confirm-order-btn"
               onClick={onAddToCart}
-              className="relative w-full py-4 sm:py-5 text-base sm:text-lg font-bold rounded-xl sm:rounded-2xl bg-brand-rose text-white hover:bg-[#a64e58] hover:shadow-xl hover:shadow-brand-rose/40 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow group"
+              className="relative w-full py-4 sm:py-5 text-base sm:text-lg font-black rounded-xl sm:rounded-2xl bg-[#FBC6E2] text-brand-dark hover:bg-[#f8b0d8] border-2 border-[#F3B2D4] hover:shadow-2xl hover:shadow-[#FBC6E2]/60 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow group"
             >
               <ShoppingBag className="w-5 h-5 group-hover:-rotate-12 transition-transform duration-300" />
               {t.addToCart}

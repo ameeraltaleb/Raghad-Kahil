@@ -56,8 +56,8 @@ export default function ClinicalResults({ lang }) {
           <div className={`space-y-2.5 sm:space-y-8 ${isRtl ? 'lg:pl-8' : 'lg:pr-8'}`}>
             {t.stats.map((stat, index) => (
               <div key={index} className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm border border-brand-pink/20 flex flex-row items-center gap-3.5 sm:gap-6 hover:shadow-md transition-shadow text-start">
-                <div className="flex-shrink-0 w-13 h-13 sm:w-24 sm:h-24 rounded-full bg-brand-bg flex items-center justify-center border-3 sm:border-4 border-brand-pink/30 shadow-inner">
-                  <span className="text-base sm:text-3xl font-bold text-brand-rose">{stat.percentage}</span>
+                <div className="flex-shrink-0 w-13 h-13 sm:w-24 sm:h-24 rounded-full bg-[#FBC6E2]/30 flex items-center justify-center border-3 sm:border-4 border-[#FBC6E2] shadow-inner">
+                  <span className="text-base sm:text-3xl font-black text-brand-dark">{stat.percentage}</span>
                 </div>
                 <div className="flex flex-col justify-center flex-1 py-0.5">
                   <p className="text-brand-dark font-medium leading-relaxed text-xs sm:text-lg">
@@ -90,7 +90,7 @@ export default function ClinicalResults({ lang }) {
                   className="w-full h-full object-cover pointer-events-none"
                 />
               </div>
-              <div className={`absolute top-4 ${isRtl ? 'left-4' : 'right-4'} bg-brand-rose text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-md pointer-events-none z-0`}>
+              <div className={`absolute top-4 ${isRtl ? 'left-4' : 'right-4'} bg-[#FBC6E2] text-brand-dark border border-[#F3B2D4] px-3 py-1.5 rounded-full text-xs font-bold shadow-md pointer-events-none z-0`}>
                 {t.beforeAfter.after}
               </div>
 
@@ -120,10 +120,10 @@ export default function ClinicalResults({ lang }) {
                 className={`absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_10px_rgba(0,0,0,0.1)] z-30 flex items-center justify-center ${isRtl ? 'translate-x-1/2' : '-translate-x-1/2'}`}
                 style={{ [isRtl ? 'right' : 'left']: `${sliderPosition}%` }}
               >
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg border border-brand-pink/30">
+                <div className="w-8 h-8 bg-[#FBC6E2] text-brand-dark rounded-full flex items-center justify-center shadow-lg border-2 border-white">
                   <div className="flex gap-0.5">
-                    <div className="w-1 h-3 border-l-2 border-gray-300"></div>
-                    <div className="w-1 h-3 border-r-2 border-gray-300"></div>
+                    <div className="w-1 h-3 border-l-2 border-brand-dark/40"></div>
+                    <div className="w-1 h-3 border-r-2 border-brand-dark/40"></div>
                   </div>
                 </div>
               </div>

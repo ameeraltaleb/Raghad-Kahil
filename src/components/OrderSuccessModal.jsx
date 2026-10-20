@@ -50,9 +50,9 @@ export default function OrderSuccessModal({ lang, isOpen, onClose, orderDetails 
               <span className="text-brand-muted">{t.city}</span>
               <span className="font-medium text-brand-dark">{orderDetails.city}</span>
             </div>
-            <div className="flex justify-between pt-3 border-t border-brand-pink/30">
+            <div className="flex justify-between items-center pt-3 border-t border-brand-pink/30">
               <span className="text-brand-muted font-medium">{t.total}</span>
-              <span className="font-bold text-brand-rose">{orderDetails.price}</span>
+              <span className="font-black text-brand-dark px-2.5 py-0.5 rounded-full bg-[#FBC6E2] border border-[#F3B2D4]">{orderDetails.price}</span>
             </div>
           </div>
         </div>
