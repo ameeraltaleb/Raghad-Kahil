@@ -24,21 +24,16 @@ import { detectUserLocale } from './utils/geoDetection';
 function App() {
   const [locale] = useState(() => detectUserLocale());
   const [lang, setLang] = useState(locale.lang);
-  const [currency, setCurrency] = useState(locale.currency);
+  const [currency, setCurrency] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('raghad_currency') : null) || 'USD');
   const [countryCode] = useState(locale.countryCode);
   const [isSiteRevealed, setIsSiteRevealed] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
-  // Persist language and sync currency smartly when user toggles
+  // Persist language
   const handleLangChange = (newLang) => {
     setLang(newLang);
     if (typeof window !== 'undefined') {
       localStorage.setItem('raghad_lang', newLang);
-      if (newLang === 'tr' && !localStorage.getItem('raghad_currency')) {
-        setCurrency('TRY');
-      } else if (newLang === 'ar' && !localStorage.getItem('raghad_currency')) {
-        setCurrency('SAR');
-      }
     }
   };
 

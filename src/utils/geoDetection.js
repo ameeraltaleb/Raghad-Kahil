@@ -26,7 +26,7 @@ export function detectUserLocale() {
   const primaryLang = (navLanguages[0] || '').toLowerCase();
 
   let detectedCountry = 'SA';
-  let detectedCurrency = 'SAR';
+  let detectedCurrency = 'USD';
   let detectedLang = 'ar';
 
   // --- Turkey Detection ---
