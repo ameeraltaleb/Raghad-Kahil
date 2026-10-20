@@ -4,6 +4,7 @@ import { translations } from '../translations';
 import hero1Img from '../assets/hero1.png';
 import hero2Img from '../assets/hero2.png';
 import hero3Img from '../assets/hero3.jpg';
+import heroBannerModel from '../assets/hero_banner_model.jpg';
 
 export default function HeroSection({ lang, onWatchVideo }) {
   const t = translations[lang];
@@ -11,7 +12,7 @@ export default function HeroSection({ lang, onWatchVideo }) {
   
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
-  const images = [hero1Img, hero2Img, hero3Img];
+  const images = [heroBannerModel, hero1Img, hero2Img, hero3Img];
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   useEffect(() => {
