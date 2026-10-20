@@ -18,8 +18,8 @@ import StickyAddToCart from './components/StickyAddToCart';
 import SocialProofToast from './components/SocialProofToast';
 import VideoModal from './components/VideoModal';
 import { translations } from './translations';
-
 import { detectUserLocale } from './utils/geoDetection';
+import { fetchLiveRates } from './services/currencyService';
 
 function App() {
   const [locale] = useState(() => detectUserLocale());
@@ -61,6 +61,11 @@ function App() {
     metaDescription.content = tSeo.description;
 
   }, [lang]);
+
+  // Fetch live market exchange rates silently in the background
+  useEffect(() => {
+    fetchLiveRates();
+  }, []);
 
   const t = translations[lang];
 

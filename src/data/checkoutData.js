@@ -1,3 +1,5 @@
+import { getStoredRates, DEFAULT_RATES } from '../services/currencyService';
+
 export const countries = [
   { code: 'TR', name: 'Turkey (Türkiye 🇹🇷)', dialCode: '+90', priority: 1 },
   { code: 'SA', name: 'Saudi Arabia (المملكة العربية السعودية 🇸🇦)', dialCode: '+966', priority: 2 },
@@ -27,24 +29,27 @@ export const countries = [
 });
 
 export const currencies = [
-  { code: 'USD', symbol: '$', name: 'US Dollar ($)', format: (v) => `$${v.toLocaleString()}`, rate: 1 },
-  { code: 'SAR', symbol: 'SAR', name: 'Saudi Riyal (ر.س)', format: (v) => `${v.toLocaleString()} SAR`, rate: 3.75 },
-  { code: 'AED', symbol: 'AED', name: 'UAE Dirham (د.إ)', format: (v) => `${v.toLocaleString()} AED`, rate: 3.70 },
-  { code: 'TRY', symbol: '₺', name: 'Turkish Lira (₺)', format: (v) => `${v.toLocaleString()}₺`, rate: 35 },
-  { code: 'EUR', symbol: '€', name: 'Euro (€)', format: (v) => `${v.toLocaleString()}€`, rate: 1 },
+  { code: 'USD', symbol: '$', name: 'US Dollar ($)', format: (v) => `$${v.toLocaleString()}` },
+  { code: 'TRY', symbol: '₺', name: 'Turkish Lira (₺)', format: (v) => `${v.toLocaleString()}₺` },
+  { code: 'SAR', symbol: 'SAR', name: 'Saudi Riyal (ر.س)', format: (v) => `${v.toLocaleString()} SAR` },
+  { code: 'AED', symbol: 'AED', name: 'UAE Dirham (د.إ)', format: (v) => `${v.toLocaleString()} AED` },
+  { code: 'EUR', symbol: '€', name: 'Euro (€)', format: (v) => `${v.toLocaleString()}€` },
 ];
 
 /**
  * Pricing Rules:
- * 1 jar  = 20
- * 2 jars = 30
- * 3 jars = 45
- * Each additional jar (4+) = +15 per jar (4 jars = 60, 5 jars = 75, etc.)
+ * Base in USD:
+ * 1 jar  = 20 USD
+ * 2 jars = 30 USD
+ * 3 jars = 45 USD
+ * Each additional jar (4+) = +15 USD per jar
+ *
+ * Rates are dynamically fetched and cached, guaranteeing up-to-date conversion.
  */
-export const calculatePricing = (qty, currency = 'USD') => {
+export const calculatePricing = (qty, currency = 'USD', customRates = null) => {
   const quantity = Math.max(1, parseInt(qty) || 1);
-  const cur = currencies.find(c => c.code === currency) || currencies[0];
-  const rate = cur.rate || 1;
+  const rates = customRates || getStoredRates() || DEFAULT_RATES;
+  const rate = rates[currency] || 1;
 
   // Base price in USD
   let baseFinalUSD = 20;
@@ -59,11 +64,20 @@ export const calculatePricing = (qty, currency = 'USD') => {
     baseFinalUSD = 45 + (quantity - 3) * 15;
   }
 
-  // Original single-unit price without volume discount (20 per jar)
+  // Original single-unit price without bundle discount (20 USD per jar)
   const baseOriginalUSD = quantity * 20;
 
-  const finalTotal = Math.round(baseFinalUSD * rate);
-  const originalTotal = Math.round(baseOriginalUSD * rate);
+  // Converted totals:
+  // For currencies with high numbers like TRY, round to nearest 5 or 10 for clean boutique pricing
+  let finalTotal = Math.round(baseFinalUSD * rate);
+  let originalTotal = Math.round(baseOriginalUSD * rate);
+
+  if (currency === 'TRY' && finalTotal > 100) {
+    // Round to clean nearest 5 for Turkish Lira (e.g. 990 or 1485)
+    finalTotal = Math.round(finalTotal / 5) * 5;
+    originalTotal = Math.round(originalTotal / 5) * 5;
+  }
+
   const discountAmount = Math.max(0, originalTotal - finalTotal);
   const discountRate = originalTotal > 0 ? (discountAmount / originalTotal) : 0;
 
@@ -84,6 +98,7 @@ export const calculatePricing = (qty, currency = 'USD') => {
     discountRate,
     discountAmount,
     finalTotal,
-    freeGifts
+    freeGifts,
+    activeRate: rate
   };
 };
