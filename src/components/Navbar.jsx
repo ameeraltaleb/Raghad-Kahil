@@ -49,52 +49,50 @@ export default function Navbar({ lang, setLang }) {
 
   const currentLang = languages.find(l => l.code === lang);
 
-  // Dynamic styles based on scroll state
-  const textColorClass = isScrolled ? 'text-brand-dark' : 'text-white';
-  const textHoverClass = isScrolled ? 'hover:text-brand-rose' : 'hover:text-brand-peach';
-
   return (
-    <nav className={`fixed w-full top-0 z-50 transition-all duration-500 ${
-      isScrolled ? 'bg-brand-bg/95 backdrop-blur-lg shadow-sm border-b border-brand-pink/30 py-1' : 'bg-transparent py-3'
+    <nav className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-[#FBC6E2]/95 backdrop-blur-md shadow-md border-b border-[#F3B2D4] py-1.5' 
+        : 'bg-[#FBC6E2] shadow-sm border-b border-[#F3B2D4] py-2 sm:py-2.5'
     }`}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-11 sm:h-12">
           
           {/* Logo */}
           <div className="flex-shrink-0">
             <a href="#" className="flex items-center group transition-transform hover:scale-105">
-              <BrandLogo isScrolled={isScrolled} size="md" />
+              <BrandLogo isScrolled={true} size="md" />
             </a>
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
-            <div className={`flex items-center gap-8 ${isRtl ? 'space-x-reverse' : ''}`}>
+          <div className="hidden md:flex items-center space-x-6">
+            <div className={`flex items-center gap-6 ${isRtl ? 'space-x-reverse' : ''}`}>
               {navLinks.map((link, index) => (
-                <a key={index} href={link.href} className={`text-sm font-medium transition-colors ${textColorClass} ${textHoverClass}`}>
+                <a 
+                  key={index} 
+                  href={link.href} 
+                  className="text-sm font-bold text-brand-dark hover:text-black transition-colors px-3 py-1.5 rounded-full hover:bg-white/40"
+                >
                   {link.name}
                 </a>
               ))}
             </div>
             
-            <div className={`w-px h-6 mx-4 transition-colors ${isScrolled ? 'bg-brand-pink/50' : 'bg-white/30'}`}></div>
+            <div className="w-px h-6 mx-2 bg-[#F3B2D4]"></div>
             
             {/* Language Dropdown */}
             <div className="relative" ref={desktopLangRef}>
               <button 
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className={`flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full border transition-all ${
-                  isScrolled 
-                    ? 'text-brand-dark hover:text-brand-rose border-brand-pink/30 hover:border-brand-pink hover:bg-brand-peach/50' 
-                    : 'text-white border-white/30 hover:border-white hover:bg-white/10'
-                }`}
+                className="flex items-center gap-2 text-sm font-bold text-brand-dark px-3.5 py-1.5 rounded-full border border-[#F3B2D4] bg-white/70 hover:bg-white shadow-2xs transition-all"
               >
                 <span>{currentLang.label}</span>
                 <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {isLangDropdownOpen && (
-                <div className={`absolute top-full mt-3 ${isRtl ? 'left-0' : 'right-0'} w-40 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-brand-pink/30 py-2 overflow-hidden`}>
+                <div className={`absolute top-full mt-2.5 ${isRtl ? 'left-0' : 'right-0'} w-40 bg-white/98 backdrop-blur-md rounded-2xl shadow-xl border border-[#F3B2D4] py-2 overflow-hidden z-50`}>
                   {languages.map((l) => (
                     <button
                       key={l.code}
@@ -102,7 +100,7 @@ export default function Navbar({ lang, setLang }) {
                         setLang(l.code);
                         setIsLangDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-brand-peach transition-colors ${lang === l.code ? 'font-bold text-brand-dark bg-[#FBC6E2]/40' : 'text-brand-dark'}`}
+                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-[#FBC6E2]/30 transition-colors ${lang === l.code ? 'font-bold text-brand-dark bg-[#FBC6E2]/50' : 'text-brand-dark font-medium'}`}
                     >
                       {l.label}
                     </button>
@@ -112,25 +110,21 @@ export default function Navbar({ lang, setLang }) {
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
+          {/* Mobile Actions */}
+          <div className="md:hidden flex items-center gap-2.5">
             
             {/* Mobile Lang Dropdown */}
             <div className="relative" ref={mobileLangRef}>
               <button 
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className={`flex items-center gap-1 text-sm font-medium px-3 py-1.5 rounded-full border transition-all ${
-                  isScrolled 
-                    ? 'text-brand-dark border-brand-pink/30 bg-brand-peach/20' 
-                    : 'text-white border-white/30 bg-white/10'
-                }`}
+                className="flex items-center gap-1 text-xs font-bold text-brand-dark px-2.5 py-1.5 rounded-full border border-[#F3B2D4] bg-white/70 shadow-2xs transition-all"
               >
-                <span className="text-base">{currentLang.label.split(' ')[0]}</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
+                <span className="text-sm">{currentLang.label.split(' ')[0]}</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {isLangDropdownOpen && (
-                <div className={`absolute top-full mt-3 ${isRtl ? 'left-0' : 'right-0'} w-36 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-brand-pink/30 py-2 overflow-hidden`}>
+                <div className={`absolute top-full mt-2.5 ${isRtl ? 'left-0' : 'right-0'} w-36 bg-white/98 backdrop-blur-md rounded-2xl shadow-xl border border-[#F3B2D4] py-2 overflow-hidden z-50`}>
                   {languages.map((l) => (
                     <button
                       key={l.code}
@@ -138,7 +132,7 @@ export default function Navbar({ lang, setLang }) {
                         setLang(l.code);
                         setIsLangDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-brand-peach transition-colors ${lang === l.code ? 'font-bold text-brand-dark bg-[#FBC6E2]/40' : 'text-brand-dark'}`}
+                      className={`w-full text-left px-4 py-2 text-xs hover:bg-[#FBC6E2]/30 transition-colors ${lang === l.code ? 'font-bold text-brand-dark bg-[#FBC6E2]/50' : 'text-brand-dark font-medium'}`}
                     >
                       {l.label}
                     </button>
@@ -149,23 +143,24 @@ export default function Navbar({ lang, setLang }) {
 
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`transition-colors ${textColorClass} ${textHoverClass}`}
+              className="p-1.5 rounded-xl text-brand-dark hover:bg-white/40 transition-colors"
+              aria-label="Toggle Navigation"
             >
-              {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu Panel */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pt-4 pb-6 border-t border-brand-pink/30 bg-brand-bg absolute left-0 right-0 shadow-2xl px-6 rounded-b-3xl">
-            <div className="flex flex-col space-y-5">
+          <div className="md:hidden mt-2 pt-3 pb-5 border-t border-[#F3B2D4] bg-[#FBC6E2] absolute left-0 right-0 shadow-2xl px-6 rounded-b-3xl">
+            <div className="flex flex-col space-y-3.5">
               {navLinks.map((link, index) => (
                 <a 
                   key={index} 
                   href={link.href} 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-bold text-brand-dark hover:text-brand-rose transition-colors"
+                  className="text-base font-bold text-brand-dark hover:text-black py-1 transition-colors"
                 >
                   {link.name}
                 </a>
