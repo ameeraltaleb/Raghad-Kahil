@@ -39,23 +39,23 @@ export default function ElegantPreloader({ lang, onStartReveal }) {
           : 'opacity-100'
       }`}
       style={{
-        backgroundColor: isFading ? 'rgba(252, 246, 249, 0)' : '#FCF6F9',
+        backgroundColor: isFading ? 'rgba(251, 198, 226, 0)' : '#FBC6E2',
         transition: 'background-color 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 950ms cubic-bezier(0.16, 1, 0.3, 1)'
       }}
       onClick={triggerReveal}
     >
       {/* Ambient Silk Luxury Glow in the background */}
       <div className={`absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="w-[500px] h-[500px] bg-gradient-to-tr from-rose-200/40 via-amber-100/30 to-pink-100/40 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute w-[300px] h-[300px] bg-white/70 rounded-full blur-2xl"></div>
+        <div className="w-[520px] h-[520px] bg-gradient-to-tr from-[#F8B0D7]/70 via-[#FDF0F6]/50 to-white/60 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute w-[320px] h-[320px] bg-white/60 rounded-full blur-2xl"></div>
       </div>
 
       {/* Floating Micro Stardust Particles */}
       <div className={`absolute inset-0 pointer-events-none overflow-hidden transition-opacity duration-500 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="absolute top-[25%] left-[20%] w-1.5 h-1.5 bg-amber-400/70 rounded-full blur-[0.5px] animate-float-particle-1"></div>
-        <div className="absolute top-[35%] right-[22%] w-2 h-2 bg-rose-400/60 rounded-full blur-[0.5px] animate-float-particle-2"></div>
+        <div className="absolute top-[25%] left-[20%] w-1.5 h-1.5 bg-amber-400/80 rounded-full blur-[0.5px] animate-float-particle-1"></div>
+        <div className="absolute top-[35%] right-[22%] w-2 h-2 bg-[#D94B7E]/60 rounded-full blur-[0.5px] animate-float-particle-2"></div>
         <div className="absolute bottom-[30%] left-[28%] w-1 h-1 bg-amber-500/80 rounded-full animate-float-particle-3"></div>
-        <div className="absolute bottom-[35%] right-[30%] w-1.5 h-1.5 bg-pink-400/70 rounded-full animate-float-particle-1"></div>
+        <div className="absolute bottom-[35%] right-[30%] w-2 h-2 bg-white/90 rounded-full animate-float-particle-1"></div>
       </div>
 
       {/* Center Content with gentle upward float and dissolve */}
@@ -179,18 +179,18 @@ export default function ElegantPreloader({ lang, onStartReveal }) {
 
         {/* Thrilling Tagline with Luxury Hairline Accents */}
         <div className="flex items-center gap-3 mt-3 overflow-hidden">
-          <div className="w-8 sm:w-16 h-[1px] bg-gradient-to-r from-transparent via-brand-rose/40 to-brand-rose/60 animate-line-expand-thrill"></div>
-          <p className="text-xs sm:text-sm tracking-[0.2em] text-brand-dark/80 font-serif font-medium uppercase text-center animate-fade-thrill-sub">
+          <div className="w-8 sm:w-16 h-[1.5px] bg-gradient-to-r from-transparent via-[#F3B2D4] to-brand-dark/50 animate-line-expand-thrill"></div>
+          <p className="text-xs sm:text-sm tracking-[0.2em] text-brand-dark font-serif font-bold uppercase text-center animate-fade-thrill-sub">
             {lang === 'ar' ? 'الفخامة الهادئة • سر الحواجب المرفوعة' : lang === 'tr' ? 'Sade Lüks • Kusursuz Kaş Deneyimi' : 'Quiet Luxury • Effortless Brow Lift'}
           </p>
-          <div className="w-8 sm:w-16 h-[1px] bg-gradient-to-l from-transparent via-brand-rose/40 to-brand-rose/60 animate-line-expand-thrill"></div>
+          <div className="w-8 sm:w-16 h-[1.5px] bg-gradient-to-l from-transparent via-[#F3B2D4] to-brand-dark/50 animate-line-expand-thrill"></div>
         </div>
 
       </div>
 
       {/* Thrilling Minimalist 2-Second Golden Progress Bar at the very bottom */}
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-brand-rose/10">
-        <div className="h-full bg-gradient-to-r from-brand-rose/40 via-amber-400 to-brand-rose animate-loading-bar-2s"></div>
+      <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#F3B2D4]/60">
+        <div className="h-full bg-gradient-to-r from-brand-dark via-amber-400 to-brand-dark animate-loading-bar-2s"></div>
       </div>
 
       {/* Scoped CSS for 2-Second Thrilling Animation Sequence */}
