@@ -250,21 +250,7 @@ export default function CustomerReviews({ lang }) {
           })}
         </div>
 
-        {/* Discreet Owner Moderation Link */}
-        <div className="mt-12 text-center">
-          <button
-            onClick={() => setIsAdminOpen(true)}
-            className="inline-flex items-center gap-1.5 text-xs text-brand-muted hover:text-brand-dark transition-colors px-3 py-1.5 rounded-full hover:bg-white/60 border border-transparent hover:border-[#F3B2D4] cursor-pointer"
-          >
-            <Lock className="w-3 h-3 text-brand-rose" />
-            <span>{lang === 'ar' ? 'إدارة واعتماد التقييمات (خاص بالإدارة)' : 'Review Moderation Portal'}</span>
-            {pendingReviews.length > 0 && (
-              <span className="bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
-                {pendingReviews.length}
-              </span>
-            )}
-          </button>
-        </div>
+
 
       </div>
 

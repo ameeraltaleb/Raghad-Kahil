@@ -128,15 +128,7 @@ function App() {
           <CustomerReviews lang={lang} />
           <FAQAccordion lang={lang} />
         </main>
-        <Footer 
-          lang={lang} 
-          onNavigateToAdmin={() => {
-            if (typeof window !== 'undefined') {
-              window.history.pushState({}, '', '/admin');
-            }
-            setCurrentPath('/admin');
-          }} 
-        />
+        <Footer lang={lang} />
         <FloatingWhatsApp lang={lang} />
         <StickyAddToCart lang={lang} currency={currency} />
         <SocialProofToast lang={lang} />

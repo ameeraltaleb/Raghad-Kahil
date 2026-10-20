@@ -3,7 +3,7 @@ import { translations } from '../translations';
 import { CreditCard, Banknote } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
-export default function Footer({ lang, onNavigateToAdmin }) {
+export default function Footer({ lang }) {
   const t = translations[lang].footer;
   
   return (
@@ -49,16 +49,8 @@ export default function Footer({ lang, onNavigateToAdmin }) {
           </div>
         </div>
 
-        <div className="pt-6 sm:pt-8 border-t border-white/10 text-center text-gray-500 text-xs sm:text-sm flex flex-col md:flex-row justify-between items-center gap-3">
+        <div className="pt-6 sm:pt-8 border-t border-white/10 text-center text-gray-500 text-xs sm:text-sm flex flex-col md:flex-row justify-center items-center gap-3">
           <p>{t.rights}</p>
-          {onNavigateToAdmin && (
-            <button
-              onClick={onNavigateToAdmin}
-              className="text-[11px] text-gray-400 hover:text-[#FBC6E2] transition-colors flex items-center gap-1 opacity-70 hover:opacity-100 cursor-pointer"
-            >
-              <span>🔒 لوحة الإدارة (/admin)</span>
-            </button>
-          )}
         </div>
         
       </div>
