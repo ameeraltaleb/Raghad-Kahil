@@ -150,23 +150,38 @@ export function getWhatsAppOrderUrl(params) {
  */
 export function openWhatsAppOrder(params) {
   const url = getWhatsAppOrderUrl(params);
+  const rawText = buildWhatsAppMessage(params);
+  const orderId = params.orderId || `RK-${Math.floor(10000 + Math.random() * 90000)}`;
+
   if (typeof window !== 'undefined') {
     // Record order in localStorage for local logging/analytics
     try {
       const existing = JSON.parse(localStorage.getItem('raghad_whatsapp_orders') || '[]');
       existing.unshift({
-        id: params.orderId || `WA-${Date.now()}`,
+        id: orderId,
         timestamp: new Date().toISOString(),
+        dateFormatted: new Date().toLocaleDateString(params.lang === 'ar' ? 'ar-SA' : 'en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
         quantity: params.quantity,
+        bundleTitle: params.bundleTitle || `${params.quantity} عبوة`,
         price: params.price,
-        customerName: params.customerName || 'Anonymous',
-        city: params.city || '',
+        customerName: params.customerName || 'عميلة جديدة',
         phone: params.phone || '',
+        country: params.country || '',
+        city: params.city || '',
         address: params.address || '',
         notes: params.notes || '',
-        paymentMethod: params.paymentMethod || 'cod'
+        paymentMethod: params.paymentMethod || 'cod',
+        hasFreeGift: Boolean(params.hasFreeGift),
+        status: 'new', // 'new' | 'contacted' | 'completed'
+        whatsappMessage: rawText
       });
-      localStorage.setItem('raghad_whatsapp_orders', JSON.stringify(existing.slice(0, 50)));
+      localStorage.setItem('raghad_whatsapp_orders', JSON.stringify(existing.slice(0, 100)));
     } catch (e) {
       console.error('Failed to log WhatsApp order:', e);
     }
