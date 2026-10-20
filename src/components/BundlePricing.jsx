@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { translations } from '../translations';
 import { calculatePricing, currencies } from '../data/checkoutData';
-import { Plus, Minus, MessageCircle, Star, Check, Gift, Truck, ShieldCheck, Lock, Sparkles, Send, ChevronDown, ChevronUp, User, MapPin, Phone } from 'lucide-react';
+import { Plus, Minus, Star, Check, Gift, Truck, ShieldCheck, Lock, ArrowLeft, ArrowRight, Sparkles, MessageCircle } from 'lucide-react';
 import hero1Img from '../assets/hero1.png';
 import hero2Img from '../assets/hero2.png';
 import hero3Img from '../assets/hero3.jpg';
 import GuaranteeBadge from './GuaranteeBadge';
-import { openWhatsAppOrder, WHATSAPP_DISPLAY } from '../utils/whatsapp';
+import { WHATSAPP_DISPLAY } from '../utils/whatsapp';
 
 const BUNDLE_QTYS = [1, 2, 3];
 
@@ -14,6 +14,7 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
   const t = translations[lang]?.pricing || translations.ar.pricing;
   const shop = translations[lang]?.shop || translations.ar.shop;
   const isRtl = lang === 'ar';
+  const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
   const currentCurrency = currencies.find(c => c.code === currency) || currencies[0];
   const pricing = calculatePricing(quantity, currentCurrency.code);
@@ -21,35 +22,18 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
   const [activeImage, setActiveImage] = useState(hero1Img);
   const gallery = [hero1Img, hero2Img, hero3Img];
 
-  // Quick WhatsApp details form state
-  const [showQuickForm, setShowQuickForm] = useState(false);
-  const [quickName, setQuickName] = useState('');
-  const [quickCity, setQuickCity] = useState('');
-  const [quickPhone, setQuickPhone] = useState('');
-
   const bundleLabel = { 1: shop.bundles.one, 2: shop.bundles.two, 3: shop.bundles.three };
   const bundleTag = { 2: shop.bundles.popular, 3: shop.bundles.bestValue };
 
   const handleIncrement = () => setQuantity(q => q + 1);
   const handleDecrement = () => setQuantity(q => Math.max(1, q - 1));
 
-  // Current bundle title
-  const currentBundleTitle = bundleLabel[quantity] || `${quantity} ${t.units || 'عبوات'}`;
-  const formattedPrice = currentCurrency.format(pricing.finalTotal);
-
-  // 1-Click Instant WhatsApp order
-  const handleDirectWhatsAppOrder = () => {
-    openWhatsAppOrder({
-      lang,
-      quantity,
-      bundleTitle: currentBundleTitle,
-      price: formattedPrice,
-      customerName: quickName.trim(),
-      city: quickCity.trim(),
-      phone: quickPhone.trim(),
-      hasFreeGift: pricing.freeGifts && pricing.freeGifts.length > 0
-    });
-  };
+  const continueText = lang === 'ar' ? 'استمرار' : lang === 'tr' ? 'Devam Et' : 'Continue';
+  const nextStepNote = lang === 'ar'
+    ? 'الخطوة التالية: إدخال معلومات التوصيل وتأكيد الطلب عبر واتساب 💬'
+    : lang === 'tr'
+    ? 'Sonraki adım: Teslimat bilgilerini girin ve WhatsApp ile onaylayın 💬'
+    : 'Next step: Enter delivery details and confirm via WhatsApp 💬';
 
   return (
     <section id="bundles" className="py-8 sm:py-16 lg:py-20 bg-brand-bg relative">
@@ -75,7 +59,7 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
               ))}
             </div>
 
-            {/* Official WhatsApp Concierge Card */}
+            {/* Official WhatsApp Concierge Badge */}
             <div className="bg-white rounded-2xl p-4 border border-[#F3B2D4]/60 shadow-xs flex items-center gap-3.5 mt-2">
               <div className="w-11 h-11 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0">
                 <MessageCircle className="w-6 h-6 text-emerald-600 fill-current" />
@@ -83,7 +67,7 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
               <div className="min-w-0">
                 <div className="text-[11px] font-bold text-emerald-700 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>{lang === 'ar' ? 'استلام فوري للطلبات عبر واتساب الرسمي' : lang === 'tr' ? 'WhatsApp Üzerinden Hızlı Sipariş' : 'Official WhatsApp Order Concierge'}</span>
+                  <span>{lang === 'ar' ? 'استلام وتأكيد الطلبات عبر واتساب الرسمي' : lang === 'tr' ? 'Resmi WhatsApp Sipariş Hattı' : 'Official WhatsApp Order Line'}</span>
                 </div>
                 <div className="font-bold text-brand-dark text-xs sm:text-sm mt-0.5 dir-ltr tracking-wide">
                   {WHATSAPP_DISPLAY}
@@ -135,8 +119,14 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
               </span>
             </div>
 
-            {/* Bundle cards */}
-            <h3 className="text-sm font-bold text-brand-dark mb-3">{shop.bundles.title}</h3>
+            {/* Bundle cards (Step 1) */}
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold text-brand-dark">{shop.bundles.title}</h3>
+              <span className="text-[11px] font-bold text-brand-rose bg-[#FBC6E2]/30 border border-[#F3B2D4] px-2.5 py-0.5 rounded-full">
+                {lang === 'ar' ? 'الخطوة 1 من 2' : lang === 'tr' ? '1. Adım' : 'Step 1 of 2'}
+              </span>
+            </div>
+
             <div role="radiogroup" className="space-y-3 mb-4">
               {BUNDLE_QTYS.map(q => {
                 const p = calculatePricing(q, currentCurrency.code);
@@ -219,86 +209,25 @@ export default function BundlePricing({ lang, quantity, setQuantity, currency, s
               </div>
             </div>
 
-            {/* PRIMARY ACTION: Direct 1-Click WhatsApp Order */}
-            <div className="space-y-3">
+            {/* PRIMARY BUTTON: استمرار (Continue) */}
+            <div className="space-y-2.5">
               <button
                 type="button"
-                id="whatsapp-order-btn"
-                onClick={handleDirectWhatsAppOrder}
-                className="relative w-full py-4 sm:py-5 text-base sm:text-lg font-black rounded-2xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 text-white hover:from-emerald-600 hover:to-emerald-700 shadow-xl shadow-emerald-500/25 transition-all duration-300 flex items-center justify-center gap-2.5 sm:gap-3 hover:scale-[1.02] active:scale-[0.98] cursor-pointer group border-2 border-emerald-400/50"
+                id="continue-to-info-btn"
+                onClick={onAddToCart}
+                className="relative w-full py-4 sm:py-5 text-base sm:text-lg font-black rounded-2xl bg-[#FBC6E2] text-brand-dark hover:bg-[#f8b0d8] border-2 border-[#F3B2D4] shadow-xl shadow-[#FBC6E2]/50 hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] cursor-pointer group"
               >
-                <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-                  <MessageCircle className="w-4 h-4 fill-current text-white group-hover:rotate-12 transition-transform" />
-                </div>
-                <span>
-                  {lang === 'ar' ? 'اطلبي الآن عبر واتساب بنقرة واحدة 💬' : lang === 'tr' ? 'WhatsApp ile Hemen Sipariş Ver 💬' : 'Order via WhatsApp in 1-Click 💬'}
+                <Sparkles className="w-5 h-5 text-brand-dark group-hover:rotate-12 transition-transform" />
+                <span>{continueText}</span>
+                <span dir="ltr" className="opacity-90 font-bold text-sm sm:text-base bg-white/50 px-2.5 py-0.5 rounded-full border border-[#F3B2D4]">
+                  {currentCurrency.format(pricing.finalTotal)}
                 </span>
-                <span dir="ltr" className="opacity-95 font-bold text-sm sm:text-base bg-black/20 px-2.5 py-0.5 rounded-full">
-                  {formattedPrice}
-                </span>
+                <ArrowIcon className="w-5 h-5 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
               </button>
 
-              {/* Quick toggle to add Name & City */}
-              <div className="bg-white rounded-2xl border border-[#F3B2D4]/60 p-3.5 transition-all shadow-xs">
-                <button
-                  type="button"
-                  onClick={() => setShowQuickForm(!showQuickForm)}
-                  className="w-full flex items-center justify-between text-xs sm:text-sm font-bold text-brand-dark cursor-pointer py-1"
-                >
-                  <span className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-brand-rose" />
-                    <span>{lang === 'ar' ? 'أو اكتبي اسمكِ ومدينتكِ للطلب فوراً 🌸' : lang === 'tr' ? 'Veya adınızı ve şehrinizi yazarak sipariş verin' : 'Or enter your name & city for fast dispatch'}</span>
-                  </span>
-                  {showQuickForm ? <ChevronUp className="w-4 h-4 text-brand-muted" /> : <ChevronDown className="w-4 h-4 text-brand-muted" />}
-                </button>
-
-                {showQuickForm && (
-                  <div className="pt-3 border-t border-gray-100 mt-2 space-y-2.5 animate-in fade-in duration-200">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="relative">
-                        <User className={`w-3.5 h-3.5 text-gray-400 absolute top-3.5 ${isRtl ? 'right-3' : 'left-3'}`} />
-                        <input
-                          type="text"
-                          value={quickName}
-                          onChange={(e) => setQuickName(e.target.value)}
-                          placeholder={lang === 'ar' ? 'اسمكِ الكريم (مثال: نورة)' : lang === 'tr' ? 'Adınız Soyadınız' : 'Your Name'}
-                          className={`w-full ${isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'} py-2.5 text-xs rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-1 focus:ring-[#FBC6E2] outline-none bg-brand-bg/30`}
-                        />
-                      </div>
-                      <div className="relative">
-                        <MapPin className={`w-3.5 h-3.5 text-gray-400 absolute top-3.5 ${isRtl ? 'right-3' : 'left-3'}`} />
-                        <input
-                          type="text"
-                          value={quickCity}
-                          onChange={(e) => setQuickCity(e.target.value)}
-                          placeholder={lang === 'ar' ? 'المدينة (مثال: الرياض)' : lang === 'tr' ? 'Şehir (Örn: İstanbul)' : 'City (e.g. Dubai)'}
-                          className={`w-full ${isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'} py-2.5 text-xs rounded-xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-1 focus:ring-[#FBC6E2] outline-none bg-brand-bg/30`}
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={handleDirectWhatsAppOrder}
-                      className="w-full py-2.5 rounded-xl bg-[#FBC6E2] hover:bg-[#f8b0d8] text-brand-dark font-bold text-xs flex items-center justify-center gap-2 border border-[#F3B2D4] cursor-pointer transition-colors shadow-xs"
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                      <span>{lang === 'ar' ? 'إرسال بيانات الطلب عبر واتساب 💬' : lang === 'tr' ? 'Bilgileri WhatsApp ile Gönder' : 'Send Order Details to WhatsApp'}</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Option to fill full detailed checkout form */}
-              <div className="text-center pt-1">
-                <button
-                  type="button"
-                  onClick={onAddToCart}
-                  className="text-xs text-brand-muted hover:text-brand-dark font-medium underline underline-offset-4 cursor-pointer transition-colors"
-                >
-                  {lang === 'ar' ? 'أو تفضيل تعبئة عنوان التوصيل بالتفصيل 🚚' : lang === 'tr' ? 'Veya ayrıntılı teslimat formunu doldurun' : 'Or fill out full shipping address form'}
-                </button>
-              </div>
+              <p className="text-center text-xs text-brand-muted font-medium pt-1">
+                {nextStepNote}
+              </p>
             </div>
 
             {/* Trust row */}
