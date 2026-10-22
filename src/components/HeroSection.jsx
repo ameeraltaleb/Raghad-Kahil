@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, ArrowLeft, ArrowDown, Play, Leaf, ShieldCheck, Heart, Star } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ArrowDown, Leaf, ShieldCheck, Heart, Star } from 'lucide-react';
 import { translations } from '../translations';
 import { hero1 as hero1Img } from '../config/media';
 import { hero2 as hero2Img } from '../config/media';
 import { hero3 as hero3Img } from '../config/media';
 
-export default function HeroSection({ lang, onWatchVideo }) {
+export default function HeroSection({ lang }) {
   const t = translations[lang];
   const isRtl = lang === 'ar';
   
@@ -71,28 +71,16 @@ export default function HeroSection({ lang, onWatchVideo }) {
           {t.hero.subtitle}
         </p>
         
-        <div className="flex flex-row items-center justify-center gap-3 sm:gap-5 mb-6 sm:mb-16 w-full sm:w-auto">
-          <button 
-            onClick={scrollToCheckout}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 bg-[#FBC6E2] text-brand-dark px-4 py-3 sm:px-10 sm:py-5 rounded-full font-black text-sm sm:text-xl hover:bg-[#f8b0d8] transition-all hover:scale-105 shadow-xl shadow-[#FBC6E2]/50 border-2 border-[#F3B2D4] animate-pulse-glow whitespace-nowrap"
-          >
-            {t.cta.orderNow}
-            <ArrowIcon className="w-4 h-4 sm:w-6 sm:h-6" />
-          </button>
-          
+        <div className="flex items-center justify-center mb-6 sm:mb-16 w-full sm:w-auto">
           <button 
             type="button"
-            id="btn-watch-video"
-            aria-label={t.cta.watchVideo}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (onWatchVideo) onWatchVideo();
-            }}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 text-white px-4 py-3 sm:px-10 sm:py-5 rounded-full font-bold text-sm sm:text-xl hover:bg-white/15 transition-all border-2 border-white/50 backdrop-blur-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 shadow-lg relative z-30"
+            id="btn-order-now-hero"
+            aria-label={t.cta.orderNow}
+            onClick={scrollToCheckout}
+            className="flex items-center justify-center gap-3 bg-[#FBC6E2] text-brand-dark px-8 py-4 sm:px-14 sm:py-5 rounded-full font-black text-base sm:text-2xl hover:bg-[#f8b0d8] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-[#FBC6E2]/50 border-2 border-[#F3B2D4] animate-pulse-glow whitespace-nowrap cursor-pointer group"
           >
-            <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current pointer-events-none" />
-            <span className="pointer-events-none">{t.cta.watchVideo}</span>
+            <span>{t.cta.orderNow}</span>
+            <ArrowIcon className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
 

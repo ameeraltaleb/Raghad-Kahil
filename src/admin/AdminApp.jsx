@@ -101,17 +101,38 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
     e.preventDefault();
     if (lockoutSeconds > 0 || authLoading) return;
     setAuthError('');
+
+    if (!authEmail.trim() || !authPassword) {
+      setAuthError('يرجى إدخال البريد الإلكتروني وكلمة المرور.');
+      return;
+    }
+
     setAuthLoading(true);
 
     try {
-      // 1. Firebase Auth Mode
-      if (isFirebaseConfigured && auth && authEmail.trim()) {
-        await signInWithEmailAndPassword(auth, authEmail.trim(), authPassword);
-        setAuthLoading(false);
-        return;
+      // 1. Firebase Auth Mode (Primary, Enterprise-grade security)
+      if (isFirebaseConfigured && auth) {
+        try {
+          await signInWithEmailAndPassword(auth, authEmail.trim(), authPassword);
+          setAuthLoading(false);
+          return;
+        } catch (firebaseErr) {
+          const code = firebaseErr.code;
+          if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+            setAuthError('البريد الإلكتروني أو كلمة المرور غير صحيحة.');
+          } else if (code === 'auth/too-many-requests') {
+            setAuthError('تم تجميد محاولات الدخول مؤقتاً لحماية الحساب. يرجى الانتظار دقيقة.');
+          } else if (code === 'auth/network-request-failed') {
+            setAuthError('فشل الاتصال بالإنترنت، يرجى التحقق من اتصالك.');
+          } else {
+            setAuthError('خطأ في تسجيل الدخول: ' + (firebaseErr.message || code));
+          }
+          setAuthLoading(false);
+          return;
+        }
       }
 
-      // 2. Local PIN / Master Password Mode
+      // 2. Emergency Local Fallback if Firebase is offline
       const hashedInput = await hashCredential(authPassword.trim());
       const targetHash = localStorage.getItem(PASSWORD_HASH_KEY) || DEFAULT_PASSWORD_HASH;
 
@@ -469,32 +490,33 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
-            {isFirebaseConfigured && (
-              <div className="text-start">
-                <label className="block text-xs font-bold text-brand-dark mb-1">البريد الإلكتروني للإدارة</label>
-                <input
-                  type="email"
-                  value={authEmail}
-                  onChange={(e) => setAuthEmail(e.target.value)}
-                  placeholder="admin@raghadbeauty.com"
-                  className="w-full text-start py-3 px-4 rounded-2xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-xs font-medium"
-                />
-              </div>
-            )}
+            <div className="text-start">
+              <label className="block text-xs font-bold text-brand-dark mb-1">البريد الإلكتروني للإدارة</label>
+              <input
+                type="email"
+                required
+                autoComplete="email"
+                value={authEmail}
+                onChange={(e) => setAuthEmail(e.target.value)}
+                placeholder="admin@raghadbeauty.com"
+                className="w-full text-start py-3 px-4 rounded-2xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none text-xs font-medium"
+              />
+            </div>
 
             <div className="space-y-2 text-start">
               <label className="block text-xs font-bold text-brand-dark mb-1">
-                {isFirebaseConfigured ? 'كلمة المرور' : 'الرمز السري الخاص بالإدارة'}
+                كلمة المرور السرية
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  required
+                  autoComplete="current-password"
                   value={authPassword}
                   onChange={(e) => setAuthPassword(e.target.value)}
                   disabled={lockoutSeconds > 0 || authLoading}
-                  placeholder="أدخل كلمة المرور السرية"
-                  className={`w-full text-center ${showPassword ? 'text-base font-bold' : 'tracking-widest text-xl font-bold'} py-3.5 px-10 rounded-2xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed`}
-                  autoFocus
+                  placeholder="••••••••"
+                  className={`w-full ${showPassword ? 'text-start text-xs font-medium px-4' : 'text-center tracking-widest text-lg font-bold px-10'} py-3.5 rounded-2xl border border-gray-200 focus:border-[#FBC6E2] focus:ring-2 focus:ring-[#FBC6E2]/40 outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed`}
                 />
                 <button
                   type="button"

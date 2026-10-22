@@ -1,6 +1,6 @@
 import React from 'react';
 import { translations } from '../translations';
-import { CreditCard, Banknote, Lock } from 'lucide-react';
+import { CreditCard, Banknote } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 export default function Footer({ lang }) {
@@ -49,16 +49,8 @@ export default function Footer({ lang }) {
           </div>
         </div>
 
-        <div className="pt-6 sm:pt-8 border-t border-white/10 text-center text-gray-500 text-xs sm:text-sm flex flex-col md:flex-row justify-between items-center gap-3">
+        <div className="pt-6 sm:pt-8 border-t border-white/10 text-center text-gray-500 text-xs sm:text-sm flex flex-col md:flex-row justify-center items-center gap-3">
           <p>{t.rights}</p>
-          <a 
-            href="#admin" 
-            className="text-gray-600 hover:text-brand-peach/80 text-[11px] font-medium transition-colors flex items-center gap-1.5 py-1 px-2 rounded hover:bg-white/5"
-            title="لوحة تحكم الإدارة"
-          >
-            <Lock className="w-3 h-3" />
-            <span>لوحة الإدارة</span>
-          </a>
         </div>
         
       </div>

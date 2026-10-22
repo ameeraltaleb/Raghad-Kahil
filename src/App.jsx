@@ -16,12 +16,10 @@ import ComparisonTable from './components/ComparisonTable';
 import ElegantPreloader from './components/ElegantPreloader';
 import StickyAddToCart from './components/StickyAddToCart';
 import SocialProofToast from './components/SocialProofToast';
-import VideoModal from './components/VideoModal';
 import { translations } from './translations';
 import { detectUserLocale } from './utils/geoDetection';
 import { fetchLiveRates } from './services/currencyService';
 import { getConfig, subscribeConfig } from './config/siteConfig';
-import { promoVideo } from './config/media';
 
 // Admin panel is code-split: visitors never download it
 const AdminApp = lazy(() => import('./admin/AdminApp'));
@@ -37,7 +35,6 @@ function App() {
   const [currency, setCurrency] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('raghad_currency') : null) || 'USD');
   const [countryCode] = useState(locale.countryCode);
   const [isSiteRevealed, setIsSiteRevealed] = useState(false);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   // Dedicated Route State for /admin
   const [currentPath, setCurrentPath] = useState(() => {
@@ -135,7 +132,7 @@ function App() {
       >
         <Navbar lang={lang} setLang={handleLangChange} />
         <main>
-          <HeroSection lang={lang} onWatchVideo={() => setIsVideoModalOpen(true)} />
+          <HeroSection lang={lang} />
           {sections.marquee !== false && <MarqueeRibbon lang={lang} />}
           {sections.problemSolution !== false && <ProblemSolution lang={lang} />}
           {sections.comparison !== false && <ComparisonTable lang={lang} />}
@@ -156,14 +153,6 @@ function App() {
       </div>
 
       {showPreloader && <ElegantPreloader lang={lang} onStartReveal={() => setIsSiteRevealed(true)} />}
-
-      {/* Luxury Lightbox Video Player */}
-      <VideoModal 
-        isOpen={isVideoModalOpen} 
-        onClose={() => setIsVideoModalOpen(false)} 
-        lang={lang} 
-        videoSrc={promoVideo} 
-      />
     </div>
   );
 }
