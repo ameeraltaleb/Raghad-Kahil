@@ -70,12 +70,12 @@ export async function listApprovedReviews() {
 }
 
 /**
- * Public: Customer submits a new review (published directly to Firestore)
+ * Public: Customer submits a new review (pending moderation by Admin)
  */
 export async function submitReview(review) {
   const clean = {
     ...sanitize(review),
-    status: 'approved',
+    status: 'pending',
     date: new Date().toLocaleDateString('ar-SA'),
     time: 'الآن'
   };
@@ -84,9 +84,9 @@ export async function submitReview(review) {
     try {
       const docRef = await addDoc(collection(db, 'reviews'), clean);
       const itemWithId = { ...clean, id: docRef.id };
-      const currentApproved = readLocal(APPROVED_KEY);
-      currentApproved.unshift(itemWithId);
-      writeLocal(APPROVED_KEY, currentApproved);
+      const currentPending = readLocal(PENDING_KEY);
+      currentPending.unshift(itemWithId);
+      writeLocal(PENDING_KEY, currentPending);
       return itemWithId;
     } catch (err) {
       console.error('Firebase submit review failed:', err);
@@ -94,10 +94,10 @@ export async function submitReview(review) {
   }
 
   // Fallback to local
-  const list = readLocal(APPROVED_KEY);
+  const list = readLocal(PENDING_KEY);
   const localItem = { ...clean, id: `rev-${Date.now()}` };
   list.unshift(localItem);
-  writeLocal(APPROVED_KEY, list);
+  writeLocal(PENDING_KEY, list);
   return localItem;
 }
 
