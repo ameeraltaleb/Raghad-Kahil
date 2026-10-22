@@ -11,8 +11,8 @@ import { auth, storage, isFirebaseConfigured } from '../lib/firebase';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getConfig, saveConfig, SECTION_LABELS, DEFAULT_CONFIG } from '../config/siteConfig';
-import { listOrders, updateOrder, deleteOrder } from '../services/ordersService';
-import { listAllReviews, setReviewStatus, deleteReview, addApprovedReview } from '../services/reviewsService';
+import { listOrders, updateOrder, deleteOrder, subscribeOrders } from '../services/ordersService';
+import { listAllReviews, setReviewStatus, deleteReview, addApprovedReview, subscribeAllReviews } from '../services/reviewsService';
 import { MEDIA_LABELS, MEDIA_DEFAULTS } from '../config/media';
 import { translations } from '../translations';
 
@@ -233,11 +233,22 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
 
   useEffect(() => {
     if (isAuthenticated) {
-      loadOrders();
-      loadReviews();
+      const unsubOrders = subscribeOrders((data) => {
+        setOrders(data);
+        setOrdersLoading(false);
+      });
+      const unsubReviews = subscribeAllReviews((data) => {
+        setReviews(data);
+        setReviewsLoading(false);
+      });
       const cfg = getConfig();
       setConfigDraft(cfg);
       setMediaDraft(cfg.media || {});
+
+      return () => {
+        if (typeof unsubOrders === 'function') unsubOrders();
+        if (typeof unsubReviews === 'function') unsubReviews();
+      };
     }
   }, [isAuthenticated]);
 

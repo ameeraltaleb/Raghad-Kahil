@@ -7,7 +7,7 @@
  *   for an instant first paint.
  */
 import { db, isFirebaseConfigured } from '../lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { translations } from '../translations';
 import { applyWhatsAppConfig } from '../utils/whatsapp';
 import { setPricingRules } from '../data/checkoutData';
@@ -95,6 +95,22 @@ export function subscribeConfig(fn) {
   return () => listeners.delete(fn);
 }
 
+function deepMerge(target, source) {
+  if (!source || typeof source !== 'object') return target;
+  const output = { ...target };
+  for (const key of Object.keys(source)) {
+    const val = source[key];
+    if (val !== undefined && val !== null) {
+      if (typeof val === 'object' && !Array.isArray(val) && typeof output[key] === 'object' && !Array.isArray(output[key])) {
+        output[key] = deepMerge(output[key], val);
+      } else {
+        output[key] = val;
+      }
+    }
+  }
+  return output;
+}
+
 /** Push a config into all runtime modules */
 export function applyConfig(rawConfig) {
   const cfg = normalizeConfig(rawConfig);
@@ -104,10 +120,7 @@ export function applyConfig(rawConfig) {
   for (const lang of Object.keys(ORIGINAL_TRANSLATIONS)) {
     const base = JSON.parse(JSON.stringify(ORIGINAL_TRANSLATIONS[lang]));
     const overrides = cfg.content[lang] || {};
-    for (const key of Object.keys(overrides)) {
-      if (overrides[key] !== undefined && overrides[key] !== null) base[key] = overrides[key];
-    }
-    translations[lang] = base;
+    translations[lang] = deepMerge(base, overrides);
   }
 
   // 2. Contact / WhatsApp
@@ -139,23 +152,24 @@ export function bootFromCache() {
   }
 }
 
-/** Fetch latest settings from Firebase and apply if they changed */
-export async function refreshConfigFromServer() {
-  if (!isFirebaseConfigured || !db) return current;
+/** Fetch latest settings from Firebase and listen to real-time changes */
+export function refreshConfigFromServer() {
+  if (!isFirebaseConfigured || !db) return () => {};
   try {
-    const snap = await getDoc(doc(db, 'settings', 'main'));
-    if (snap.exists()) {
-      const remote = snap.data() || {};
-      const remoteStr = JSON.stringify(normalizeConfig(remote));
-      if (remoteStr !== JSON.stringify(current)) {
+    const unsub = onSnapshot(doc(db, 'settings', 'main'), (snap) => {
+      if (snap.exists()) {
+        const remote = snap.data() || {};
         applyConfig(remote);
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(remote)); } catch { /* ignore */ }
       }
-      localStorage.setItem(CACHE_KEY, JSON.stringify(remote));
-    }
+    }, (e) => {
+      console.warn('Firebase settings listener warning:', e);
+    });
+    return unsub;
   } catch (e) {
-    console.warn('Could not load site settings from Firebase, using cached/default values:', e);
+    console.warn('Could not subscribe to site settings from Firebase:', e);
+    return () => {};
   }
-  return current;
 }
 
 /** Admin: persist a full config */

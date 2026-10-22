@@ -14,7 +14,8 @@ import {
   query, 
   where,
   orderBy, 
-  limit 
+  limit,
+  onSnapshot 
 } from 'firebase/firestore';
 
 const PENDING_KEY = 'raghad_pending_reviews';
@@ -70,6 +71,33 @@ export async function listApprovedReviews() {
 }
 
 /**
+ * Public: Real-time listener for approved reviews on the live storefront
+ */
+export function subscribeApprovedReviews(callback) {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(
+        collection(db, 'reviews'), 
+        where('status', '==', 'approved'),
+        limit(200)
+      );
+      const unsub = onSnapshot(q, (snapshot) => {
+        const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        writeLocal(APPROVED_KEY, list);
+        callback(list);
+      }, (err) => {
+        console.warn('Real-time reviews listener warning:', err);
+      });
+      return unsub;
+    } catch (err) {
+      console.warn('Failed to subscribe to reviews:', err);
+    }
+  }
+  callback(readLocal(APPROVED_KEY));
+  return () => {};
+}
+
+/**
  * Public: Customer submits a new review (pending moderation by Admin)
  */
 export async function submitReview(review) {
@@ -118,6 +146,28 @@ export async function listAllReviews() {
     ...readLocal(PENDING_KEY).map(r => ({ ...r, status: 'pending' })),
     ...readLocal(APPROVED_KEY).map(r => ({ ...r, status: 'approved' }))
   ];
+}
+
+/**
+ * Admin: Real-time listener for all reviews (pending & approved)
+ */
+export function subscribeAllReviews(callback) {
+  if (isFirebaseConfigured && db) {
+    try {
+      const unsub = onSnapshot(collection(db, 'reviews'), (snapshot) => {
+        const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        callback(list);
+      }, (e) => console.warn('Reviews real-time listener warning:', e));
+      return unsub;
+    } catch (e) {
+      console.warn('Failed to subscribe all reviews:', e);
+    }
+  }
+  callback([
+    ...readLocal(PENDING_KEY).map(r => ({ ...r, status: 'pending' })),
+    ...readLocal(APPROVED_KEY).map(r => ({ ...r, status: 'approved' }))
+  ]);
+  return () => {};
 }
 
 /**

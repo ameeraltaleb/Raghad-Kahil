@@ -12,7 +12,8 @@ import {
   deleteDoc, 
   query, 
   orderBy, 
-  limit 
+  limit,
+  onSnapshot 
 } from 'firebase/firestore';
 
 const LOCAL_KEY = 'raghad_whatsapp_orders';
@@ -91,6 +92,27 @@ export async function listOrders() {
     }
   }
   return readLocal();
+}
+
+/**
+ * Admin: Real-time listener for incoming orders
+ */
+export function subscribeOrders(callback) {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(500));
+      const unsub = onSnapshot(q, (snapshot) => {
+        const remoteOrders = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        writeLocal(remoteOrders);
+        callback(remoteOrders);
+      }, (e) => console.warn('Orders real-time listener warning:', e));
+      return unsub;
+    } catch (e) {
+      console.warn('Failed to subscribe to orders:', e);
+    }
+  }
+  callback(readLocal());
+  return () => {};
 }
 
 /**

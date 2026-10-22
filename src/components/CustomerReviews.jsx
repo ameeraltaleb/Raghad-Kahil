@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { translations } from '../translations';
 import { WHATSAPP_PHONE, WHATSAPP_DISPLAY } from '../utils/whatsapp';
-import { listApprovedReviews, submitReview } from '../services/reviewsService';
+import { listApprovedReviews, submitReview, subscribeApprovedReviews } from '../services/reviewsService';
 
 export default function CustomerReviews({ lang }) {
   const t = translations[lang]?.reviews || translations.ar.reviews;
@@ -27,11 +27,12 @@ export default function CustomerReviews({ lang }) {
   const [approvedReviews, setApprovedReviews] = useState([]);
 
   useEffect(() => {
-    let cancelled = false;
-    listApprovedReviews()
-      .then((list) => { if (!cancelled) setApprovedReviews(list); })
-      .catch((e) => console.error('Failed to load reviews:', e));
-    return () => { cancelled = true; };
+    const unsub = subscribeApprovedReviews((list) => {
+      setApprovedReviews(list);
+    });
+    return () => {
+      if (typeof unsub === 'function') unsub();
+    };
   }, []);
 
   // Build WhatsApp review notification link
