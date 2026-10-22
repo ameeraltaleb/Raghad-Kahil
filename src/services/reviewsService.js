@@ -60,10 +60,8 @@ export async function listApprovedReviews() {
       );
       const snapshot = await getDocs(q);
       const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (list.length > 0) {
-        writeLocal(APPROVED_KEY, list);
-        return list;
-      }
+      writeLocal(APPROVED_KEY, list);
+      return list;
     } catch (err) {
       console.warn('Firebase listApprovedReviews failed, using local:', err);
     }
@@ -72,27 +70,35 @@ export async function listApprovedReviews() {
 }
 
 /**
- * Public: Customer submits a new review (pending by default)
+ * Public: Customer submits a new review (published directly to Firestore)
  */
 export async function submitReview(review) {
   const clean = {
     ...sanitize(review),
-    status: 'pending',
+    status: 'approved',
     date: new Date().toLocaleDateString('ar-SA'),
     time: 'الآن'
   };
 
-  const list = readLocal(PENDING_KEY);
-  list.unshift({ ...clean, id: `rev-${Date.now()}` });
-  writeLocal(PENDING_KEY, list);
-
   if (isFirebaseConfigured && db) {
     try {
-      await addDoc(collection(db, 'reviews'), clean);
+      const docRef = await addDoc(collection(db, 'reviews'), clean);
+      const itemWithId = { ...clean, id: docRef.id };
+      const currentApproved = readLocal(APPROVED_KEY);
+      currentApproved.unshift(itemWithId);
+      writeLocal(APPROVED_KEY, currentApproved);
+      return itemWithId;
     } catch (err) {
       console.error('Firebase submit review failed:', err);
     }
   }
+
+  // Fallback to local
+  const list = readLocal(APPROVED_KEY);
+  const localItem = { ...clean, id: `rev-${Date.now()}` };
+  list.unshift(localItem);
+  writeLocal(APPROVED_KEY, list);
+  return localItem;
 }
 
 /**
@@ -103,9 +109,7 @@ export async function listAllReviews() {
     try {
       const snapshot = await getDocs(collection(db, 'reviews'));
       const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (list.length > 0) {
-        return list;
-      }
+      return list;
     } catch (err) {
       console.warn('Firebase listAllReviews failed, using local:', err);
     }

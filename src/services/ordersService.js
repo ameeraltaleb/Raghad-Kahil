@@ -84,10 +84,8 @@ export async function listOrders() {
       const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(500));
       const snapshot = await getDocs(q);
       const remoteOrders = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (remoteOrders.length > 0) {
-        writeLocal(remoteOrders);
-        return remoteOrders;
-      }
+      writeLocal(remoteOrders);
+      return remoteOrders;
     } catch (err) {
       console.warn('Firebase list orders failed, falling back to local:', err);
     }
