@@ -1,5 +1,14 @@
-export const WHATSAPP_PHONE = '905525200700';
-export const WHATSAPP_DISPLAY = '+90 552 520 07 00';
+import { recordOrder } from '../services/ordersService';
+
+// Live bindings – updated from the admin dashboard via applyWhatsAppConfig()
+export let WHATSAPP_PHONE = '905525200700';
+export let WHATSAPP_DISPLAY = '+90 552 520 07 00';
+
+export function applyWhatsAppConfig(phone, display) {
+  const cleaned = String(phone || '').replace(/[^0-9]/g, '');
+  if (cleaned.length >= 8) WHATSAPP_PHONE = cleaned;
+  if (display && String(display).trim()) WHATSAPP_DISPLAY = String(display).trim();
+}
 
 /**
  * Builds a friendly, luxurious, complete WhatsApp order message
@@ -154,39 +163,27 @@ export function openWhatsAppOrder(params) {
   const orderId = params.orderId || `RK-${Math.floor(10000 + Math.random() * 90000)}`;
 
   if (typeof window !== 'undefined') {
-    // Record order in localStorage for local logging/analytics
-    try {
-      const existing = JSON.parse(localStorage.getItem('raghad_whatsapp_orders') || '[]');
-      existing.unshift({
-        id: orderId,
-        timestamp: new Date().toISOString(),
-        dateFormatted: new Date().toLocaleDateString(params.lang === 'ar' ? 'ar-SA' : 'en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        }),
-        quantity: params.quantity,
-        bundleTitle: params.bundleTitle || `${params.quantity} عبوة`,
-        price: params.price,
-        customerName: params.customerName || 'عميلة جديدة',
-        phone: params.phone || '',
-        country: params.country || '',
-        city: params.city || '',
-        address: params.address || '',
-        notes: params.notes || '',
-        paymentMethod: params.paymentMethod || 'cod',
-        hasFreeGift: Boolean(params.hasFreeGift),
-        status: 'new', // 'new' | 'contacted' | 'completed'
-        whatsappMessage: rawText
-      });
-      localStorage.setItem('raghad_whatsapp_orders', JSON.stringify(existing.slice(0, 100)));
-    } catch (e) {
-      console.error('Failed to log WhatsApp order:', e);
-    }
-
+    // Open WhatsApp synchronously (avoids popup blockers), then persist the order
     window.open(url, '_blank', 'noopener,noreferrer');
+
+    recordOrder({
+      id: orderId,
+      quantity: params.quantity,
+      bundleTitle: params.bundleTitle || `${params.quantity} عبوة`,
+      price: params.price,
+      finalTotal: params.finalTotal,
+      currency: params.currency,
+      customerName: params.customerName || 'عميلة جديدة',
+      phone: params.phone || '',
+      country: params.country || '',
+      city: params.city || '',
+      address: params.address || '',
+      notes: params.notes || '',
+      paymentMethod: params.paymentMethod || 'cod',
+      hasFreeGift: Boolean(params.hasFreeGift),
+      lang: params.lang,
+      whatsappMessage: rawText
+    }).catch((e) => console.error('Failed to record order:', e));
   }
   return url;
 }

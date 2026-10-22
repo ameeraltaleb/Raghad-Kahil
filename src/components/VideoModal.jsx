@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Volume2, VolumeX, Play, Pause, Sparkles, ArrowRight, ArrowLeft } from 'lucide-react';
-import hero2Img from '../assets/hero2.png';
+import { hero2 as hero2Img } from '../config/media';
 
 export default function VideoModal({ isOpen, onClose, lang, videoSrc = '/promo.mp4' }) {
   const videoRef = useRef(null);

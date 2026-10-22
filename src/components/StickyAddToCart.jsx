@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { translations } from '../translations';
 import { ShoppingBag } from 'lucide-react';
-import heroImg from '../assets/hero1.png';
+import { hero1 as heroImg } from '../config/media';
 import { calculatePricing, currencies } from '../data/checkoutData';
 
 export default function StickyAddToCart({ lang, currency = 'USD' }) {

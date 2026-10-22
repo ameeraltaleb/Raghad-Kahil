@@ -2,7 +2,7 @@ import React from 'react';
 import { translations } from '../translations';
 import { calculatePricing, currencies } from '../data/checkoutData';
 import { X, ShoppingBag, Gift, ArrowRight, ArrowLeft } from 'lucide-react';
-import browTextureImg from '../assets/hero1.png';
+import { hero1 as browTextureImg } from '../config/media';
 
 export default function CartDrawer({ lang, isOpen, onClose, quantity, currency, onProceed }) {
   const t = translations[lang].pricing;

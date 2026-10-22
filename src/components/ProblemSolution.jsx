@@ -2,7 +2,7 @@ import React from 'react';
 import { X, CheckCircle } from 'lucide-react';
 import { translations } from '../translations';
 import TiltCard from './TiltCard';
-import textureImg from '../assets/hero2.png';
+import { hero2 as textureImg } from '../config/media';
 
 export default function ProblemSolution({ lang }) {
   const t = translations[lang].problemSolution;

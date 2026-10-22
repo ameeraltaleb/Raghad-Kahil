@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { translations } from '../translations';
-import beforeImg from '../assets/brows-before.jpg';
-import afterImg from '../assets/brows-after.jpg';
+import { before as beforeImg } from '../config/media';
+import { after as afterImg } from '../config/media';
 
 export default function ClinicalResults({ lang }) {
   const t = translations[lang].results;

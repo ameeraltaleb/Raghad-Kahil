@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, ArrowDown, Play, Leaf, ShieldCheck, Heart, Star } from 'lucide-react';
 import { translations } from '../translations';
-import hero1Img from '../assets/hero1.png';
-import hero2Img from '../assets/hero2.png';
-import hero3Img from '../assets/hero3.jpg';
+import { hero1 as hero1Img } from '../config/media';
+import { hero2 as hero2Img } from '../config/media';
+import { hero3 as hero3Img } from '../config/media';
 
 export default function HeroSection({ lang, onWatchVideo }) {
   const t = translations[lang];

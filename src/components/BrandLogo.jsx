@@ -1,6 +1,6 @@
 import React from 'react';
-import logoDark from '../assets/logo.png';
-import logoWhite from '../assets/logo-white.png';
+import { logo as logoDark } from '../config/media';
+import { logoWhite as logoWhite } from '../config/media';
 
 export default function BrandLogo({ 
   className = '', 

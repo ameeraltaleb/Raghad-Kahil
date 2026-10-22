@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { translations } from '../translations';
 import { Heart } from 'lucide-react';
-import textureImg from '../assets/hero1.png';
+import { hero1 as textureImg } from '../config/media';
 
 export default function SocialProofToast({ lang }) {
   const shop = translations[lang]?.shop;

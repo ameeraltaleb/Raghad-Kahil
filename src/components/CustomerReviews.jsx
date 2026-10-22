@@ -5,9 +5,7 @@ import {
 } from 'lucide-react';
 import { translations } from '../translations';
 import { WHATSAPP_PHONE, WHATSAPP_DISPLAY } from '../utils/whatsapp';
-
-const PENDING_STORAGE_KEY = 'raghad_pending_reviews';
-const APPROVED_STORAGE_KEY = 'raghad_approved_reviews';
+import { listApprovedReviews, submitReview } from '../services/reviewsService';
 
 export default function CustomerReviews({ lang }) {
   const t = translations[lang]?.reviews || translations.ar.reviews;
@@ -25,42 +23,16 @@ export default function CustomerReviews({ lang }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
 
-  // Persistent lists
-  const [pendingReviews, setPendingReviews] = useState([]);
+  // Approved reviews (shown to everyone)
   const [approvedReviews, setApprovedReviews] = useState([]);
 
-  // Load reviews from localStorage
   useEffect(() => {
-    try {
-      const storedPending = localStorage.getItem(PENDING_STORAGE_KEY);
-      if (storedPending) setPendingReviews(JSON.parse(storedPending));
-
-      const storedApproved = localStorage.getItem(APPROVED_STORAGE_KEY);
-      if (storedApproved) setApprovedReviews(JSON.parse(storedApproved));
-    } catch (e) {
-      console.error('Failed to load reviews storage:', e);
-    }
+    let cancelled = false;
+    listApprovedReviews()
+      .then((list) => { if (!cancelled) setApprovedReviews(list); })
+      .catch((e) => console.error('Failed to load reviews:', e));
+    return () => { cancelled = true; };
   }, []);
-
-  // Save approved reviews to localStorage
-  const saveApprovedReviews = (newList) => {
-    setApprovedReviews(newList);
-    try {
-      localStorage.setItem(APPROVED_STORAGE_KEY, JSON.stringify(newList));
-    } catch (e) {
-      console.error('Failed to save approved reviews:', e);
-    }
-  };
-
-  // Save pending reviews to localStorage
-  const savePendingReviews = (newList) => {
-    setPendingReviews(newList);
-    try {
-      localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(newList));
-    } catch (e) {
-      console.error('Failed to save pending reviews:', e);
-    }
-  };
 
   // Build WhatsApp review notification link
   const buildWhatsAppReviewUrl = (reviewItem) => {
@@ -80,7 +52,7 @@ export default function CustomerReviews({ lang }) {
   };
 
   // Handle customer submit
-  const handleCustomerSubmit = (e) => {
+  const handleCustomerSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim() || !reviewText.trim()) return;
 
@@ -88,32 +60,31 @@ export default function CustomerReviews({ lang }) {
 
     const nowText = lang === 'ar' ? 'الآن' : lang === 'tr' ? 'Az önce' : 'Just now';
     const newPendingItem = {
-      id: Date.now(),
       name: name.trim(),
       location: city.trim() || (lang === 'ar' ? 'الرياض' : lang === 'tr' ? 'İstanbul' : 'Verified Buyer'),
       rating: rating,
       time: nowText,
       text: reviewText.trim(),
       recommended: recommend,
-      status: 'pending',
-      date: new Date().toLocaleDateString(lang === 'ar' ? 'ar-SA' : 'en-US')
+      lang
     };
 
-    setTimeout(() => {
-      const updatedPending = [newPendingItem, ...pendingReviews];
-      savePendingReviews(updatedPending);
+    try {
+      await submitReview(newPendingItem);
+    } catch (err) {
+      console.error('Failed to submit review:', err);
+    }
 
-      setSubmittedReviewData(newPendingItem);
-      setIsSubmitting(false);
-      setIsSubmittedSuccess(true);
+    setSubmittedReviewData(newPendingItem);
+    setIsSubmitting(false);
+    setIsSubmittedSuccess(true);
 
-      // Reset form fields
-      setName('');
-      setCity('');
-      setReviewText('');
-      setRating(5);
-      setRecommend(true);
-    }, 350);
+    // Reset form fields
+    setName('');
+    setCity('');
+    setReviewText('');
+    setRating(5);
+    setRecommend(true);
   };
 
 

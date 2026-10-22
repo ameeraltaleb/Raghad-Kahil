@@ -96,6 +96,8 @@ export default function FastCheckoutForm({ lang, quantity, currency, countryCode
       quantity,
       bundleTitle: `${quantity} ${tPricingInfo.units || 'عبوات'}`,
       price: displayFinalPrice,
+      finalTotal: pricing.finalTotal,
+      currency,
       customerName: formData.fullName,
       phone: formData.phone,
       country: countryName,

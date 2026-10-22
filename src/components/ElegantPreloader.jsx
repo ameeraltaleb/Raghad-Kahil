@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logoImg from '../assets/logo.png';
+import { logo as logoImg } from '../config/media';
 import { Sparkles } from 'lucide-react';
 
 export default function ElegantPreloader({ lang, onStartReveal }) {

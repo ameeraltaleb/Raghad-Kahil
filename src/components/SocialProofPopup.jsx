@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle2, X } from 'lucide-react';
 import { translations } from '../translations';
-import textureImg from '../assets/hero1.png';
+import { hero1 as textureImg } from '../config/media';
 
 export default function SocialProofPopup({ lang }) {
   const t = translations[lang].socialProof;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Sparkles, Pipette, Smile } from 'lucide-react';
 import { translations } from '../translations';
 import TiltCard from './TiltCard';
-import lifestyleImg from '../assets/hero3.jpg';
+import { hero3 as lifestyleImg } from '../config/media';
 
 export default function HowToUse({ lang }) {
   const t = translations[lang].howToUse;

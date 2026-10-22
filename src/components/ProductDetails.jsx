@@ -2,7 +2,7 @@ import React from 'react';
 import { translations } from '../translations';
 import { Droplet, Leaf, Clock, Eye, Package, PenTool, BookOpen, Ban, CloudRain } from 'lucide-react';
 import TiltCard from './TiltCard';
-import browHeroImg from '../assets/hero1.png';
+import { hero1 as browHeroImg } from '../config/media';
 
 export default function ProductDetails({ lang }) {
   const t = translations[lang].productDetails;

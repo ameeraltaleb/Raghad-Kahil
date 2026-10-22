@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import { translations } from '../translations';
-import hero2Img from '../assets/hero2.png';
+import { hero2 as hero2Img } from '../config/media';
 
 export default function VideoDemonstration({ lang }) {
   const t = translations[lang].video;

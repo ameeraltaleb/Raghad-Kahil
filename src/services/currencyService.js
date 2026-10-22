@@ -16,10 +16,22 @@ export const DEFAULT_RATES = {
   EUR: 0.90
 };
 
+// Admin-defined manual rates (null = use live market rates)
+let manualRates = null;
+
+export function setManualRates(rates) {
+  manualRates = rates ? { ...DEFAULT_RATES, ...rates, USD: 1 } : null;
+}
+
+export function isManualRatesMode() {
+  return Boolean(manualRates);
+}
+
 /**
  * Reads cached rates if available and fresh, otherwise returns default rates.
  */
 export function getStoredRates() {
+  if (manualRates) return manualRates;
   if (typeof window === 'undefined') return DEFAULT_RATES;
 
   try {
@@ -42,6 +54,7 @@ export function getStoredRates() {
  * Applies a safety buffer margin if desired.
  */
 export async function fetchLiveRates() {
+  if (manualRates) return manualRates;
   if (typeof window === 'undefined') return DEFAULT_RATES;
 
   try {

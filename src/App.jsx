@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import MarqueeRibbon from './components/MarqueeRibbon';
@@ -17,12 +17,21 @@ import ElegantPreloader from './components/ElegantPreloader';
 import StickyAddToCart from './components/StickyAddToCart';
 import SocialProofToast from './components/SocialProofToast';
 import VideoModal from './components/VideoModal';
-import AdminDashboard from './components/AdminDashboard';
 import { translations } from './translations';
 import { detectUserLocale } from './utils/geoDetection';
 import { fetchLiveRates } from './services/currencyService';
+import { getConfig, subscribeConfig } from './config/siteConfig';
+import { promoVideo } from './config/media';
+
+// Admin panel is code-split: visitors never download it
+const AdminApp = lazy(() => import('./admin/AdminApp'));
 
 function App() {
+  // Re-render the whole tree whenever admin settings are (re)applied
+  const [config, setConfigState] = useState(() => getConfig());
+  useEffect(() => subscribeConfig((c) => setConfigState(c)), []);
+  const sections = config.sections || {};
+
   const [locale] = useState(() => detectUserLocale());
   const [lang, setLang] = useState(locale.lang);
   const [currency, setCurrency] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('raghad_currency') : null) || 'USD');
@@ -70,8 +79,8 @@ function App() {
     document.documentElement.lang = lang;
 
     // SEO Meta Configuration
-    const tSeo = translations[lang].seo;
-    document.title = tSeo.title;
+    const tSeo = translations[lang]?.seo || {};
+    if (tSeo.title) document.title = tSeo.title;
     
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
@@ -79,9 +88,9 @@ function App() {
       metaDescription.name = 'description';
       document.head.appendChild(metaDescription);
     }
-    metaDescription.content = tSeo.description;
+    if (tSeo.description) metaDescription.content = tSeo.description;
 
-  }, [lang]);
+  }, [lang, config]);
 
   // Fetch live market exchange rates silently in the background
   useEffect(() => {
@@ -93,55 +102,67 @@ function App() {
   // If on /admin route, display the dedicated Admin Dashboard directly
   if (isAdminRoute) {
     return (
-      <AdminDashboard 
-        lang={lang} 
-        onBackToStore={() => {
-          if (typeof window !== 'undefined') {
-            window.history.pushState({}, '', '/');
-            window.location.hash = '';
-          }
-          setCurrentPath('/');
-        }} 
-      />
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-brand-bg">
+            <div className="w-10 h-10 rounded-full border-4 border-[#FBC6E2] border-t-brand-dark animate-spin" />
+          </div>
+        }
+      >
+        <AdminApp
+          onBackToStore={() => {
+            if (typeof window !== 'undefined') {
+              window.history.pushState({}, '', '/');
+              window.location.hash = '';
+            }
+            setCurrentPath('/');
+          }}
+        />
+      </Suspense>
     );
   }
+
+  const showPreloader = sections.preloader !== false;
+  const revealed = isSiteRevealed || !showPreloader;
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-dark font-sans selection:bg-brand-pink/30 relative overflow-x-hidden w-full max-w-full">
       {/* Smoothly dissolves into crystal-clear focus as preloader fades */}
       <div 
         className={`w-full max-w-full transition-opacity duration-1000 ease-out ${
-          isSiteRevealed ? 'opacity-100' : 'opacity-85'
+          revealed ? 'opacity-100' : 'opacity-85'
         }`}
       >
         <Navbar lang={lang} setLang={handleLangChange} />
         <main>
           <HeroSection lang={lang} onWatchVideo={() => setIsVideoModalOpen(true)} />
-          <MarqueeRibbon lang={lang} />
-          <ProblemSolution lang={lang} />
-          <ComparisonTable lang={lang} />
-          <KeyIngredients lang={lang} />
-          <ClinicalResults lang={lang} />
-          <HowToUse lang={lang} />
-          <ProductDetails lang={lang} />
-          <CheckoutSection lang={lang} currency={currency} setCurrency={handleCurrencyChange} countryCode={countryCode} />
-          <CustomerReviews lang={lang} />
-          <FAQAccordion lang={lang} />
+          {sections.marquee !== false && <MarqueeRibbon lang={lang} />}
+          {sections.problemSolution !== false && <ProblemSolution lang={lang} />}
+          {sections.comparison !== false && <ComparisonTable lang={lang} />}
+          {sections.ingredients !== false && <KeyIngredients lang={lang} />}
+          {sections.results !== false && <ClinicalResults lang={lang} />}
+          {sections.howToUse !== false && <HowToUse lang={lang} />}
+          {sections.productDetails !== false && <ProductDetails lang={lang} />}
+          {sections.checkout !== false && (
+            <CheckoutSection lang={lang} currency={currency} setCurrency={handleCurrencyChange} countryCode={countryCode} />
+          )}
+          {sections.reviews !== false && <CustomerReviews lang={lang} />}
+          {sections.faq !== false && <FAQAccordion lang={lang} />}
         </main>
         <Footer lang={lang} />
-        <FloatingWhatsApp lang={lang} />
-        <StickyAddToCart lang={lang} currency={currency} />
-        <SocialProofToast lang={lang} />
+        {sections.floatingWhatsApp !== false && <FloatingWhatsApp lang={lang} />}
+        {sections.stickyBar !== false && sections.checkout !== false && <StickyAddToCart lang={lang} currency={currency} />}
+        {sections.socialProof !== false && <SocialProofToast lang={lang} />}
       </div>
 
-      <ElegantPreloader lang={lang} onStartReveal={() => setIsSiteRevealed(true)} />
+      {showPreloader && <ElegantPreloader lang={lang} onStartReveal={() => setIsSiteRevealed(true)} />}
 
       {/* Luxury Lightbox Video Player */}
       <VideoModal 
         isOpen={isVideoModalOpen} 
         onClose={() => setIsVideoModalOpen(false)} 
         lang={lang} 
-        videoSrc="/promo.mp4" 
+        videoSrc={promoVideo} 
       />
     </div>
   );
