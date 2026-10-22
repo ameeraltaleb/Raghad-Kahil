@@ -1,51 +1,21 @@
 /**
- * Orders data layer – Supabase when configured, localStorage fallback otherwise.
+ * Orders data layer:
+ * Uses Google Firebase Firestore when configured, with seamless localStorage fallback.
  */
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { db, isFirebaseConfigured } from '../lib/firebase';
+import { 
+  collection, 
+  doc, 
+  setDoc, 
+  getDocs, 
+  updateDoc, 
+  deleteDoc, 
+  query, 
+  orderBy, 
+  limit 
+} from 'firebase/firestore';
 
 const LOCAL_KEY = 'raghad_whatsapp_orders';
-
-const toRow = (o) => ({
-  id: o.id,
-  status: 'new',
-  quantity: Number(o.quantity) || 1,
-  bundle_title: o.bundleTitle || null,
-  price: o.price != null ? String(o.price) : null,
-  final_total: o.finalTotal != null ? Number(o.finalTotal) : null,
-  currency: o.currency || null,
-  customer_name: String(o.customerName || '').slice(0, 120),
-  phone: String(o.phone || '').slice(0, 40),
-  country: String(o.country || '').slice(0, 120),
-  city: String(o.city || '').slice(0, 120),
-  address: String(o.address || '').slice(0, 500),
-  notes: String(o.notes || '').slice(0, 1000),
-  payment_method: o.paymentMethod || 'cod',
-  has_free_gift: Boolean(o.hasFreeGift),
-  lang: o.lang || null,
-  whatsapp_message: String(o.whatsappMessage || '').slice(0, 5000)
-});
-
-export const fromRow = (r) => ({
-  id: r.id,
-  createdAt: r.created_at || r.timestamp,
-  status: r.status || 'new',
-  quantity: r.quantity,
-  bundleTitle: r.bundle_title ?? r.bundleTitle,
-  price: r.price,
-  finalTotal: r.final_total ?? r.finalTotal,
-  currency: r.currency,
-  customerName: r.customer_name ?? r.customerName,
-  phone: r.phone,
-  country: r.country,
-  city: r.city,
-  address: r.address,
-  notes: r.notes,
-  paymentMethod: r.payment_method ?? r.paymentMethod,
-  hasFreeGift: r.has_free_gift ?? r.hasFreeGift,
-  lang: r.lang,
-  whatsappMessage: r.whatsapp_message ?? r.whatsappMessage,
-  adminNote: r.admin_note ?? r.adminNote ?? ''
-});
 
 const readLocal = () => {
   try {
@@ -55,52 +25,103 @@ const readLocal = () => {
     return [];
   }
 };
-const writeLocal = (list) => localStorage.setItem(LOCAL_KEY, JSON.stringify(list.slice(0, 300)));
 
-/** Public: called when a customer confirms an order */
+const writeLocal = (list) => {
+  try {
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(list.slice(0, 300)));
+  } catch (e) {
+    console.warn('localStorage write failed:', e);
+  }
+};
+
+/**
+ * Public: Customer confirms order.
+ * Saves to Firebase Firestore and local cache.
+ */
 export async function recordOrder(order) {
-  if (isSupabaseConfigured) {
-    // No .select() – anonymous visitors are not allowed to read orders back
-    const { error } = await supabase.from('orders').insert(toRow(order));
-    if (error) throw error;
-    return;
-  }
+  const item = {
+    id: order.id,
+    createdAt: new Date().toISOString(),
+    status: 'new',
+    quantity: Number(order.quantity) || 1,
+    bundleTitle: order.bundleTitle || `${order.quantity} عبوة`,
+    price: order.price != null ? String(order.price) : null,
+    finalTotal: order.finalTotal != null ? Number(order.finalTotal) : null,
+    currency: order.currency || null,
+    customerName: String(order.customerName || 'عميلة جديدة').slice(0, 120),
+    phone: String(order.phone || '').slice(0, 40),
+    country: String(order.country || '').slice(0, 120),
+    city: String(order.city || '').slice(0, 120),
+    address: String(order.address || '').slice(0, 500),
+    notes: String(order.notes || '').slice(0, 1000),
+    paymentMethod: order.paymentMethod || 'cod',
+    hasFreeGift: Boolean(order.hasFreeGift),
+    lang: order.lang || 'ar',
+    whatsappMessage: String(order.whatsappMessage || '').slice(0, 5000),
+    adminNote: ''
+  };
+
+  // Always update local cache for immediate feedback
   const list = readLocal();
-  list.unshift({ ...order, status: 'new', createdAt: new Date().toISOString() });
+  list.unshift(item);
   writeLocal(list);
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'orders', order.id), item);
+    } catch (err) {
+      console.error('Firebase save order failed:', err);
+    }
+  }
 }
 
-/** Admin */
+/**
+ * Admin: List all orders
+ */
 export async function listOrders() {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1000);
-    if (error) throw error;
-    return (data || []).map(fromRow);
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(500));
+      const snapshot = await getDocs(q);
+      const remoteOrders = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (remoteOrders.length > 0) {
+        writeLocal(remoteOrders);
+        return remoteOrders;
+      }
+    } catch (err) {
+      console.warn('Firebase list orders failed, falling back to local:', err);
+    }
   }
-  return readLocal().map(fromRow);
+  return readLocal();
 }
 
+/**
+ * Admin: Update order status or internal note
+ */
 export async function updateOrder(id, patch) {
-  const row = {};
-  if (patch.status !== undefined) row.status = patch.status;
-  if (patch.adminNote !== undefined) row.admin_note = patch.adminNote;
-  if (isSupabaseConfigured) {
-    const { error } = await supabase.from('orders').update(row).eq('id', id);
-    if (error) throw error;
-    return;
+  const list = readLocal().map(o => (o.id === id ? { ...o, ...patch } : o));
+  writeLocal(list);
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await updateDoc(doc(db, 'orders', id), patch);
+    } catch (err) {
+      console.error('Firebase update order failed:', err);
+    }
   }
-  writeLocal(readLocal().map((o) => (o.id === id ? { ...o, ...patch } : o)));
 }
 
+/**
+ * Admin: Delete order
+ */
 export async function deleteOrder(id) {
-  if (isSupabaseConfigured) {
-    const { error } = await supabase.from('orders').delete().eq('id', id);
-    if (error) throw error;
-    return;
+  writeLocal(readLocal().filter(o => o.id !== id));
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await deleteDoc(doc(db, 'orders', id));
+    } catch (err) {
+      console.error('Firebase delete order failed:', err);
+    }
   }
-  writeLocal(readLocal().filter((o) => o.id !== id));
 }

@@ -7,7 +7,9 @@ import {
   Sliders, DollarSign, Image as ImageIcon, FileText, ToggleLeft, ToggleRight,
   Save, Database, LogOut, Upload, Globe, Layers, AlertCircle, Info, Edit3
 } from 'lucide-react';
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { auth, storage, isFirebaseConfigured } from '../lib/firebase';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getConfig, saveConfig, SECTION_LABELS, DEFAULT_CONFIG } from '../config/siteConfig';
 import { listOrders, updateOrder, deleteOrder } from '../services/ordersService';
 import { listAllReviews, setReviewStatus, deleteReview, addApprovedReview } from '../services/reviewsService';
@@ -67,16 +69,13 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
   });
   const [lockoutSeconds, setLockoutSeconds] = useState(0);
 
-  // Check Supabase session on mount
+  // Check Firebase session on mount
   useEffect(() => {
-    if (isSupabaseConfigured && supabase) {
-      supabase.auth.getSession().then(({ data: { session: s } }) => {
-        setSession(s);
+    if (isFirebaseConfigured && auth) {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setSession(user);
       });
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
-        setSession(s);
-      });
-      return () => subscription.unsubscribe();
+      return () => unsubscribe();
     }
   }, []);
 
@@ -105,13 +104,9 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
     setAuthLoading(true);
 
     try {
-      // 1. Supabase Mode
-      if (isSupabaseConfigured && supabase && authEmail.trim()) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: authEmail.trim(),
-          password: authPassword
-        });
-        if (error) throw error;
+      // 1. Firebase Auth Mode
+      if (isFirebaseConfigured && auth && authEmail.trim()) {
+        await signInWithEmailAndPassword(auth, authEmail.trim(), authPassword);
         setAuthLoading(false);
         return;
       }
@@ -147,8 +142,12 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
   };
 
   const handleLogout = async () => {
-    if (isSupabaseConfigured && supabase) {
-      await supabase.auth.signOut();
+    if (isFirebaseConfigured && auth) {
+      try {
+        await signOut(auth);
+      } catch (err) {
+        console.warn('Sign out error:', err);
+      }
     }
     setSession(null);
     setLocalAuth(false);
@@ -393,26 +392,20 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
     }
   };
 
-  // Upload Media File to Supabase Storage Bucket
+  // Upload Media File to Firebase Storage Bucket
   const handleUploadFile = async (key, file) => {
     if (!file) return;
-    if (!isSupabaseConfigured || !supabase) {
-      alert('رفع الملفات التلقائي يتطلب ربط Supabase. يمكنك حالياً وضع رابط الصورة (URL) مباشرة بالأسفل.');
+    if (!isFirebaseConfigured || !storage) {
+      alert('رفع الملفات التلقائي يتطلب ربط Firebase Storage. يمكنك حالياً وضع رابط الصورة (URL) مباشرة بالأسفل.');
       return;
     }
     setUploadingKey(key);
     try {
       const ext = file.name.split('.').pop();
-      const fileName = `${key}-${Date.now()}.${ext}`;
-      const { data, error } = await supabase.storage
-        .from('site-media')
-        .upload(fileName, file, { cacheControl: '3600', upsert: true });
-
-      if (error) throw error;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('site-media')
-        .getPublicUrl(data.path);
+      const fileName = `media/${key}-${Date.now()}.${ext}`;
+      const fileRef = storageRef(storage, fileName);
+      await uploadBytes(fileRef, file);
+      const publicUrl = await getDownloadURL(fileRef);
 
       const nextMedia = { ...mediaDraft, [key]: publicUrl };
       setMediaDraft(nextMedia);
@@ -465,7 +458,7 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
-            {isSupabaseConfigured && (
+            {isFirebaseConfigured && (
               <div className="text-start">
                 <label className="block text-xs font-bold text-brand-dark mb-1">البريد الإلكتروني للإدارة</label>
                 <input
@@ -480,7 +473,7 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
 
             <div className="space-y-2 text-start">
               <label className="block text-xs font-bold text-brand-dark mb-1">
-                {isSupabaseConfigured ? 'كلمة المرور' : 'الرمز السري الخاص بالإدارة'}
+                {isFirebaseConfigured ? 'كلمة المرور' : 'الرمز السري الخاص بالإدارة'}
               </label>
               <div className="relative">
                 <input
@@ -566,14 +559,14 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
               <span>لوحة الإدارة الكاملة</span>
             </span>
 
-            {/* Supabase Status Indicator */}
+            {/* Firebase Status Indicator */}
             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
-              isSupabaseConfigured 
+              isFirebaseConfigured 
                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                 : 'bg-amber-50 text-amber-700 border border-amber-200'
             }`}>
               <Database className="w-3 h-3" />
-              <span>{isSupabaseConfigured ? 'Supabase متصل' : 'وضع الحفظ المحلي'}</span>
+              <span>{isFirebaseConfigured ? 'Firebase متصل' : 'وضع الحفظ المحلي'}</span>
             </span>
           </div>
 
@@ -1645,19 +1638,19 @@ export default function AdminApp({ onBackToStore, lang = 'ar' }) {
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl border space-y-3 text-xs leading-relaxed ${
-              isSupabaseConfigured 
+            <div className={`p-4 rounded-2xl border space-y-3 text-xs leading-relaxed ${
+              isFirebaseConfigured 
                 ? 'bg-emerald-50 border-emerald-200 text-emerald-900' 
                 : 'bg-amber-50 border-amber-200 text-amber-900'
-            }">
+            }`}>
               <div className="flex items-center gap-2 font-bold text-sm">
                 <Database className="w-4 h-4" />
-                <span>{isSupabaseConfigured ? 'قاعدة بيانات Supabase مفعلة ومتصلة بنجاح' : 'تعمل لوحة الإدارة حالياً بالوضع المحلي (Local Storage)'}</span>
+                <span>{isFirebaseConfigured ? 'قاعدة بيانات Google Firebase مفعلة ومتصلة بنجاح' : 'تعمل لوحة الإدارة حالياً بالوضع المحلي (Local Storage)'}</span>
               </div>
               <p>
-                {isSupabaseConfigured
-                  ? 'جميع الطلبات، التقييمات، إعدادات الأسعار، والوسائط يتم مزامنتها سحابياً وتظهر لجميع الزوار على مختلف الأجهزة.'
-                  : 'لتفعيل المزامنة السحابية مع كل الزوار: أنشئ مشروعاً مجانياً على supabase.com، نفّذ ملف schema.sql في الـ SQL Editor، وأضف المفاتيح في ملف .env.'}
+                {isFirebaseConfigured
+                  ? 'جميع الطلبات، التقييمات، إعدادات الأسعار، والوسائط يتم مزامنتها سحابياً مع Firebase Firestore وتظهر لجميع الزوار فوراً.'
+                  : 'لتفعيل المزامنة السحابية: أنشئ مشروعاً مجانياً على console.firebase.google.com، فعّل Firestore Database، وأضف المفاتيح في ملف .env.'}
               </p>
             </div>
 

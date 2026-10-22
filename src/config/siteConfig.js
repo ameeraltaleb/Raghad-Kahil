@@ -3,10 +3,11 @@
  * - Holds every admin-editable setting (contact, pricing, rates, sections, texts, media).
  * - Applies settings to the existing modules (translations, whatsapp, pricing, media)
  *   so public components need almost no changes.
- * - Persists to Supabase (`site_settings` row "main") with a localStorage cache
+ * - Persists to Firebase Firestore (`settings/main` doc) with a localStorage cache
  *   for an instant first paint.
  */
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { db, isFirebaseConfigured } from '../lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { translations } from '../translations';
 import { applyWhatsAppConfig } from '../utils/whatsapp';
 import { setPricingRules } from '../data/checkoutData';
@@ -138,24 +139,21 @@ export function bootFromCache() {
   }
 }
 
-/** Fetch latest settings from Supabase and apply if they changed */
+/** Fetch latest settings from Firebase and apply if they changed */
 export async function refreshConfigFromServer() {
-  if (!isSupabaseConfigured) return current;
+  if (!isFirebaseConfigured || !db) return current;
   try {
-    const { data, error } = await supabase
-      .from('site_settings')
-      .select('data')
-      .eq('id', 'main')
-      .maybeSingle();
-    if (error) throw error;
-    const remote = (data && data.data) || {};
-    const remoteStr = JSON.stringify(normalizeConfig(remote));
-    if (remoteStr !== JSON.stringify(current)) {
-      applyConfig(remote);
+    const snap = await getDoc(doc(db, 'settings', 'main'));
+    if (snap.exists()) {
+      const remote = snap.data() || {};
+      const remoteStr = JSON.stringify(normalizeConfig(remote));
+      if (remoteStr !== JSON.stringify(current)) {
+        applyConfig(remote);
+      }
+      localStorage.setItem(CACHE_KEY, JSON.stringify(remote));
     }
-    localStorage.setItem(CACHE_KEY, JSON.stringify(remote));
   } catch (e) {
-    console.warn('Could not load site settings, using cached/default values:', e);
+    console.warn('Could not load site settings from Firebase, using cached/default values:', e);
   }
   return current;
 }
@@ -163,11 +161,15 @@ export async function refreshConfigFromServer() {
 /** Admin: persist a full config */
 export async function saveConfig(nextConfig) {
   const cfg = normalizeConfig(nextConfig);
-  if (isSupabaseConfigured) {
-    const { error } = await supabase
-      .from('site_settings')
-      .upsert({ id: 'main', data: cfg, updated_at: new Date().toISOString() });
-    if (error) throw error;
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'settings', 'main'), {
+        ...cfg,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error('Firebase saveConfig failed:', e);
+    }
   }
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(cfg)); } catch { /* ignore quota */ }
   applyConfig(cfg);
